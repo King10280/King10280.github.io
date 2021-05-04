@@ -4,7 +4,7 @@
     <title>hexo初使用</title>
     <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<blockquote>
-<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这里有个其他博主比较详细的步骤</a></p>
+<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
 </blockquote>
 <h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
 <li>Node.js</li>
