@@ -51,6 +51,7 @@
 <p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
 </blockquote>
 <p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
+<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
 ]]></content>
       <categories>
         <category>hexo</category>
