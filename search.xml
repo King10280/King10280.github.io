@@ -60,4 +60,40 @@
         <tag>hexo</tag>
       </tags>
   </entry>
+  <entry>
+    <title>sql注入学习</title>
+    <url>/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="sql注入学习"><a href="#sql注入学习" class="headerlink" title="sql注入学习"></a>sql注入学习</h1><h2 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h2><h3 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h3><h3 id="字符型注入"><a href="#字符型注入" class="headerlink" title="字符型注入"></a>字符型注入</h3><h3 id="搜索型注入"><a href="#搜索型注入" class="headerlink" title="搜索型注入"></a>搜索型注入</h3><h3 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h3><h3 id="Base64变形注入"><a href="#Base64变形注入" class="headerlink" title="Base64变形注入"></a>Base64变形注入</h3><h2 id="以提交方式分类"><a href="#以提交方式分类" class="headerlink" title="以提交方式分类"></a>以提交方式分类</h2><h3 id="GET注入"><a href="#GET注入" class="headerlink" title="GET注入"></a>GET注入</h3><h3 id="POST注入"><a href="#POST注入" class="headerlink" title="POST注入"></a>POST注入</h3><h3 id="Cookie注入"><a href="#Cookie注入" class="headerlink" title="Cookie注入"></a>Cookie注入</h3><h3 id="HTTP头注入（XFF注入、UA注入、REFERER注入）"><a href="#HTTP头注入（XFF注入、UA注入、REFERER注入）" class="headerlink" title="HTTP头注入（XFF注入、UA注入、REFERER注入）"></a>HTTP头注入（XFF注入、UA注入、REFERER注入）</h3><h2 id="以获取信息的方式分类"><a href="#以获取信息的方式分类" class="headerlink" title="以获取信息的方式分类"></a>以获取信息的方式分类</h2><h3 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h3><h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h3><h3 id="堆查询注入"><a href="#堆查询注入" class="headerlink" title="堆查询注入"></a>堆查询注入</h3><h2 id="判断是否存在注入点及其类型"><a href="#判断是否存在注入点及其类型" class="headerlink" title="判断是否存在注入点及其类型"></a>判断是否存在注入点及其类型</h2><ul>
+<li><p>可以使用单引号，双引号，单括号，双括号判断是否报错，报错的话可能存在sql注入</p>
+</li>
+<li><p>判断是否为数字型，若<code>and 1=1</code>页面正常<code>and 1=2</code>页面错误，则为数字型注入</p>
+<blockquote>
+<p>原理：<code>select * from 表名 where id=x</code></p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>因为如果是数字型注入的话<code>and 1=2</code>逻辑为假，会返回错误</p>
+</blockquote>
+<ul>
+<li><p>判断是否为字符型，若<code>&#39;and &#39;1&#39;=&#39;1 </code>页面正常，<code>&#39;and &#39;1&#39;=&#39;2</code>页面错误，则为字符型</p>
+<blockquote>
+<p>原理：<code>select * from 表名 where id=&#39;参数&#39;</code></p>
+</blockquote>
+<blockquote>
+<p>这里的sql语句相当于<code>select * from 表名 where id=&#39;参数&#39;and &#39;1&#39;=&#39;1&#39;</code>因为这里的参数是字符类型，而这样构造sql语句正好是字符类型</p>
+</blockquote>
+<p><strong>两者最大的区别就是字符型需要单引号来闭合，而数字型不需要</strong></p>
+</li>
+<li></li>
+</ul>
+<p>​    </p>
+]]></content>
+      <categories>
+        <category>sql</category>
+      </categories>
+      <tags>
+        <tag>sql</tag>
+      </tags>
+  </entry>
 </search>
