@@ -419,21 +419,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-07
+                    2021-05-08
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    327
+                    661
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -458,26 +458,47 @@
 </li>
 <li><p>判断是否为数字型，若<code>and 1=1</code>页面正常<code>and 1=2</code>页面错误，则为数字型注入</p>
 <blockquote>
-<p>原理：<code>select * from 表名 where id=x</code></p>
+<p>原理：<code>select * from 表 where id=x</code></p>
 </blockquote>
-</li>
-</ul>
 <blockquote>
 <p>因为如果是数字型注入的话<code>and 1=2</code>逻辑为假，会返回错误</p>
 </blockquote>
-<ul>
+</li>
 <li><p>判断是否为字符型，若<code>&#39;and &#39;1&#39;=&#39;1 </code>页面正常，<code>&#39;and &#39;1&#39;=&#39;2</code>页面错误，则为字符型</p>
 <blockquote>
-<p>原理：<code>select * from 表名 where id=&#39;参数&#39;</code></p>
+<p>原理：<code>select * from 表 where id=&#39;参数&#39;</code></p>
 </blockquote>
 <blockquote>
 <p>这里的sql语句相当于<code>select * from 表名 where id=&#39;参数&#39;and &#39;1&#39;=&#39;1&#39;</code>因为这里的参数是字符类型，而这样构造sql语句正好是字符类型</p>
 </blockquote>
 <p><strong>两者最大的区别就是字符型需要单引号来闭合，而数字型不需要</strong></p>
 </li>
-<li></li>
+<li><p>判断是否为搜索型，根据<code>%&#39; and 1=1 and &#39;%&#39;=&#39;</code>(相当于<code>and 1=1</code>)与<code>%&#39; and 1=2 and &#39;%&#39;=&#39;</code>的回显进行判断</p>
+<blockquote>
+<p>原理：<code>select * from 表 where username like &#39;%$name%&#39;</code></p>
+</blockquote>
+<blockquote>
+<p>相当于<code>select * from 表 where username like &#39;%$name%&#39; and 1=1 and &#39;%&#39;=&#39;%&#39;</code></p>
+</blockquote>
+<blockquote>
+<p>pikachu靶场较详细的实例<a target="_blank" rel="noopener" href="https://www.cnblogs.com/Hunter-01001100/p/11628286.html">pikachu-搜索型注入 #手工注入</a></p>
+</blockquote>
+</li>
 </ul>
-<p>​    </p>
+<p>目前接触的大部分都是MySQL，绝大多数的数据库的SQL语句都类似，但是当遇到其他类型的数据库时还是要通过<strong>特殊表</strong>来分辨数据库类型</p>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="判断数据库"></p>
+<blockquote>
+<p>MySQL数据库的特有的表是 <strong>information_schema.tables ,</strong> access数据库特有的表是 <strong>msysobjects</strong> 、SQLServer 数据库特有的表是 <strong>sysobjects</strong> ,oracle数据库特有的表是 <strong>dual</strong></p>
+</blockquote>
+<p>判断语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>判断是否是 Mysql数据库</span><br><span class="line">http:<span class="operator">/</span><span class="operator">/</span>xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; and exists(select*from information_schema.tables) #</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">//判断是否是 access数据库</span></span><br><span class="line"><span class="string">http://xxx/?id=1&#x27;</span> <span class="keyword">and</span> <span class="keyword">exists</span>(<span class="keyword">select</span><span class="operator">*</span><span class="keyword">from</span> msysobjects) #</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>判断是否是 Sqlserver数据库</span><br><span class="line">http:<span class="operator">/</span><span class="operator">/</span>xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; and exists(select*from sysobjects) #</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">//判断是否是Oracle数据库</span></span><br><span class="line"><span class="string">http://xxx/?id=1&#x27;</span> <span class="keyword">and</span> (<span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> dual)<span class="operator">&gt;</span><span class="number">0</span> #</span><br></pre></td></tr></table></figure>
+<p>对于MySQL数据库，<strong>information_schema</strong>数据库中的表是一个视图，都是只读的，不能进行增删改的操作</p>
+<p>information_schema表中三个重要的表：</p>
+<ul>
+<li>information_schema.<strong>schemata</strong>该表存储了所有的数据库库名</li>
+<li>information_schema.<strong>tables</strong>该表存储了所有的</li>
+<li>information_schema.<strong>columns</strong></li>
+</ul>
 
                 
             </div>
@@ -879,7 +900,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">1.1k</span>&nbsp;字
+                class="white-color">1.5k</span>&nbsp;字
             
             
             
