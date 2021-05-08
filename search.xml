@@ -13,7 +13,7 @@
 <h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
 <h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
 <h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<p>![image-20210417215354480](docker基本使用/docker images.png)</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/images.png" alt="image-20210417215354480"></p>
 <h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>参数解释：</p>
@@ -22,7 +22,7 @@
 <p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
 </blockquote>
 <p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
-<p>![image-20210417222849702](docker基本使用/docker run -d -p.png)</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/run.png" alt="image-20210417222849702"></p>
 <blockquote>
 <p>请注意这张图片中的容器端口8801是错误的</p>
 </blockquote>
@@ -42,9 +42,9 @@
 <p>成功访问</p>
 </blockquote>
 <h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
-<p>![image-20210417223707346](docker基本使用/docker ps.png)</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/ps.png" alt="image-20210417223707346"></p>
 <h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
-<p>![image-20210417223949376](docker基本使用/docker exec -it.png)</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/exec.png" alt="image-20210417223949376"></p>
 <p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E9%85%8D%E7%BD%AE.png" alt="image-20210418160159989"></p>
 <h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
 <h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
@@ -60,6 +60,42 @@
       </categories>
       <tags>
         <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sql注入学习</title>
+    <url>/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="sql注入学习"><a href="#sql注入学习" class="headerlink" title="sql注入学习"></a>sql注入学习</h1><h2 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h2><h3 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h3><h3 id="字符型注入"><a href="#字符型注入" class="headerlink" title="字符型注入"></a>字符型注入</h3><h3 id="搜索型注入"><a href="#搜索型注入" class="headerlink" title="搜索型注入"></a>搜索型注入</h3><h3 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h3><h3 id="Base64变形注入"><a href="#Base64变形注入" class="headerlink" title="Base64变形注入"></a>Base64变形注入</h3><h2 id="以提交方式分类"><a href="#以提交方式分类" class="headerlink" title="以提交方式分类"></a>以提交方式分类</h2><h3 id="GET注入"><a href="#GET注入" class="headerlink" title="GET注入"></a>GET注入</h3><h3 id="POST注入"><a href="#POST注入" class="headerlink" title="POST注入"></a>POST注入</h3><h3 id="Cookie注入"><a href="#Cookie注入" class="headerlink" title="Cookie注入"></a>Cookie注入</h3><h3 id="HTTP头注入（XFF注入、UA注入、REFERER注入）"><a href="#HTTP头注入（XFF注入、UA注入、REFERER注入）" class="headerlink" title="HTTP头注入（XFF注入、UA注入、REFERER注入）"></a>HTTP头注入（XFF注入、UA注入、REFERER注入）</h3><h2 id="以获取信息的方式分类"><a href="#以获取信息的方式分类" class="headerlink" title="以获取信息的方式分类"></a>以获取信息的方式分类</h2><h3 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h3><h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h3><h3 id="堆查询注入"><a href="#堆查询注入" class="headerlink" title="堆查询注入"></a>堆查询注入</h3><h2 id="判断是否存在注入点及其类型"><a href="#判断是否存在注入点及其类型" class="headerlink" title="判断是否存在注入点及其类型"></a>判断是否存在注入点及其类型</h2><ul>
+<li><p>可以使用单引号，双引号，单括号，双括号判断是否报错，报错的话可能存在sql注入</p>
+</li>
+<li><p>判断是否为数字型，若<code>and 1=1</code>页面正常<code>and 1=2</code>页面错误，则为数字型注入</p>
+<blockquote>
+<p>原理：<code>select * from 表名 where id=x</code></p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>因为如果是数字型注入的话<code>and 1=2</code>逻辑为假，会返回错误</p>
+</blockquote>
+<ul>
+<li><p>判断是否为字符型，若<code>&#39;and &#39;1&#39;=&#39;1 </code>页面正常，<code>&#39;and &#39;1&#39;=&#39;2</code>页面错误，则为字符型</p>
+<blockquote>
+<p>原理：<code>select * from 表名 where id=&#39;参数&#39;</code></p>
+</blockquote>
+<blockquote>
+<p>这里的sql语句相当于<code>select * from 表名 where id=&#39;参数&#39;and &#39;1&#39;=&#39;1&#39;</code>因为这里的参数是字符类型，而这样构造sql语句正好是字符类型</p>
+</blockquote>
+<p><strong>两者最大的区别就是字符型需要单引号来闭合，而数字型不需要</strong></p>
+</li>
+<li></li>
+</ul>
+<p>​    </p>
+]]></content>
+      <categories>
+        <category>sql</category>
+      </categories>
+      <tags>
+        <tag>sql</tag>
       </tags>
   </entry>
   <entry>
@@ -120,42 +156,6 @@
       </categories>
       <tags>
         <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sql注入学习</title>
-    <url>/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="sql注入学习"><a href="#sql注入学习" class="headerlink" title="sql注入学习"></a>sql注入学习</h1><h2 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h2><h3 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h3><h3 id="字符型注入"><a href="#字符型注入" class="headerlink" title="字符型注入"></a>字符型注入</h3><h3 id="搜索型注入"><a href="#搜索型注入" class="headerlink" title="搜索型注入"></a>搜索型注入</h3><h3 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h3><h3 id="Base64变形注入"><a href="#Base64变形注入" class="headerlink" title="Base64变形注入"></a>Base64变形注入</h3><h2 id="以提交方式分类"><a href="#以提交方式分类" class="headerlink" title="以提交方式分类"></a>以提交方式分类</h2><h3 id="GET注入"><a href="#GET注入" class="headerlink" title="GET注入"></a>GET注入</h3><h3 id="POST注入"><a href="#POST注入" class="headerlink" title="POST注入"></a>POST注入</h3><h3 id="Cookie注入"><a href="#Cookie注入" class="headerlink" title="Cookie注入"></a>Cookie注入</h3><h3 id="HTTP头注入（XFF注入、UA注入、REFERER注入）"><a href="#HTTP头注入（XFF注入、UA注入、REFERER注入）" class="headerlink" title="HTTP头注入（XFF注入、UA注入、REFERER注入）"></a>HTTP头注入（XFF注入、UA注入、REFERER注入）</h3><h2 id="以获取信息的方式分类"><a href="#以获取信息的方式分类" class="headerlink" title="以获取信息的方式分类"></a>以获取信息的方式分类</h2><h3 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h3><h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h3><h3 id="堆查询注入"><a href="#堆查询注入" class="headerlink" title="堆查询注入"></a>堆查询注入</h3><h2 id="判断是否存在注入点及其类型"><a href="#判断是否存在注入点及其类型" class="headerlink" title="判断是否存在注入点及其类型"></a>判断是否存在注入点及其类型</h2><ul>
-<li><p>可以使用单引号，双引号，单括号，双括号判断是否报错，报错的话可能存在sql注入</p>
-</li>
-<li><p>判断是否为数字型，若<code>and 1=1</code>页面正常<code>and 1=2</code>页面错误，则为数字型注入</p>
-<blockquote>
-<p>原理：<code>select * from 表名 where id=x</code></p>
-</blockquote>
-</li>
-</ul>
-<blockquote>
-<p>因为如果是数字型注入的话<code>and 1=2</code>逻辑为假，会返回错误</p>
-</blockquote>
-<ul>
-<li><p>判断是否为字符型，若<code>&#39;and &#39;1&#39;=&#39;1 </code>页面正常，<code>&#39;and &#39;1&#39;=&#39;2</code>页面错误，则为字符型</p>
-<blockquote>
-<p>原理：<code>select * from 表名 where id=&#39;参数&#39;</code></p>
-</blockquote>
-<blockquote>
-<p>这里的sql语句相当于<code>select * from 表名 where id=&#39;参数&#39;and &#39;1&#39;=&#39;1&#39;</code>因为这里的参数是字符类型，而这样构造sql语句正好是字符类型</p>
-</blockquote>
-<p><strong>两者最大的区别就是字符型需要单引号来闭合，而数字型不需要</strong></p>
-</li>
-<li></li>
-</ul>
-<p>​    </p>
-]]></content>
-      <categories>
-        <category>sql</category>
-      </categories>
-      <tags>
-        <tag>sql</tag>
       </tags>
   </entry>
 </search>
