@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="l0odrd的博客">
+    <meta name="keywords" content="docker基本使用, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>l0odrd的博客</title>
+    <title>docker基本使用 | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title"></h1>
+                    <h1 class="description center-align post-title">docker基本使用</h1>
                 </div>
             </div>
         </div>
@@ -385,12 +385,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/docker/">
+                                <span class="chip bg-color">docker</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/docker/" class="post-category">
+                                docker
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -399,21 +412,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-03
+                    2021-05-08
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-02-24
+                    2021-05-08
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    17
+                    452
                 </div>
                 
 
@@ -440,7 +453,58 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title: 关于</span><br><span class="line">date: 2021-02-08 00:00:00</span><br><span class="line">type: &quot;about&quot;</span><br><span class="line">layout: &quot;about&quot;</span><br></pre></td></tr></table></figure>
+                <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p>![image-20210417215354480](docker基本使用/docker images.png)</p>
+<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数解释：</p>
+<p>-d 镜像在后台运行</p>
+<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
+<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
+</blockquote>
+<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
+<p>![image-20210417222849702](docker基本使用/docker run -d -p.png)</p>
+<blockquote>
+<p>请注意这张图片中的容器端口8801是错误的</p>
+</blockquote>
+<p>但是会报错，是因为没有开启ipv4转发</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
+</blockquote>
+<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/net.ipv4.png" alt="image-20210417222634372"></p>
+<p>重启服务并查看修改是否成功</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/%E6%9F%A5%E7%9C%8B.png" alt="image-20210417222728689"></p>
+<blockquote>
+<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
+</blockquote>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E7%95%8C%E9%9D%A2.png" alt="image-20210418160119935"></p>
+<blockquote>
+<p>成功访问</p>
+</blockquote>
+<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
+<p>![image-20210417223707346](docker基本使用/docker ps.png)</p>
+<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
+<p>![image-20210417223949376](docker基本使用/docker exec -it.png)</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E9%85%8D%E7%BD%AE.png" alt="image-20210418160159989"></p>
+<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>删除容器和镜像时需要注意的是：</p>
+<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
+</blockquote>
+<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
+
                 
             </div>
             <hr/>
@@ -466,7 +530,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/about/index.html">https://King10280.github.io/about/index.html</a>
+                    <a href="https://King10280.github.io/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">https://King10280.github.io/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -503,7 +567,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/docker/">
+                                    <span class="chip bg-color">docker</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -552,13 +620,13 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/about/index.html">
+                <a href="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="docker基本使用">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">docker基本使用</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -569,17 +637,29 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-08
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            l0odrd
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/docker/" class="post-category">
+                                    docker
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/docker/">
+                        <span class="chip bg-color">docker</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -587,16 +667,16 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/about/index.html">
+                <a href="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="sql注入学习">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">sql注入学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -607,17 +687,28 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-06
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            l0odrd
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/sql/" class="post-category">
+                                    sql
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/sql/">
+                        <span class="chip bg-color">sql</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
