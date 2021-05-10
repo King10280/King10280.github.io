@@ -123,6 +123,36 @@
       </tags>
   </entry>
   <entry>
+    <title>sqlmap基本使用</title>
+    <url>/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="sqlmap基本使用"><a href="#sqlmap基本使用" class="headerlink" title="sqlmap基本使用"></a>sqlmap基本使用</h1><h2 id="检查注入点"><a href="#检查注入点" class="headerlink" title="检查注入点"></a>检查注入点</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>当然也可以手工检查</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="查库"><a href="#查库" class="headerlink" title="查库"></a>查库</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>查所有数据库</span><br><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="comment">--dbs</span></span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>查当前数据库</span><br><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="comment">--current-db</span></span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/security.png" alt="image-20210510202453434"></p>
+<h2 id="查表"><a href="#查表" class="headerlink" title="查表"></a>查表</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="operator">-</span>D 库名 <span class="comment">--tables</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/users.png" alt="image-20210510202533497"></p>
+<h2 id="查列"><a href="#查列" class="headerlink" title="查列"></a>查列</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="operator">-</span>D 库名 <span class="operator">-</span>T 表名 <span class="comment">--columns</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/id,username,password.png" alt="image-20210510202602861"></p>
+<h2 id="查数据"><a href="#查数据" class="headerlink" title="查数据"></a>查数据</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="operator">-</span>D 库名 <span class="operator">-</span>T 表名 <span class="operator">-</span>C 多个列 <span class="comment">--dump</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/dump.png" alt="image-20210510202622139"></p>
+<blockquote>
+<p>后续将持续跟进详细使用</p>
+</blockquote>
+<p><a href="https://www.freebuf.com/sectool/164608.html">超详细SQLMap使用攻略及技巧分享</a></p>
+]]></content>
+      <categories>
+        <category>sql</category>
+      </categories>
+      <tags>
+        <tag>sqlmap</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>sql注入学习</title>
     <url>/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="sql注入学习"><a href="#sql注入学习" class="headerlink" title="sql注入学习"></a>sql注入学习</h1><h2 id="类型划分"><a href="#类型划分" class="headerlink" title="类型划分"></a>类型划分</h2><h3 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h3><p>数字型注入</p>
