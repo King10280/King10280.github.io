@@ -1,6 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>docker基本使用</title>
+    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/images.png" alt="image-20210417215354480"></p>
+<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数解释：</p>
+<p>-d 镜像在后台运行</p>
+<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
+<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
+</blockquote>
+<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/run.png" alt="image-20210417222849702"></p>
+<blockquote>
+<p>请注意这张图片中的容器端口8801是错误的</p>
+</blockquote>
+<p>但是会报错，是因为没有开启ipv4转发</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
+</blockquote>
+<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/net.ipv4.png" alt="image-20210417222634372"></p>
+<p>重启服务并查看修改是否成功</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/%E6%9F%A5%E7%9C%8B.png" alt="image-20210417222728689"></p>
+<blockquote>
+<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
+</blockquote>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E7%95%8C%E9%9D%A2.png" alt="image-20210418160119935"></p>
+<blockquote>
+<p>成功访问</p>
+</blockquote>
+<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/ps.png" alt="image-20210417223707346"></p>
+<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/exec.png" alt="image-20210417223949376"></p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E9%85%8D%E7%BD%AE.png" alt="image-20210418160159989"></p>
+<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>删除容器和镜像时需要注意的是：</p>
+<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
+</blockquote>
+<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
+]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo初使用</title>
+    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
+</blockquote>
+<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
+<li>Node.js</li>
+<li>git</li>
+<li>hexo</li>
+<li>GitHub账号</li>
+</ul>
+<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
+<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
+<p>配置全局变量,并生成密钥</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
+<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
+<blockquote>
+<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
+</blockquote>
+<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
+<li>npm install hexo-deployer-git –save</li>
+</ul>
+<blockquote>
+<p>要在博客目录下右键git bash运行</p>
+</blockquote>
+<ul>
+<li>hexo clean （清除缓存和静态文件）</li>
+<li>hexo g （生成静态文件）</li>
+<li>hexo d （部署）</li>
+</ul>
+<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
+<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
+<blockquote>
+<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
+</blockquote>
+<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
+<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
+<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
+<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
+<ul>
+<li>安装插件</li>
+<li>_config.yml选项设置</li>
+<li>使用相对路径</li>
+</ul>
+<blockquote>
+<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
+</blockquote>
+<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
+<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Lampiao</title>
     <url>/2021/05/24/Lampiao/</url>
     <content><![CDATA[<h1 id="Lampiao"><a href="#Lampiao" class="headerlink" title="Lampiao"></a>Lampiao</h1><p><img src="/2021/05/24/Lampiao/image-20210519163046106.png" alt="image-20210519163046106"></p>
@@ -163,128 +285,6 @@
       </categories>
       <tags>
         <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo初使用</title>
-    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
-</blockquote>
-<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
-<li>Node.js</li>
-<li>git</li>
-<li>hexo</li>
-<li>GitHub账号</li>
-</ul>
-<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
-<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
-<p>配置全局变量,并生成密钥</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
-<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
-<blockquote>
-<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
-</blockquote>
-<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
-<li>npm install hexo-deployer-git –save</li>
-</ul>
-<blockquote>
-<p>要在博客目录下右键git bash运行</p>
-</blockquote>
-<ul>
-<li>hexo clean （清除缓存和静态文件）</li>
-<li>hexo g （生成静态文件）</li>
-<li>hexo d （部署）</li>
-</ul>
-<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
-<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
-<blockquote>
-<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
-</blockquote>
-<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
-<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
-<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
-<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
-<ul>
-<li>安装插件</li>
-<li>_config.yml选项设置</li>
-<li>使用相对路径</li>
-</ul>
-<blockquote>
-<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
-</blockquote>
-<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
-<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>docker基本使用</title>
-    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/images.png" alt="image-20210417215354480"></p>
-<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>参数解释：</p>
-<p>-d 镜像在后台运行</p>
-<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
-<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
-</blockquote>
-<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/run.png" alt="image-20210417222849702"></p>
-<blockquote>
-<p>请注意这张图片中的容器端口8801是错误的</p>
-</blockquote>
-<p>但是会报错，是因为没有开启ipv4转发</p>
-<blockquote>
-<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
-</blockquote>
-<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/net.ipv4.png" alt="image-20210417222634372"></p>
-<p>重启服务并查看修改是否成功</p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/%E6%9F%A5%E7%9C%8B.png" alt="image-20210417222728689"></p>
-<blockquote>
-<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
-</blockquote>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E7%95%8C%E9%9D%A2.png" alt="image-20210418160119935"></p>
-<blockquote>
-<p>成功访问</p>
-</blockquote>
-<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/ps.png" alt="image-20210417223707346"></p>
-<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/exec.png" alt="image-20210417223949376"></p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E9%85%8D%E7%BD%AE.png" alt="image-20210418160159989"></p>
-<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>删除容器和镜像时需要注意的是：</p>
-<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
-</blockquote>
-<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
-]]></content>
-      <categories>
-        <category>docker</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
