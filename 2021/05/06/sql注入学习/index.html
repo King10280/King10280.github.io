@@ -419,7 +419,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-10
+                    2021-05-20
                 </div>
                 
 
@@ -433,7 +433,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    10 分
                 </div>
                 
 
@@ -495,7 +495,7 @@
 </blockquote>
 <p>**PS:**字符型和搜索型注入可能需要注释符对<code>&#39;</code>或<code>%&#39;</code>进行注释，如上面的判断字符型注入的语句可以修改为<code>&#39; and 1=1 # </code>和<code>&#39; and 1=2 #</code>来进行判断，而这里的<code>#</code>就是对sql语句后面的<code>&#39;</code>进行注释，同理搜索型也一样</p>
 <h4 id="易出现SQL注入的功能点"><a href="#易出现SQL注入的功能点" class="headerlink" title="易出现SQL注入的功能点"></a><strong>易出现SQL注入的功能点</strong></h4><blockquote>
-<p>凡是和数据库有交互的地方都容易出现SQL注入，SQL注入经常出现在登陆页面、涉及获取HTTP头（user-agent / client-ip等）的功能点及订单处理等地方。例如登陆页面，除常见的万能密码，post 数据注入外也有可能发生在HTTP头中的  client-ip 和 x-forward-for 等字段处。这些字段是用来记录登陆的 i  p的，有可能会被存储进数据库中从而与数据库发生交互导致sql注入。</p>
+<p>凡是和数据库有交互的地方都容易出现SQL注入，SQL注入经常出现在登陆页面、涉及获取HTTP头（user-agent / client-ip等）的功能点及订单处理等地方。例如登陆页面，除常见的万能密码，post 数据注入外也有可能发生在HTTP头中的      client-ip 和 x-forward-for 等字段处。这些字段是用来记录登陆的 i  p的，有可能会被存储进数据库中从而与数据库发生交互导致sql注入。</p>
 </blockquote>
 <h2 id="根据特殊表判断数据库类型"><a href="#根据特殊表判断数据库类型" class="headerlink" title="根据特殊表判断数据库类型"></a>根据特殊表判断数据库类型</h2><p>目前接触的大部分都是MySQL，绝大多数的数据库的SQL语句都类似，但是当遇到其他类型的数据库时还是要通过<strong>特殊表</strong>来分辨数据库类型</p>
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="判断数据库"></p>
@@ -624,6 +624,11 @@
 <p>参考文章：</p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
 <p><a target="_blank" rel="noopener" href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
+<p>其他：</p>
+<blockquote>
+<p>附上国光师傅的随笔</p>
+<p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/2020/10/todo.html">国光的安全随笔记录</a></p>
+</blockquote>
 
                 
             </div>
@@ -1025,7 +1030,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">3.4k</span>&nbsp;字
+                class="white-color">4.7k</span>&nbsp;字
             
             
             

