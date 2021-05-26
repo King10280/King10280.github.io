@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="hexo初使用, l0odrd的博客">
+    <meta name="keywords" content="文件包含知识点总结, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>hexo初使用 | l0odrd的博客</title>
+    <title>文件包含知识点总结 | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/hexo.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">hexo初使用</h1>
+                    <h1 class="description center-align post-title">文件包含知识点总结</h1>
                 </div>
             </div>
         </div>
@@ -387,8 +387,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/hexo/">
-                                <span class="chip bg-color">hexo</span>
+                            <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+                                <span class="chip bg-color">文件包含</span>
                             </a>
                         
                     </div>
@@ -399,8 +399,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/hexo/" class="post-category">
-                                hexo
+                            <a href="/categories/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="post-category">
+                                文件包含
                             </a>
                         
                     </div>
@@ -412,28 +412,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-04
+                    2021-05-26
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-05
+                    2021-05-26
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    391
+                    1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    4 分
                 </div>
                 
 
@@ -453,55 +453,97 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a target="_blank" rel="noopener" href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
+                <h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><blockquote>
+<p>.htacess的Apache解析漏洞</p>
+<p>配合文件包含，图片马</p>
+<p>条件竞争</p>
 </blockquote>
-<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
-<li>Node.js</li>
-<li>git</li>
-<li>hexo</li>
-<li>GitHub账号</li>
-</ul>
-<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
-<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
-<p>配置全局变量,并生成密钥</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
-<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
-<blockquote>
-<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
-</blockquote>
-<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
-<li>npm install hexo-deployer-git –save</li>
-</ul>
-<blockquote>
-<p>要在博客目录下右键git bash运行</p>
-</blockquote>
+<h3 id="客户端验证"><a href="#客户端验证" class="headerlink" title="客户端验证"></a>客户端验证</h3><p>js校验后缀名</p>
+<p>绕过：先把木马改为jpg或其他形式，burp抓包后修改为php</p>
+<h3 id="服务端验证"><a href="#服务端验证" class="headerlink" title="服务端验证"></a>服务端验证</h3><ol>
+<li>MIME</li>
+</ol>
+<p>绕过：burp修改文件头content-type字段为image/gif</p>
+<ol start="2">
+<li>文件内容头</li>
+</ol>
+<p>在<img src alt="img">马之前加上一些图片信息，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GIF89a&lt;?php @eval($_POST[&#39;caidao&#39;]);?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<ol>
+<li>文件扩展名校验（白名单，黑名单）</li>
+<li>文件内容检测（检测内容是否合法或是是否有恶意代码）</li>
+</ol>
+<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><ol>
+<li><strong>大小写、双写</strong>绕过pphphp</li>
+<li>文件名后加上个**.<strong>或是</strong>空格**（burp中修改）</li>
+</ol>
 <ul>
-<li>hexo clean （清除缓存和静态文件）</li>
-<li>hexo g （生成静态文件）</li>
-<li>hexo d （部署）</li>
+<li>🔲尝试黑名单可能没有的类型，如<strong>asa、cer、.htaccess</strong></li>
 </ul>
-<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
-<p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
 <blockquote>
-<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
+<p>.htaccess是Apache的</p>
 </blockquote>
-<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
-<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
-<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
-<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
+<ol start="4">
+<li><p>修改后缀类型，php修改为<strong>php3、php5</strong>（php高版本会向低版本兼容）</p>
+</li>
+<li><p>针对Windows系统，上传不符合Windows命名规则的文件名，可以尝试**::$DATA<strong>进行绕过或是</strong>:1.jpg**</p>
+</li>
+</ol>
+<blockquote>
+<p>windows下文件名+::$DATA，会把它当做数据流来处理，不会检验文件的后缀名，并且保留::$DATA之前的的文件名及后缀</p>
+<p>简单来说，数据流$DATA是Windows下NTFS文件系统的一个特性，即NTFS文件系统的存储数据流的一个属性DATA时，就是请求 a.asp 本身的数据，如果a.asp 还包含了其他的数据流，比如 a.asp:lake2.asp，请求 a.asp:lake2.asp::$DATA，则是请求a.asp中的流数据lake2.asp的流数据内容。</p>
+</blockquote>
+<ol start="6">
+<li><strong>%00</strong>截断，解析的时候会自动忽略%00后面的内容</li>
+</ol>
+<blockquote>
 <ul>
-<li>安装插件</li>
-<li>_config.yml选项设置</li>
-<li>使用相对路径</li>
+<li>常用在服务端把文件路径和文件名加在一起进行判断后缀</li>
+<li>截断条件：</li>
 </ul>
-<blockquote>
-<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
+<p><em>php &lt; 5.3.4</em></p>
+<p>php.ini文件<em>magic_quotes_gpc</em>为<em>off</em>（这个函数的作用是转义字符，在php&gt;5.4.0中已经移除了） </p>
+<ul>
+<li>当参数是以post方式传入时，需要二进制修改</li>
+</ul>
 </blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
-<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
+<ol start="7">
+<li>🔲配合<strong>文件包含</strong>使用</li>
+</ol>
+<blockquote>
+<p>上传<strong>图片马</strong></p>
+<p>拼接图片马：copy xxx.jpg /b + shell.php /a shell.jpg （b是binary二进制的意思，/b就是以二进制的格式）</p>
+<p>进行文件包含</p>
+</blockquote>
+<ol start="8">
+<li>🔲<strong>条件竞争</strong></li>
+</ol>
+<blockquote>
+<p>简单来说就是利用了并发处理请求不当或是相关操作逻辑顺序设计不合理时，会导致条件竞争的发生</p>
+<p>具体实例可见upload-labs pass17、18</p>
+<p>pass17源码 – 利用方式：在文件删除之前访问文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$is_upload &#x3D; false;</span><br><span class="line">$msg &#x3D; null;</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&#39;submit&#39;]))&#123;</span><br><span class="line">    $ext_arr &#x3D; array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span><br><span class="line">    $file_name &#x3D; $_FILES[&#39;upload_file&#39;][&#39;name&#39;];  &#x2F;&#x2F;$_FILES数组，$file_name就是upload_file的文件名</span><br><span class="line">    $temp_file &#x3D; $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];  &#x2F;&#x2F;$temp_file就是upload_file的临时文件名</span><br><span class="line">    $file_ext &#x3D; substr($file_name,strrpos($file_name,&quot;.&quot;)+1);  &#x2F;&#x2F;返回$file_name的文件后缀</span><br><span class="line">    $upload_file &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39; . $file_name;</span><br><span class="line"></span><br><span class="line">    if(move_uploaded_file($temp_file, $upload_file))&#123;  &#x2F;&#x2F;对$temp_file进行合法检验</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;  &#x2F;&#x2F;判断$file_ext是否在$ext_arr中，即判断文件后缀是否合法</span><br><span class="line">             $img_path &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload &#x3D; true;</span><br><span class="line">        &#125;else&#123;  &#x2F;&#x2F;如果后缀不合法</span><br><span class="line">            $msg &#x3D; &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg &#x3D; &#39;上传出错！&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<h3 id="一些函数"><a href="#一些函数" class="headerlink" title="一些函数"></a>一些函数</h3><ul>
+<li>trim(string,charlist) ——<strong>移除</strong>字符串两侧的空白或其他预定义的字符charlist</li>
+<li>strrchr(string,char) ——在string中<strong>查找</strong>char最后出现的位置，并返回（<strong>截取</strong>）包括char在内到字符串末尾的所有字符</li>
+<li>str_ireplace(find,replace,string) ——在string中找到find，然后进行<strong>替换</strong>replace</li>
+<li>substr(string,start,length可选) ——在string中从start处开始，<strong>返回</strong>length长度的<strong>字符串</strong></li>
+<li>strrpos(string,find,start可选) ——在string中从start开始，<strong>返回</strong>最后一次出现的<strong>位置</strong></li>
+<li>move_uploaded_file(string $filename,string $destination) ——检测确保上传的文件filename是合法的（即通过post方式上传），如果合法就将其<strong>移动</strong>为由destination指定的文件</li>
+<li>in_array(data,array) —— 检查数组array中是否存在某个值data</li>
+</ul>
+<h3 id="参考的一些博客"><a href="#参考的一些博客" class="headerlink" title="参考的一些博客"></a>参考的一些博客</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39670065/article/details/107366077?spm=1001.2014.3001.5501">https://blog.csdn.net/qq_39670065/article/details/107366077?spm=1001.2014.3001.5501</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4029#toc-15">https://xz.aliyun.com/t/4029#toc-15</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.wgpsec.org/knowledge/web/fileuploads.html">https://wiki.wgpsec.org/knowledge/web/fileuploads.html</a></p>
 
                 
             </div>
@@ -528,7 +570,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/">https://King10280.github.io/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</a>
+                    <a href="https://King10280.github.io/2021/05/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/">https://King10280.github.io/2021/05/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -566,8 +608,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/hexo/">
-                                    <span class="chip bg-color">hexo</span>
+                                <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+                                    <span class="chip bg-color">文件包含</span>
                                 </a>
                             
                         </div>
@@ -613,65 +655,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/">
+                <a href="/2021/05/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="sql注入学习">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="文件包含知识点总结">
                         
-                        <span class="card-title">sql注入学习</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-06
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/sql/" class="post-category">
-                                    sql
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/sql/">
-                        <span class="chip bg-color">sql</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/">
-                    <div class="card-image">
-                        
-                        <img src="/images/hexo.jpg" class="responsive-img" alt="hexo初使用">
-                        
-                        <span class="card-title">hexo初使用</span>
+                        <span class="card-title">文件包含知识点总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -682,14 +677,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-04
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-26
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/hexo/" class="post-category">
-                                    hexo
+                            <a href="/categories/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="post-category">
+                                    文件包含
                                 </a>
                             
                             
@@ -700,8 +695,56 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/hexo/">
-                        <span class="chip bg-color">hexo</span>
+                    <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+                        <span class="chip bg-color">文件包含</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/24/Lampiao/">
+                    <div class="card-image">
+                        
+                        <img src="/images/dirty.png" class="responsive-img" alt="Lampiao">
+                        
+                        <span class="card-title">Lampiao</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/vulnhub/" class="post-category">
+                                    vulnhub
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/vulnhub/">
+                        <span class="chip bg-color">vulnhub</span>
                     </a>
                     
                 </div>
