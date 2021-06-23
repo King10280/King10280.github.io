@@ -426,14 +426,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.3k
+                    5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    16 分
+                    19 分
                 </div>
                 
 
@@ -710,6 +710,27 @@
 <p>在<code>pass_change</code>中有这样的sql更新语句</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$<span class="keyword">sql</span> <span class="operator">=</span> &quot;UPDATE users SET PASSWORD=&#x27;$pass&#x27; where username=&#x27;$username&#x27; and password=&#x27;$curr_pass&#x27; &quot;;</span><br></pre></td></tr></table></figure>
 <p>当使用<code>admin&#39;#</code>进行修改密码时，这里的<code>username=&#39;$username&#39;</code>就会变为<code>username=&#39;admin&#39;#&#39;</code>而<code>#</code>会将后面的单引号注释了，所以就直接变成了<code>admin</code>用户</p>
+<h2 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h2><h3 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String <span class="keyword">sql</span> <span class="operator">=</span> &quot;select id, no from user where id=?&quot;;</span><br><span class="line">PreparedStatement ps <span class="operator">=</span> conn.prepareStatement(<span class="keyword">sql</span>);</span><br><span class="line">ps.setInt(<span class="number">1</span>, id);</span><br><span class="line">ps.executeQuery();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>原理：SQL注入只对SQL语句的编译过程有破坏作用，而PreparedStatement已经预编译好了，执行阶段只是把输入串作为数据处理。而不再对SQL语句进行解析。因此也就避免了sql注入问题</p>
+</blockquote>
+<blockquote>
+<p>采用了PreparedStatement预编译，就会将SQL语句：”select id, no from user where id=?” 预先编译好，也就是SQL引擎会预先进行语法分析，产生语法树，生成执行计划，也就是说，后面你输入的参数，无论你输入的是什么，都不会影响该SQL语句的语法结构了</p>
+<p>即使你后面输入了这些SQL命令，也不会被当成SQL命令来执行了，因为这些SQL命令的执行， 必须先通过语法分析，生成执行计划，既然语法分析已经完成，已经预编译过了，那么后面输入的参数，是绝对不可能作为SQL命令来执行的，<strong>只会被当做字符串字面值参数</strong></p>
+</blockquote>
+<h3 id="PDO"><a href="#PDO" class="headerlink" title="PDO"></a>PDO</h3><p>PDO是PHP Data Objects（php数据对象）的缩写。是在php5.1版本之后开始支持PDO</p>
+<blockquote>
+<p> 可以把PDO看做是php提供的一个类。它提供了一组数据库抽象层API，使得编写php代码不再关心具体要连接的数据库类型。你既可以用使用PDO连接mysql，也可以用它连接oracle</p>
+</blockquote>
+<p>PDO对于解决SQL注入的原理也是基于预编译</p>
+<h3 id="正则表达式过滤"><a href="#正则表达式过滤" class="headerlink" title="正则表达式过滤"></a>正则表达式过滤</h3><p>对用户输入的数据进行严格的检查，使用正则表达式对危险字符串进行过滤</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><blockquote>
+<p><strong>·</strong> Web 应用中用于连接数据库的用户与数据库的系统管理员用户的权限有严格的区分（如不能执行 drop 等），并设置 Web 应用中用于连接数据库的用户不允许操作其他数据库</p>
+<p><strong>·</strong> 设置 Web 应用中用于连接数据库的用户对 Web 目录不允许有写权限。</p>
+<p><strong>·</strong> 严格限定参数类型和格式，明确参数检验的边界，必须在服务端正式处理之前对提交的数据的合法性进行检查</p>
+<p><strong>·</strong> 使用 Web 应用防火墙</p>
+</blockquote>
+<h2 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h2><p>这几种类型是主要的，其实还要一些其他的注入类型，如正则匹配、user-agent注入、cookie注入还有比较特殊的万能密码```or<code>1</code>=`1``、异或注入等等，而且手注大部分面向的是mysql，对于oracle、mssql等数据库接触的比较少，并且对sqlmap工具的使用也停留在最简单的阶段，总之还有很多很多需要学习的地方</p>
 <p>参考文章：</p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
 <p><a target="_blank" rel="noopener" href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
@@ -1119,7 +1140,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">7.5k</span>&nbsp;字
+                class="white-color">8.2k</span>&nbsp;字
             
             
             

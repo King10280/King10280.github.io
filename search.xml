@@ -166,6 +166,66 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo初使用</title>
+    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
+</blockquote>
+<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
+<li>Node.js</li>
+<li>git</li>
+<li>hexo</li>
+<li>GitHub账号</li>
+</ul>
+<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
+<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
+<p>配置全局变量,并生成密钥</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
+<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
+<blockquote>
+<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
+</blockquote>
+<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
+<li>npm install hexo-deployer-git –save</li>
+</ul>
+<blockquote>
+<p>要在博客目录下右键git bash运行</p>
+</blockquote>
+<ul>
+<li>hexo clean （清除缓存和静态文件）</li>
+<li>hexo g （生成静态文件）</li>
+<li>hexo d （部署）</li>
+</ul>
+<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
+<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
+<blockquote>
+<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
+</blockquote>
+<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
+<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
+<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
+<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
+<ul>
+<li>安装插件</li>
+<li>_config.yml选项设置</li>
+<li>使用相对路径</li>
+</ul>
+<blockquote>
+<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
+</blockquote>
+<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
+<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker基本使用</title>
     <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
@@ -225,66 +285,6 @@
       </categories>
       <tags>
         <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo初使用</title>
-    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
-</blockquote>
-<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
-<li>Node.js</li>
-<li>git</li>
-<li>hexo</li>
-<li>GitHub账号</li>
-</ul>
-<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
-<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
-<p>配置全局变量,并生成密钥</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
-<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
-<blockquote>
-<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
-</blockquote>
-<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
-<li>npm install hexo-deployer-git –save</li>
-</ul>
-<blockquote>
-<p>要在博客目录下右键git bash运行</p>
-</blockquote>
-<ul>
-<li>hexo clean （清除缓存和静态文件）</li>
-<li>hexo g （生成静态文件）</li>
-<li>hexo d （部署）</li>
-</ul>
-<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
-<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
-<blockquote>
-<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
-</blockquote>
-<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
-<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
-<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
-<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
-<ul>
-<li>安装插件</li>
-<li>_config.yml选项设置</li>
-<li>使用相对路径</li>
-</ul>
-<blockquote>
-<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
-</blockquote>
-<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
-<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -650,6 +650,27 @@
 <p>在<code>pass_change</code>中有这样的sql更新语句</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">$<span class="keyword">sql</span> <span class="operator">=</span> &quot;UPDATE users SET PASSWORD=&#x27;$pass&#x27; where username=&#x27;$username&#x27; and password=&#x27;$curr_pass&#x27; &quot;;</span><br></pre></td></tr></table></figure>
 <p>当使用<code>admin&#39;#</code>进行修改密码时，这里的<code>username=&#39;$username&#39;</code>就会变为<code>username=&#39;admin&#39;#&#39;</code>而<code>#</code>会将后面的单引号注释了，所以就直接变成了<code>admin</code>用户</p>
+<h2 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h2><h3 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">String <span class="keyword">sql</span> <span class="operator">=</span> &quot;select id, no from user where id=?&quot;;</span><br><span class="line">PreparedStatement ps <span class="operator">=</span> conn.prepareStatement(<span class="keyword">sql</span>);</span><br><span class="line">ps.setInt(<span class="number">1</span>, id);</span><br><span class="line">ps.executeQuery();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>原理：SQL注入只对SQL语句的编译过程有破坏作用，而PreparedStatement已经预编译好了，执行阶段只是把输入串作为数据处理。而不再对SQL语句进行解析。因此也就避免了sql注入问题</p>
+</blockquote>
+<blockquote>
+<p>采用了PreparedStatement预编译，就会将SQL语句：”select id, no from user where id=?” 预先编译好，也就是SQL引擎会预先进行语法分析，产生语法树，生成执行计划，也就是说，后面你输入的参数，无论你输入的是什么，都不会影响该SQL语句的语法结构了</p>
+<p>即使你后面输入了这些SQL命令，也不会被当成SQL命令来执行了，因为这些SQL命令的执行， 必须先通过语法分析，生成执行计划，既然语法分析已经完成，已经预编译过了，那么后面输入的参数，是绝对不可能作为SQL命令来执行的，<strong>只会被当做字符串字面值参数</strong></p>
+</blockquote>
+<h3 id="PDO"><a href="#PDO" class="headerlink" title="PDO"></a>PDO</h3><p>PDO是PHP Data Objects（php数据对象）的缩写。是在php5.1版本之后开始支持PDO</p>
+<blockquote>
+<p> 可以把PDO看做是php提供的一个类。它提供了一组数据库抽象层API，使得编写php代码不再关心具体要连接的数据库类型。你既可以用使用PDO连接mysql，也可以用它连接oracle</p>
+</blockquote>
+<p>PDO对于解决SQL注入的原理也是基于预编译</p>
+<h3 id="正则表达式过滤"><a href="#正则表达式过滤" class="headerlink" title="正则表达式过滤"></a>正则表达式过滤</h3><p>对用户输入的数据进行严格的检查，使用正则表达式对危险字符串进行过滤</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><blockquote>
+<p><strong>·</strong> Web 应用中用于连接数据库的用户与数据库的系统管理员用户的权限有严格的区分（如不能执行 drop 等），并设置 Web 应用中用于连接数据库的用户不允许操作其他数据库</p>
+<p><strong>·</strong> 设置 Web 应用中用于连接数据库的用户对 Web 目录不允许有写权限。</p>
+<p><strong>·</strong> 严格限定参数类型和格式，明确参数检验的边界，必须在服务端正式处理之前对提交的数据的合法性进行检查</p>
+<p><strong>·</strong> 使用 Web 应用防火墙</p>
+</blockquote>
+<h2 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h2><p>这几种类型是主要的，其实还要一些其他的注入类型，如正则匹配、user-agent注入、cookie注入还有比较特殊的万能密码```or<code>1</code>=`1``、异或注入等等，而且手注大部分面向的是mysql，对于oracle、mssql等数据库接触的比较少，并且对sqlmap工具的使用也停留在最简单的阶段，总之还有很多很多需要学习的地方</p>
 <p>参考文章：</p>
 <p><a href="https://www.anquanke.com/post/id/235970#h3-2">SQL注入漏洞详解</a></p>
 <p><a href="https://forum.90sec.com/t/topic/1638">【最全干货】SQL注入大合集</a></p>
