@@ -340,6 +340,9 @@
 <p><a href="https://blog.csdn.net/roukmanx/article/details/103682318">Redis 4.x/5.x 未授权访问漏洞</a></p>
 <p><a href="https://www.cnblogs.com/rnss/p/13612703.html">redis 4-unacc 复现</a></p>
 ]]></content>
+      <categories>
+        <category>vulhub</category>
+      </categories>
       <tags>
         <tag>redis</tag>
       </tags>
@@ -560,6 +563,8 @@
     <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
 <p>查看已经开放的端口<code>netstat -anp</code></p>
 <p>查看防火墙状态<code>systemctl status firewalld</code></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
+<p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
 ]]></content>
   </entry>
   <entry>
