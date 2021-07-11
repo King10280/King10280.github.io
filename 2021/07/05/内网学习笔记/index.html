@@ -419,21 +419,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-07
+                    2021-07-09
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.7k
+                    3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    11 分
                 </div>
                 
 
@@ -586,7 +586,80 @@
 <p>然后就被火绒拦截了。。</p>
 <p>下星期去了解一下免杀</p>
 <p><img src="https://i.loli.net/2021/07/07/gMXQodxYISUP6Rc.png" alt="image-20210707213652646"></p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/2JdMRgA9TlCV5hwO6ihVWQ">内网学习笔记 | 1、内网中常见名词解释</a></p>
+<h2 id="三、内网信息收集之本地信息收集"><a href="#三、内网信息收集之本地信息收集" class="headerlink" title="三、内网信息收集之本地信息收集"></a>三、内网信息收集之本地信息收集</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>当进入内网之后，首先对网络环境进行判断，即</p>
+<blockquote>
+<ol>
+<li><p>机器角色</p>
+<blockquote>
+<p>判断是web服务器、文件服务器、代理服务器、dns服务器或是其他类型，需要根据机器的主机名、文件、网络连接等综合判断</p>
+</blockquote>
+</li>
+<li><p>所处的网络环境的拓扑结构</p>
+<blockquote>
+<p>就是对所处内网进行全面的数据收集和整理分析，大致了解该内网的网络拓扑</p>
+</blockquote>
+</li>
+<li><p>当前机器所处区域</p>
+<blockquote>
+<p>判断机器处于网络拓扑中的哪个区域，DMZ、办公区还是核心区，也就是其所处的大概位置</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<h3 id="收集本地信息"><a href="#收集本地信息" class="headerlink" title="收集本地信息"></a>收集本地信息</h3><h4 id="查询网络配置信息"><a href="#查询网络配置信息" class="headerlink" title="查询网络配置信息"></a>查询网络配置信息</h4><ul>
+<li>查看当前权限</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/dQv9opMOlPDsAjC.png" alt="image-20210709161036865"></p>
+<ul>
+<li>查询网络配置信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ipconfig &#x2F;all</span><br><span class="line">ifconfig </span><br></pre></td></tr></table></figure>
+<h4 id="查询操作系统及软件信息"><a href="#查询操作系统及软件信息" class="headerlink" title="查询操作系统及软件信息"></a>查询操作系统及软件信息</h4><ul>
+<li>查询操作系统及软件信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systeminfo | findstr &#x2F;B &#x2F;C:&quot;OS 名称&quot; &#x2F;C:&quot;OS 版本&quot;</span><br><span class="line">uname -a</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/LyYWQ6tI7OnhmoB.png" alt="image-20210709161910359"></p>
+<ul>
+<li>查看系统体系结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo %PROCESSOR_ARCHITECTURE%</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/aRJM3lPEjwdZIxG.png" alt="image-20210709162129501"></p>
+<ul>
+<li>查看系统所有环境变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/J3yPFa4sEC5wN7r.png" alt="image-20210709162258148"></p>
+<ul>
+<li>查看安装的软件及版本和路径等信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic product get name,version</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/43T9BirLkyeS6OW.png" alt="image-20210709162935207"></p>
+<ul>
+<li>利用 PowerShell 收集软件版本信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell &quot;Get-WmiObject -class Win32_Product |Select-Object -Property name,version&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/ONVk5FIAfqiyCGL.png" alt="image-20210709163007956"></p>
+<h4 id="查询本机服务信息"><a href="#查询本机服务信息" class="headerlink" title="查询本机服务信息"></a>查询本机服务信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic service list brief</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/07/09/sq7QixYrmUAtjEu.png" alt="image-20210709163128489"></p>
+<h4 id="查询进程列表"><a href="#查询进程列表" class="headerlink" title="查询进程列表"></a>查询进程列表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tasklist &#x2F;v</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/mpFdPrMJDEtAo7U.png" alt="image-20210709171049226"></p>
+<ul>
+<li>wmic 查看进程信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic process list brief</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/09/7bHNJPR1GSIyLZY.png" alt="image-20210709171203244"></p>
+<h4 id="查看启动程序信息"><a href="#查看启动程序信息" class="headerlink" title="查看启动程序信息"></a>查看启动程序信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic startup get command,caption</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/07/09/BN17HuLR6vlE4hf.png" alt="image-20210709171349557"></p>
+<h4 id="查看计划任务"><a href="#查看计划任务" class="headerlink" title="查看计划任务"></a>查看计划任务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks &#x2F;query &#x2F;fo LIST &#x2F;v</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/07/09/cBJQhFGK9Iveb7w.png" alt="image-20210709171612992"></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/2JdMRgA9TlCV5hwO6ihVWQ">内网学习笔记 | 1、内网中常见名词解释</a></p>
 <p>内网安全攻防渗透测试实战指南</p>
 
                 
@@ -980,7 +1053,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">14.4k</span>&nbsp;字
+                class="white-color">14.8k</span>&nbsp;字
             
             
             
