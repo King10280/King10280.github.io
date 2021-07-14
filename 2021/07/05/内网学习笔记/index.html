@@ -419,21 +419,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-09
+                    2021-07-12
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3k
+                    4.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    11 分
+                    18 分
                 </div>
                 
 
@@ -606,7 +606,7 @@
 </li>
 </ol>
 </blockquote>
-<h3 id="收集本地信息"><a href="#收集本地信息" class="headerlink" title="收集本地信息"></a>收集本地信息</h3><h4 id="查询网络配置信息"><a href="#查询网络配置信息" class="headerlink" title="查询网络配置信息"></a>查询网络配置信息</h4><ul>
+<h3 id="一、手动收集本地信息"><a href="#一、手动收集本地信息" class="headerlink" title="一、手动收集本地信息"></a>一、手动收集本地信息</h3><h4 id="1-查询网络配置信息"><a href="#1-查询网络配置信息" class="headerlink" title="1.查询网络配置信息"></a>1.查询网络配置信息</h4><ul>
 <li>查看当前权限</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br></pre></td></tr></table></figure>
@@ -615,7 +615,7 @@
 <li>查询网络配置信息</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ipconfig &#x2F;all</span><br><span class="line">ifconfig </span><br></pre></td></tr></table></figure>
-<h4 id="查询操作系统及软件信息"><a href="#查询操作系统及软件信息" class="headerlink" title="查询操作系统及软件信息"></a>查询操作系统及软件信息</h4><ul>
+<h4 id="2-查询操作系统及软件信息"><a href="#2-查询操作系统及软件信息" class="headerlink" title="2.查询操作系统及软件信息"></a>2.查询操作系统及软件信息</h4><ul>
 <li>查询操作系统及软件信息</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systeminfo | findstr &#x2F;B &#x2F;C:&quot;OS 名称&quot; &#x2F;C:&quot;OS 版本&quot;</span><br><span class="line">uname -a</span><br></pre></td></tr></table></figure>
@@ -640,27 +640,196 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell &quot;Get-WmiObject -class Win32_Product |Select-Object -Property name,version&quot;</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/07/09/ONVk5FIAfqiyCGL.png" alt="image-20210709163007956"></p>
-<h4 id="查询本机服务信息"><a href="#查询本机服务信息" class="headerlink" title="查询本机服务信息"></a>查询本机服务信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic service list brief</span><br></pre></td></tr></table></figure>
+<h4 id="3-查询本机服务信息"><a href="#3-查询本机服务信息" class="headerlink" title="3.查询本机服务信息"></a>3.查询本机服务信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic service list brief</span><br></pre></td></tr></table></figure>
 
 
 <p><img src="https://i.loli.net/2021/07/09/sq7QixYrmUAtjEu.png" alt="image-20210709163128489"></p>
-<h4 id="查询进程列表"><a href="#查询进程列表" class="headerlink" title="查询进程列表"></a>查询进程列表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tasklist &#x2F;v</span><br></pre></td></tr></table></figure>
+<h4 id="4-查询进程列表"><a href="#4-查询进程列表" class="headerlink" title="4.查询进程列表"></a>4.查询进程列表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tasklist &#x2F;v</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/07/09/mpFdPrMJDEtAo7U.png" alt="image-20210709171049226"></p>
 <ul>
 <li>wmic 查看进程信息</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic process list brief</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/07/09/7bHNJPR1GSIyLZY.png" alt="image-20210709171203244"></p>
-<h4 id="查看启动程序信息"><a href="#查看启动程序信息" class="headerlink" title="查看启动程序信息"></a>查看启动程序信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic startup get command,caption</span><br></pre></td></tr></table></figure>
-
-
+<h4 id="5-查看启动程序信息"><a href="#5-查看启动程序信息" class="headerlink" title="5.查看启动程序信息"></a>5.查看启动程序信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic startup get command,caption</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/07/09/BN17HuLR6vlE4hf.png" alt="image-20210709171349557"></p>
-<h4 id="查看计划任务"><a href="#查看计划任务" class="headerlink" title="查看计划任务"></a>查看计划任务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks &#x2F;query &#x2F;fo LIST &#x2F;v</span><br></pre></td></tr></table></figure>
+<h4 id="6-查看计划任务"><a href="#6-查看计划任务" class="headerlink" title="6.查看计划任务"></a>6.查看计划任务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks &#x2F;query &#x2F;fo LIST &#x2F;v</span><br></pre></td></tr></table></figure>
 
 
 <p><img src="https://i.loli.net/2021/07/09/cBJQhFGK9Iveb7w.png" alt="image-20210709171612992"></p>
+<h4 id="7-查看主机开启时间"><a href="#7-查看主机开启时间" class="headerlink" title="7.查看主机开启时间"></a>7.查看主机开启时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net statistics workstation</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/nhcQbRsfUFuE8YV.png" alt="image-20210711163948985"></p>
+<h4 id="8-查询用户列表"><a href="#8-查询用户列表" class="headerlink" title="8.查询用户列表"></a>8.查询用户列表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/BLU76YiVRSAqDGb.png" alt="image-20210711164021432"></p>
+<ul>
+<li>查看指定用户的信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user xxx</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/DWqZ8xFv4saSQ1H.png" alt="image-20210711164129428"></p>
+<ul>
+<li>查看本地管理员用户</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net localgroup administrators</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看当前在线用户</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query user || qwinsta</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/t6X4fNMBmUvWyei.png" alt="image-20210711164258577"></p>
+<h4 id="9-列出或断开本地计算机和连接的客户端的会话"><a href="#9-列出或断开本地计算机和连接的客户端的会话" class="headerlink" title="9.列出或断开本地计算机和连接的客户端的会话"></a>9.列出或断开本地计算机和连接的客户端的会话</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net session</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">发生系统错误 5。</span><br><span class="line"></span><br><span class="line">拒绝访问。</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="10-查看端口列表"><a href="#10-查看端口列表" class="headerlink" title="10.查看端口列表"></a>10.查看端口列表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat –ano</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="11-查看补丁列表"><a href="#11-查看补丁列表" class="headerlink" title="11.查看补丁列表"></a>11.查看补丁列表</h4><p>查看系统的详细信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/SktHCqj3aZxBU72.png" alt="image-20210711164721047"></p>
+<ul>
+<li>使用 wmic 查看补丁列表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/vAhGJC8KMRxzIl1.png" alt="image-20210711164824760"></p>
+<h4 id="12-查看本机共享"><a href="#12-查看本机共享" class="headerlink" title="12.查看本机共享"></a>12.查看本机共享</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net share</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/aGNzef2Z1UclJWp.png" alt="image-20210711164903152"></p>
+<ul>
+<li>使用 wmic 查看共享列表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic share get name,path,status</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="13-查询路由表及所有可用接口的ARP-缓存表"><a href="#13-查询路由表及所有可用接口的ARP-缓存表" class="headerlink" title="13.查询路由表及所有可用接口的ARP 缓存表"></a>13.查询路由表及所有可用接口的ARP 缓存表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route printarp –a</span><br><span class="line">arp -a</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="14-查询防火墙相关配置"><a href="#14-查询防火墙相关配置" class="headerlink" title="14.查询防火墙相关配置"></a>14.查询防火墙相关配置</h4><ul>
+<li><ul>
+<li>关闭防火墙</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netsh firewall set opmode disable (Windows Server 2003 系统及之前版本)</span><br><span class="line">netsh advfirewall set allprofiles state off    (Windows Server 2003 系统及之后版本)</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>查看防火墙配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh firewall show config</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/zsjSJCIfHVrdGOc.png" alt="image-20210711165117441"></p>
+<ul>
+<li><p>修改防火墙配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(Windows Server 2003 系统及之前版本)允许指定程序全部连接</span><br><span class="line">netsh firewall add allowedprogram c:\nc.exe &quot;allow nc&quot; enable</span><br><span class="line"></span><br><span class="line">(Windows Server 2003 之后系统版本)允许指定程序连入</span><br><span class="line">netsh advfirewall firewall add rule name&#x3D;&quot;pass nc&quot; dir&#x3D;in action&#x3D;allow program&#x3D;&quot;C: \nc.exe&quot;</span><br><span class="line"></span><br><span class="line">允许指定程序连出</span><br><span class="line">netsh advfirewall firewall add rule name&#x3D;&quot;Allow nc&quot; dir&#x3D;out action&#x3D;allow program&#x3D;&quot;C: \nc.exe&quot;</span><br><span class="line"></span><br><span class="line">允许 3389 端口放行</span><br><span class="line">netsh advfirewall firewall add rule name&#x3D;&quot;Remote Desktop&quot; protocol&#x3D;TCP dir&#x3D;in localport&#x3D;3389 action&#x3D;allow</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><ul>
+<li>自定义防火墙日志储存位置</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh advfirewall set currentprofile logging filename &quot;C:\windows\temp\fw.log</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="15-查看计算机代理配置情况"><a href="#15-查看计算机代理配置情况" class="headerlink" title="15.查看计算机代理配置情况"></a>15.查看计算机代理配置情况</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg query &quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings&quot;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="16-查询并开启远程连接服务"><a href="#16-查询并开启远程连接服务" class="headerlink" title="16.查询并开启远程连接服务"></a>16.查询并开启远程连接服务</h4><ul>
+<li><ul>
+<li>查看远程连接端口（0xd3d换成10进制即3389）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG QUERY &quot;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&quot; &#x2F;V PortNumber</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/Z5rDzpfyPiewu6U.png" alt="image-20210711165403629"></p>
+<ul>
+<li><ul>
+<li>在Windows Server 2003 中开启3389 端口</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic path win32_terminalservicesetting where (__CLASS !&#x3D;&quot;&quot;) call setallowtsconnections 1</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><ul>
+<li>在Windows Server 2008 和Windows Server 2012 中开启3389 端口</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wmic &#x2F;namespace:\\root\cimv2\terminalservices path win32_terminalservicesetting where (__CLASS !&#x3D;&quot;&quot;) call setallowtsconnections 1</span><br><span class="line"></span><br><span class="line">wmic &#x2F;namespace:\\root\cimv2\terminalservices path win32_tsgeneralsetting where (TerminalName&#x3D;&#39;RDP-Tcp&#39;) call setuserauthenticationrequired 1</span><br><span class="line"></span><br><span class="line">reg add &quot;HKLM\SYSTEM\CURRENT\CONTROLSET\CONTROL\TERMINAL SERVER&quot; &#x2F;v fSingleSessionPerUser &#x2F;t REG_DWORD &#x2F;d 0 &#x2F;f</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="二、自动收集信息"><a href="#二、自动收集信息" class="headerlink" title="二、自动收集信息"></a>二、自动收集信息</h3><h4 id="wmic"><a href="#wmic" class="headerlink" title="wmic"></a>wmic</h4><p>windows管理工具命令行，在默认情况下，任何版本的XP的低权限用户不能访问wmic，win7以上的低权限用户允许访问并执行相关操作</p>
+<p><a target="_blank" rel="noopener" href="https://www.fuzzysecurity.com/scripts/files/wmic_info.rar">wmic 脚本下载地址</a></p>
+<p>直接运行这个bat文件，会生成out.html文件</p>
+<p><img src="https://i.loli.net/2021/07/11/Sw1klBxJofIATN6.png" alt="image-20210711132144653"></p>
+<p><img src="https://i.loli.net/2021/07/11/soz5IyMEQe4tfhL.png" alt="image-20210711132255627"></p>
+<h4 id="PowerShsell-Empire"><a href="#PowerShsell-Empire" class="headerlink" title="PowerShsell Empire"></a>PowerShsell Empire</h4><p>中文简称 “帝国”，是一款针对 Windows 系统平台而打造的渗透工具</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/BC-SECURITY/Empire">Empire</a></p>
+<p>与msf的区别是：</p>
+<ul>
+<li>MSF 是全平台的，无论是win，linux，mac都可以打，但 Empire 是只针对 Windows 的</li>
+<li>MSF 集信息收集，渗透，后渗透，木马，社工的功能为一体，全面多能；而 Empire 专注于内网渗透，它是针对 PowerShell 的</li>
+</ul>
+<p>使用了<code>git clone --recursive https://github.com/BC-SECURITY/Empire.git</code>和<code>sudo apt install powershell-empire </code></p>
+<p><code>wget https://raw.githubusercontent.com/backlion/demo/master/Empire-master.zip</code>都没有成功</p>
+<p><img src="https://i.loli.net/2021/07/11/sNVm1C56UbzE23k.png" alt="image-20210711191031758"></p>
+<p>最后还是使用docker搭建一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -p 1337:1337 -p 5000:5000 bcsecurity&#x2F;empire</span><br></pre></td></tr></table></figure>
+<h5 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h5><p><code>docker exec -it 容器id bash</code></p>
+<h5 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h5><p><code>./empire</code></p>
+<p><img src="https://i.loli.net/2021/07/11/Jx1k9gFIhOGYsQC.png" alt="image-20210711191644112"></p>
+<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>查看帮助信息</p>
+<p><img src="https://i.loli.net/2021/07/11/g8lvMn1sQYj9JmV.png" alt="image-20210711192600026"></p>
+<h5 id="设置监听"><a href="#设置监听" class="headerlink" title="设置监听"></a>设置监听</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(Empire)&gt; listeners #监听</span><br><span class="line"></span><br><span class="line">(Empire:listeners) &gt; uselistener http #选择监听方式</span><br><span class="line"></span><br><span class="line">(Empire:listeners&#x2F;http) &gt; info #查看需要配置的选项</span><br><span class="line"></span><br><span class="line">(Empire:listeners&#x2F;http) &gt; set Name backdoor #设置监听名字</span><br><span class="line"></span><br><span class="line">(Empire:listeners&#x2F;http) &gt; set Host http:&#x2F;&#x2F;ip #设置木马反弹回连地址</span><br><span class="line"></span><br><span class="line">(Empire:listeners&#x2F;http) &gt; set Port 4447 #设置本地监听端口</span><br><span class="line"></span><br><span class="line">(Empire:listeners&#x2F;http) &gt; execute #执行监听</span><br><span class="line"></span><br><span class="line">(Empire:listeners&#x2F;http) &gt; back #返回上层模块</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/07/11/13IfNbdg2JZHT9a.png" alt="image-20210711204158131"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(Empire: listeners) &gt; usestager windows&#x2F;launcher_bat backdoo # 选择木马种类</span><br><span class="line"></span><br><span class="line">这里选择的是bat类型</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>使用empire使得主机上线后，收集主机信息主要用到了<code>powershell/situational_awareness/host/winenum</code>模块</p>
+<p><code>powershell/situational_awareness/host/computerdetails</code>模块可查看更丰富的信息，比如RDP登录信息、主机时间日志等等，在运行这个模块时需要管理员权限</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>常用命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">whoami #查看当前权限</span><br><span class="line">ipconfig #查看网络配置</span><br><span class="line">systeminfo #操作系统信息</span><br><span class="line">tasklist &#x2F;v #查看进程</span><br><span class="line">net user #查询用户列表</span><br><span class="line">netstat -ano #端口</span><br><span class="line">netsh firewall show config #防火墙配置</span><br><span class="line">&#x2F;&#x2F;工具使用</span><br><span class="line">wmic</span><br><span class="line">empire</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="四、域内信息收集"><a href="#四、域内信息收集" class="headerlink" title="四、域内信息收集"></a>四、域内信息收集</h2><h3 id="1-判断是否存在域"><a href="#1-判断是否存在域" class="headerlink" title="1.判断是否存在域"></a>1.判断是否存在域</h3><p><code>ipconfig /all</code></p>
+<p>查看网关 IP 地址、DNS 的 IP 地址、域名、<strong>本机是否和 DNS 服务器处于同一网段</strong></p>
+<p>nslookup 解析域名的 IP 地址，<strong>查看是否与 DNS 服务器为同一 IP</strong></p>
+<p><code>nslookup 域名</code></p>
+<h4 id="系统详细信息"><a href="#系统详细信息" class="headerlink" title="系统详细信息"></a>系统详细信息</h4><p><code>systeminfo</code></p>
+<p><code>systeminfo | findstr 域:</code>查看域</p>
+<h4 id="当前登录域和域用户"><a href="#当前登录域和域用户" class="headerlink" title="当前登录域和域用户"></a>当前登录域和域用户</h4><p><code>net config workstation</code></p>
+<h4 id="判断主域"><a href="#判断主域" class="headerlink" title="判断主域"></a>判断主域</h4><p><code>net time /domain</code></p>
+<h3 id="2-收集域内基础信息"><a href="#2-收集域内基础信息" class="headerlink" title="2.收集域内基础信息"></a>2.收集域内基础信息</h3><h4 id="查看域"><a href="#查看域" class="headerlink" title="查看域"></a>查看域</h4><p><code>net view /domain</code></p>
+<h4 id="查看域内计算机"><a href="#查看域内计算机" class="headerlink" title="查看域内计算机"></a>查看域内计算机</h4><p><code>net view /domain:domain_name</code></p>
+<h4 id="查看域内用户列表"><a href="#查看域内用户列表" class="headerlink" title="查看域内用户列表"></a>查看域内用户列表</h4><p><code>net group /domain</code></p>
+<h4 id="查看域用户组信息"><a href="#查看域用户组信息" class="headerlink" title="查看域用户组信息"></a>查看域用户组信息</h4><p><code>net group &quot;Enterprise Admins&quot; /domain</code></p>
+<h4 id="查看域密码策略信息"><a href="#查看域密码策略信息" class="headerlink" title="查看域密码策略信息"></a>查看域密码策略信息</h4><p><code>net accounts /domain</code></p>
+<h4 id="查看域信任信息"><a href="#查看域信任信息" class="headerlink" title="查看域信任信息"></a>查看域信任信息</h4><p><code>nltest /domain_trusts</code></p>
+<h3 id="3-收集域用户和管理员信息"><a href="#3-收集域用户和管理员信息" class="headerlink" title="3.收集域用户和管理员信息"></a>3.收集域用户和管理员信息</h3><h4 id="查询域用户详细信息"><a href="#查询域用户详细信息" class="headerlink" title="查询域用户详细信息"></a>查询域用户详细信息</h4><p><code>wmic useraccount get /all</code></p>
+<h4 id="查询存在的用户"><a href="#查询存在的用户" class="headerlink" title="查询存在的用户"></a>查询存在的用户</h4><p><code>dsquery user</code></p>
+<p>常用的dsquery命令</p>
+<blockquote>
+<p> dsquery computer - 查找目录中的计算机</p>
+<p>dsquery contact - 查找目录中的联系人</p>
+<p>dsquery subnet - 查找目录中的子网</p>
+<p>dsquery group - 查找目录中的组</p>
+<p>dsquery ou - 查找目录中的组织单位</p>
+<p>dsquery site - 查找目录中的站点</p>
+<p>dsquery server - 查找目录中的域控制器</p>
+<p>dsquery user - 查找目录中的用户</p>
+<p>dsquery quota - 查找目录中的配额</p>
+<p>dsquery partition - 查找目录中的分区</p>
+<p>dsquery * - 用通用的 LDAP 查询查找目录中的任何对象</p>
+</blockquote>
+<h3 id="4-查找域控"><a href="#4-查找域控" class="headerlink" title="4.查找域控"></a>4.查找域控</h3><h4 id="查看域控机器名"><a href="#查看域控机器名" class="headerlink" title="查看域控机器名"></a>查看域控机器名</h4><p><code>nltest /dclist:域名</code></p>
+<h4 id="查看域控主机名"><a href="#查看域控主机名" class="headerlink" title="查看域控主机名"></a>查看域控主机名</h4><p><code>nslookup -type=SRV _ldap._tcp</code></p>
+<p><code>netdom query pdc</code></p>
+<h4 id="查看域控组"><a href="#查看域控组" class="headerlink" title="查看域控组"></a>查看域控组</h4><p><code>net group &quot;domain controllers&quot; /domain</code></p>
+<h3 id="5-定位域管理员"><a href="#5-定位域管理员" class="headerlink" title="5.定位域管理员"></a>5.定位域管理员</h3><h4 id="psloggedon"><a href="#psloggedon" class="headerlink" title="psloggedon"></a>psloggedon</h4><p><code>net session</code> 可以查看谁使用了本机资源，但不能查看谁在使用远程计算机资源、谁登录了本地或远程计算机</p>
+<p>使用 psloggedon 可以查看本地登录的用户和通过本地计算机或远程计算机进行资源登录的用户</p>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/2JdMRgA9TlCV5hwO6ihVWQ">内网学习笔记 | 1、内网中常见名词解释</a></p>
 <p>内网安全攻防渗透测试实战指南</p>
+<p><a target="_blank" rel="noopener" href="http://www.52bug.cn/hkjs/5194.html">内网工具学习之Empire后渗透</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.360doc.com/content/18/0228/22/11935121_733281640.shtml">Empire一款强大的后渗透测试神器</a></p>
 
                 
             </div>
@@ -772,18 +941,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/07/05/%E5%86%85%E7%BD%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                <a href="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="内网学习笔记">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="xss学习">
                         
-                        <span class="card-title">内网学习笔记</span>
+                        <span class="card-title">xss学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -793,27 +961,26 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-05
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-11
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%86%85%E7%BD%91/" class="post-category">
-                                    内网
+                            <a href="/categories/xss/" class="post-category">
+                                    xss
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%86%85%E7%BD%91/">
-                        <span class="chip bg-color">内网</span>
+                    <a href="/tags/xss/">
+                        <span class="chip bg-color">xss</span>
                     </a>
                     
                 </div>
@@ -1053,7 +1220,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">14.8k</span>&nbsp;字
+                class="white-color">17.8k</span>&nbsp;字
             
             
             

