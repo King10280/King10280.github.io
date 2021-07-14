@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="xss学习, l0odrd的博客">
+    <meta name="keywords" content="常见web漏洞学习之xss学习, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>xss学习 | l0odrd的博客</title>
+    <title>常见web漏洞学习之xss学习 | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">xss学习</h1>
+                    <h1 class="description center-align post-title">常见web漏洞学习之xss学习</h1>
                 </div>
             </div>
         </div>
@@ -426,14 +426,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    726
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
 
@@ -498,9 +498,21 @@
 <p><code>#&#39; onclick=&quot;alert(&#39;xss&#39;)&quot;&gt;</code></p>
 <p>点击<code>&#39;&gt;就让往事都随风,都随风吧</code></p>
 <p><img src="https://i.loli.net/2021/07/14/J84TmvBj1bE2lQR.png" alt="image-20210714151950066"></p>
+<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><h4 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h4><p>贴一段师傅源码</p>
+<p>区分大小写过滤<code>&lt;script&gt;</code>标签</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//前端 1.html：</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>反射型XSS<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;action4.php&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">//后端 action4.php：</span><br><span class="line">&lt;?php</span><br><span class="line">$name=$_POST[&quot;name&quot;]; </span><br><span class="line">if($name!=null)&#123;</span><br><span class="line">	$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/&quot;,&quot;&quot;,$name);      //过滤<span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">	$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/&quot;</span>,<span class="string">&quot;&quot;</span>,$name);   <span class="comment">//过滤</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">	echo $name; </span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="嵌套-lt-script-gt-标签绕过"><a href="#嵌套-lt-script-gt-标签绕过" class="headerlink" title="嵌套&lt;script&gt;标签绕过"></a>嵌套<code>&lt;script&gt;</code>标签绕过</h4><p>其他源码同上，加了一个<code>i</code>，不区分大小写过滤<code>&lt;script&gt;</code>标签</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/i&quot;,&quot;&quot;,$name);    //不区分大小写过滤 <span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/i&quot;</span>,<span class="string">&quot;&quot;</span>,$name);  <span class="comment">//不区分大小写过滤 </span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>payload<code>&lt;scr&lt;script&gt;ipt&gt;alert(&#39;hack&#39;)&lt;/scr&lt;/script&gt;ipt&gt;</code></p>
+<h4 id="过滤所有内容"><a href="#过滤所有内容" class="headerlink" title="过滤所有内容"></a>过滤所有内容</h4><p>其他源码同上</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$name = preg_replace( &#x27;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&#x27;, &#x27;&#x27;, $_GET[ &#x27;name&#x27; ] ); //过滤了&lt;script及其之间的所有内容</span><br></pre></td></tr></table></figure>
+<p>虽然script标签不能使用了，但img、body等标签的事件或者 iframe 等标签的 src 注入恶意的 js 代码</p>
+<p>payload<code>&lt;img src=1 οnerrοr=alert(&#39;hack&#39;)&gt;</code></p>
+<p>其他继续补充</p>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="http://c.biancheng.net/view/3274.html">HTML DOM是什么</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/witwitwiter/article/details/115797971">Pikachu靶场：DOM型XSS以及DOM型XSS-X</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fairyting/p/12630548.html">DOM型XSS（pikachu）</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35393693/article/details/86597707">XSS(跨站脚本)漏洞详解之XSS跨站脚本攻击漏洞的解决</a></p>
 
                 
             </div>
@@ -621,9 +633,9 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="xss学习">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="常见web漏洞学习之xss学习">
                         
-                        <span class="card-title">xss学习</span>
+                        <span class="card-title">常见web漏洞学习之xss学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -905,7 +917,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">17.8k</span>&nbsp;字
+                class="white-color">18.2k</span>&nbsp;字
             
             
             
