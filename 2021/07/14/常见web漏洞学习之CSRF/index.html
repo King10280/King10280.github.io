@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="分类, l0odrd的博客">
+    <meta name="keywords" content="常见web漏洞学习之CSRF, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>分类 | l0odrd的博客</title>
+    <title>常见web漏洞学习之CSRF | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -271,7 +271,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">分类</h1>
+                    <h1 class="description center-align post-title">常见web漏洞学习之CSRF</h1>
                 </div>
             </div>
         </div>
@@ -385,12 +385,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/csrf/">
+                                <span class="chip bg-color">csrf</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/csrf/" class="post-category">
+                                csrf
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -399,28 +412,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-02-08
+                    2021-07-14
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-02-08
+                    2021-07-17
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    868
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -440,7 +453,41 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
+<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
+<blockquote>
+<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
+</blockquote>
+<p>图里解释很清楚了，就不赘述了</p>
+<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
+<p>还是老生常谈的银行转账的问题</p>
+<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
+<p>而攻击者构造的代码是</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
+<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
+<blockquote>
+<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
+</blockquote>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
+<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
+<li>验证http referer字段</li>
+</ol>
+<p>referer就是记录了请求的来源（同源策略）</p>
+<blockquote>
+<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
+</blockquote>
+<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
+<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
+<li>添加token并验证</li>
+</ol>
+<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
+<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
+
                 
             </div>
             <hr/>
@@ -466,7 +513,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/categories/index.html">https://King10280.github.io/categories/index.html</a>
+                    <a href="https://King10280.github.io/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/">https://King10280.github.io/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -503,7 +550,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/csrf/">
+                                    <span class="chip bg-color">csrf</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -547,18 +598,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/categories/index.html">
+                <a href="/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="分类">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="常见web漏洞学习之SSRF">
                         
-                        <span class="card-title">分类</span>
+                        <span class="card-title">常见web漏洞学习之SSRF</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -568,9 +618,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-15
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -579,7 +629,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -587,16 +636,16 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/categories/index.html">
+                <a href="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="分类">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="常见web漏洞学习之xss学习">
                         
-                        <span class="card-title">分类</span>
+                        <span class="card-title">常见web漏洞学习之xss学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -607,17 +656,28 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-08
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-11
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            l0odrd
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/xss/" class="post-category">
+                                    xss
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/xss/">
+                        <span class="chip bg-color">xss</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
