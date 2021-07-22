@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="标签, l0odrd的博客">
+    <meta name="keywords" content="ctfhub之ssrf, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>标签 | l0odrd的博客</title>
+    <title>ctfhub之ssrf | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">标签</h1>
+                    <h1 class="description center-align post-title">ctfhub之ssrf</h1>
                 </div>
             </div>
         </div>
@@ -385,12 +385,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ctf/">
+                                <span class="chip bg-color">ctf</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/ctf/" class="post-category">
+                                ctf
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -399,21 +412,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-02-08
+                    2021-07-19
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-02-08
+                    2021-07-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    271
                 </div>
                 
 
@@ -440,7 +453,30 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="内网访问"><a href="#内网访问" class="headerlink" title="内网访问"></a>内网访问</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>直接构造url<code>?url=http://127.0.0.1/flag.php</code></p>
+<p><img src="https://i.loli.net/2021/07/19/ZWTUa7RtHKGEQe4.png" alt="image-20210719213700332"></p>
+<h2 id="伪协议读取文件"><a href="#伪协议读取文件" class="headerlink" title="伪协议读取文件"></a>伪协议读取文件</h2><p>尝试去读取一下Web目录下的flag.php吧</p>
+<p>linux网站的默认目录是<code>/var/www/html</code></p>
+<h3 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h3><p><code>?url=file:///var/www/html/flag.php</code></p>
+<p><img src="https://i.loli.net/2021/07/19/milXBUDKG3nLSIw.png" alt="image-20210719214708812"></p>
+<p>右键查看页面源码</p>
+<p><img src="https://i.loli.net/2021/07/19/SzAmxP7aE5Yd8wV.png" alt="image-20210719214812341"></p>
+<h2 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h2><p>来来来性感CTFHub在线扫端口,据说端口范围是8000-9000哦,</p>
+<blockquote>
+<p>在SSRF中，dict协议与http协议可用来探测内网的主机存活与端口开放情况。</p>
+</blockquote>
+<p>这里要对ip进行内网端口探测，使用burp抓包跑一下</p>
+<p>对端口参数添加一下变量</p>
+<p><img src="https://i.loli.net/2021/07/19/SGa76DWRfLE1hkp.png" alt="image-20210719220453504"></p>
+<p>设置一下参数</p>
+<p><img src="https://i.loli.net/2021/07/19/N1MW9yt2AOE8DFx.png" alt="image-20210719220428828"></p>
+<p>根据长度找到开放的端口为8347，flag存在于响应包中</p>
+<p><img src="https://i.loli.net/2021/07/19/Tbrcm2OsxAEa4n3.png" alt="image-20210719220708156"></p>
+<h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p>这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</p>
+<p>index.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if (!isset($_REQUEST[&#39;url&#39;]))&#123;</span><br><span class="line">    header(&quot;Location: &#x2F;?url&#x3D;_&quot;);</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ch &#x3D; curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $_REQUEST[&#39;url&#39;]);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);</span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);</span><br><span class="line">curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
+
                 
             </div>
             <hr/>
@@ -466,7 +502,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/tags/index.html">https://King10280.github.io/tags/index.html</a>
+                    <a href="https://King10280.github.io/2021/07/19/ctfhub%E4%B9%8Bssrf/">https://King10280.github.io/2021/07/19/ctfhub%E4%B9%8Bssrf/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -503,7 +539,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/ctf/">
+                                    <span class="chip bg-color">ctf</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -547,18 +587,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/tags/index.html">
+                <a href="/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="标签">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="常见web漏洞学习之RCE">
                         
-                        <span class="card-title">标签</span>
+                        <span class="card-title">常见web漏洞学习之RCE</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -568,18 +607,29 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-20
+                        </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            l0odrd
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/rce/" class="post-category">
+                                    rce
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/rce/">
+                        <span class="chip bg-color">rce</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -587,16 +637,16 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/tags/index.html">
+                <a href="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="标签">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="内网环境搭建">
                         
-                        <span class="card-title">标签</span>
+                        <span class="card-title">内网环境搭建</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -607,17 +657,28 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-08
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-15
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            l0odrd
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%86%85%E7%BD%91/" class="post-category">
+                                    内网
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%86%85%E7%BD%91/">
+                        <span class="chip bg-color">内网</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -817,7 +878,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">19.6k</span>&nbsp;字
+                class="white-color">23k</span>&nbsp;字
             
             
             

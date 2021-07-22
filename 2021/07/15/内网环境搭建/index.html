@@ -419,21 +419,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-16
+                    2021-07-17
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    543
+                    507
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    1 分
                 </div>
                 
 
@@ -454,7 +454,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="基本内网环境搭建"><a href="#基本内网环境搭建" class="headerlink" title="基本内网环境搭建"></a>基本内网环境搭建</h1><h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p>用的思科模拟器画的，连接的方法肯定有问题，也没有连通，只能大概了解（学会了一定改）</p>
-<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\Desktop\b4RUcqX2y8prB9l.png" alt="image-20210716122325331"></p>
+<p><img src="https://i.loli.net/2021/07/16/b4RUcqX2y8prB9l.png" alt="image-20210716122325331"></p>
 <p>pfSense(充当路由、防火墙)</p>
 <blockquote>
 <p> 基于FreeBSD，专为防火墙和路由器功能定制的开源版本</p>
@@ -467,16 +467,9 @@
 <p><del>等待网卡配置</del></p>
 <p>不用自定义安装直接</p>
 <p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715211852671.png" alt="image-20210715211852671"></p>
-<p><img src="https://i.loli.net/2021/07/15/Yaw8eKuhH5WsIEP.png" alt="image-20210715212802264"></p>
-<p><img src="https://i.loli.net/2021/07/15/cMY1XEKgR2WzTAx.png" alt="image-20210715230147471"></p>
-<blockquote>
-<p>这里设置错了，后面改了</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/15/bMegHSfNmkjEuOR.png" alt="image-20210715230315693"></p>
 <p>这里为什么要设置为<code>192.168.229.253</code>？是因为<code>VMnet8</code>网卡的地址是<code>192.168.229.1</code>（网卡地址如果没有的话可以自己设置一个静态ip）</p>
 <p><img src="https://i.loli.net/2021/07/15/WcrRpSlfYFvO8zd.png" alt="image-20210715231253905"></p>
 <p>访问</p>
-<p><img src="https://i.loli.net/2021/07/15/glGXS9VqND51yWC.png" alt="image-20210715230556829"></p>
 <p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230832578.png" alt="image-20210715230832578"></p>
 <p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230843355.png" alt="image-20210715230843355"></p>
 <p><img src="https://i.loli.net/2021/07/15/Jr4YvDmiu1oMxaE.png" alt="image-20210715231538625"></p>
@@ -485,19 +478,10 @@
 <p><img src="https://i.loli.net/2021/07/16/KEPRadL135WwmgM.png" alt="image-20210716100449009"></p>
 <p>点击进入<code>OPT1</code>，启用接口，进行描述，选择IPv4类型为静态，并将IPv4地址设置为<code>172.16.1.254</code>，子网掩码为24位，保存配置–&gt;应用更改</p>
 <p><img src="https://i.loli.net/2021/07/16/K6A4bvPsLa8gjmX.png" alt="image-20210716100821857"></p>
-<blockquote>
-<p>这里的ip设置错了，改为172.16.1.1</p>
-</blockquote>
 <p><code>OPT2</code>设置</p>
 <p><img src="https://i.loli.net/2021/07/16/oyip2gbzdH3fx7W.png" alt="image-20210716122518464"></p>
-<blockquote>
-<p>改为192.168.1.1</p>
-</blockquote>
 <p>子网掩码的位数可以设置为8</p>
 <p><img src="https://i.loli.net/2021/07/16/OsZTFUKDYRBGy3H.png" alt="image-20210716123516667"></p>
-<blockquote>
-<p>改为10.1.1.1</p>
-</blockquote>
 <p>分别添加<code>DMZ``OA``SERVER</code>规则策略</p>
 <p>防火墙–&gt;规则策略–&gt;添加–&gt;协议设置为<code>any</code></p>
 <p><img src="https://i.loli.net/2021/07/16/7gRYhTNWtjVU2Dz.png" alt="image-20210716123634964"></p>
@@ -635,18 +619,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+                <a href="/2021/07/19/ctfhub%E4%B9%8Bssrf/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="内网环境搭建">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="ctfhub之ssrf">
                         
-                        <span class="card-title">内网环境搭建</span>
+                        <span class="card-title">ctfhub之ssrf</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -656,27 +639,26 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-15
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-19
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%86%85%E7%BD%91/" class="post-category">
-                                    内网
+                            <a href="/categories/ctf/" class="post-category">
+                                    ctf
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%86%85%E7%BD%91/">
-                        <span class="chip bg-color">内网</span>
+                    <a href="/tags/ctf/">
+                        <span class="chip bg-color">ctf</span>
                     </a>
                     
                 </div>
@@ -916,7 +898,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">19.6k</span>&nbsp;字
+                class="white-color">23k</span>&nbsp;字
             
             
             

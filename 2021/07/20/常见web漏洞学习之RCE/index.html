@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="端口那些事, l0odrd的博客">
+    <meta name="keywords" content="常见web漏洞学习之RCE, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>端口那些事 | l0odrd的博客</title>
+    <title>常见web漏洞学习之RCE | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">端口那些事</h1>
+                    <h1 class="description center-align post-title">常见web漏洞学习之RCE</h1>
                 </div>
             </div>
         </div>
@@ -385,12 +385,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/rce/">
+                                <span class="chip bg-color">rce</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/rce/" class="post-category">
+                                rce
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -399,28 +412,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-06-28
+                    2021-07-20
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-05
+                    2021-07-22
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    247
+                    1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    4 分
                 </div>
                 
 
@@ -440,30 +453,119 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>想要开放端口，要先去了解防火墙状态和网络命令</p>
-<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
-<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
-<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
-<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
-<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
-<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
-<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
-<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
-<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
-<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
-<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
-<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
-<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
-<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
-<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
-<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
-<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
-<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
-<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
-<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
-<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
+                <h1 id="RCE"><a href="#RCE" class="headerlink" title="RCE"></a>RCE</h1><p>remote command/code execute</p>
+<p>远程命令执行和远程代码执行</p>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>两者是有本质区别的，命令执行是针对系统命令，而代码执行是针对脚本代码，如php,java,py等</p>
+<p>形成条件：可控变量，漏洞函数</p>
+<p>echo,eval,print区别</p>
+<h3 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h3><h4 id="产生"><a href="#产生" class="headerlink" title="产生"></a>产生</h4><h5 id="web源码-框架"><a href="#web源码-框架" class="headerlink" title="web源码/框架"></a>web源码/框架</h5><ol>
+<li>thinkPHP php开发框架</li>
+</ol>
+<p>存在的版本就很多了，从3.x，5.0，5.0.10，5.0.23等若干版本</p>
+<blockquote>
+<p>要专开一篇来记录</p>
+<p><img src="https://i.loli.net/2021/07/21/JzgGi7aL1xqZTkS.png" alt="image-20210721192942401"></p>
+</blockquote>
+<ol start="2">
+<li>WordPress 基于php的博客平台，可以搭建网站也可以当做cms来使用</li>
+</ol>
+<blockquote>
+<p>想到了hexo，也是搭建博客的一个框架，不过hexo搭建静态站点，WordPress搭建动态站点，可以使用数据库（跑偏了）</p>
+</blockquote>
+<p>4.6和5.0.0存在RCE</p>
+<h5 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h5><ul>
+<li>Tomcat</li>
+</ul>
+<blockquote>
+<p>Tomcat的RCE有CVE-2017-12615，CVE-2019-0232</p>
+<p>附CVE-2019-0232复现:</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liliyuanshangcao/p/10731966.html">Apache Tomcat 远程代码执行漏洞（CVE-2019-0232）漏洞复现</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.sohu.com/a/214814902_354899">Tomcat远程代码执行漏洞分析与利用</a></p>
+</blockquote>
+<ul>
+<li>Redis</li>
+</ul>
+<ul>
+<li>Apache Struts2</li>
+</ul>
+<p>vulhub来复现一下Tomcat CVE-2017-12615</p>
+<h5 id="tomcat-RCE"><a href="#tomcat-RCE" class="headerlink" title="tomcat RCE"></a>tomcat RCE</h5><p>搭建环境</p>
+<p><img src="https://i.loli.net/2021/07/21/nSjt4OdQlKRFgxM.png" alt="image-20210721195653843"></p>
+<blockquote>
+<p> 这里要使用docker-compose build来进行重新构建镜像，<del>好像别的一般不用也行</del></p>
+</blockquote>
+<p>查看镜像</p>
+<p><img src="https://i.loli.net/2021/07/21/taX53Flh6Bs2APE.png" alt="image-20210721195911278"></p>
+<p><img src="/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210721200200464.png" alt="image-20210721200200464"></p>
+<h6 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h6><p>存在该漏洞的Tomcat 运行在 Windows 主机上，且启用了 HTTP PUT请求方法，攻击者可通过构造的攻击请求向服务器上传包含任意代码的 JSP 文件，造成任意代码执行</p>
+<h6 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h6><p>Apache Tomcat 7.0.0 - 7.0.79</p>
+<p>Tomcat 7.x版本内web.xml配置文件内默认配置无readonly参数，需要手工添加，默认配置条件下不受此漏洞影响</p>
+<h6 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h6><p>触发条件有两个，一个是Tomcat要运行在Windows上，二是要启用PUT请求方法</p>
+<blockquote>
+<p>要是自己搭环境来复现的话，只需在conf/web.xml中添加</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">param-name</span>&gt;</span>readonly<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line"> 	<span class="tag">&lt;<span class="name">param-value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当<code>resdonly</code>的值为true时，是不开启PUT的方法的，当它为false时，则是开启PUT方法</p>
+</blockquote>
+<p>而使用vulhub进行复现，不需要手动修改配置文件</p>
+<blockquote>
+<p>范围说是7.0.0 - 7.0.79，但vulhub直接给了个8.5的？？？</p>
+</blockquote>
+<p>—————————-手动分割线———————————————-</p>
+<p>往后看，这里的操作太沙雕了</p>
+<blockquote>
+<p>PUT传参构造错了，淦</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/21/9a4EMYJP213g7bl.png" alt="image-20210721203925269"></p>
+<p>查看是否存在？？?又给我整不会了</p>
+<p><img src="https://i.loli.net/2021/07/21/G1uiNkYoOpaFLq7.png" alt="image-20210721203008446"></p>
+<p>goby扫了一下 确实存在</p>
+<p><img src="https://i.loli.net/2021/07/21/c41b6tPHnOuaMlv.png" alt="image-20210721203343508"></p>
+<p>再看一下这个文件，报500</p>
+<p><img src="https://i.loli.net/2021/07/21/d7DkYBSrF9K4EUM.png" alt="image-20210721203613166"></p>
+<p>goby传的shell成功了！！！</p>
+<p><code>/a855db52.jsp?cmd=whoami</code></p>
+<p><img src="https://i.loli.net/2021/07/21/2VnfpJK4BFvHsXa.png" alt="image-20210721204351131"></p>
+<p>但尝试其他命令就会显示</p>
+<p><img src="https://i.loli.net/2021/07/21/wQ6e9xbFVvESRmj.png" alt="image-20210721205818097"></p>
+<p><img src="https://i.loli.net/2021/07/21/Fg2caqSE8xBeWoy.png" alt="image-20210721210843718"></p>
+<p>百度Google半天无果，就得大概意思还是配置有点问题，好像要删除<code>webapps</code>需要复制一个其他</p>
+<p>—————————-手动分割线———————————————-</p>
+<p>没事了，我是**，是因为put传参的时候构造错了，应该是<code>PUT /xxx.jsp/</code>少了一个<code>/</code></p>
+<blockquote>
+<p>划重点：PUT路径要用<code>/</code>结束！！！</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/21/F7LHm9ndgtOKPxY.png" alt="image-20210721213856611"></p>
+<p><img src="https://i.loli.net/2021/07/21/THWuJ1C5In9QtcR.png" alt="image-20210721213350865"></p>
+<p>构造<code>?&amp;pwd=qqq&amp;cmd=whoami</code></p>
+<p><img src="https://i.loli.net/2021/07/21/W6ugqBkfh493sQU.png" alt="image-20210721213755460"></p>
+<p>其他命令还是报错</p>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><ul>
+<li>PUT传参路径要用<code>/</code>结束！！！</li>
+<li>这个Tomcat的RCE说是7.0.0-7.0.79，但是这个是8.5.19（但是配置出错了，能利用的点也特别少，等于基本没用）</li>
+<li>还有不是必须在win下，linux下也可以复现，但是问题是实际的Tomcat配置有问题，在linux下除了读一下权限和目录，其他干不了啥。可能这和Tomcat版本或是linux有关，暂时没有再去研究</li>
+</ul>
+<blockquote>
+<p>关于版本的问题真相了<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/MLXvePJ7-o7M2wLBhrzg-g">CVE-2017-12615  Tomcat远程代码执行漏洞复现</a></p>
+<p>如果配置了默认servlet，则在9.0.1（Beta），8.5.23，8.0.47和7.0.82之前的所有Tomcat版本都包含所有操作系统上的潜在危险的远程执行代码（RCE）漏洞，只需参数readonly设置为false或者使用参数readonly设置启用WebDAV servlet false</p>
+</blockquote>
+<h4 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h4><p>敏感函数禁用，变量过滤或是固定，waf</p>
+<h3 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h3><p>web源码</p>
+<blockquote>
+<p>nexus,webmin,elasticSearch</p>
+</blockquote>
+<p>中间件</p>
+<blockquote>
+<p>weblogic,apache</p>
+</blockquote>
+<p>其他</p>
+<blockquote>
+<p>postgresql</p>
+</blockquote>
+<h2 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h2><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43071873/article/details/110084577">vulhub系列之thinkphp(2-rce、5.0.23-rce、5-rce、in-sqlinjection)</a></p>
+<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/825/">Wordpress 5.0.0 远程代码执行漏洞分析与复现</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoqiyue/p/9954493.html">漏洞复现——tomcat远程代码执行漏洞</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/247338.html">CVE-2017-12615 Tomcat远程代码执行漏洞复现</a></p>
 
                 
             </div>
@@ -490,7 +592,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/">https://King10280.github.io/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</a>
+                    <a href="https://King10280.github.io/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/">https://King10280.github.io/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -527,7 +629,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/rce/">
+                                    <span class="chip bg-color">rce</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -571,17 +677,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/07/05/web%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">
+                <a href="/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="web基础学习">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="常见web漏洞学习之RCE">
                         
-                        <span class="card-title">web基础学习</span>
+                        <span class="card-title">常见web漏洞学习之RCE</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -591,16 +698,29 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-20
+                            </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            l0odrd
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/rce/" class="post-category">
+                                    rce
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/rce/">
+                        <span class="chip bg-color">rce</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -612,13 +732,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/06/28/redis-4-unacc/">
+                <a href="/2021/07/19/ctfhub%E4%B9%8Bssrf/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="redis 4-unacc">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="ctfhub之ssrf">
                         
-                        <span class="card-title">redis 4-unacc</span>
+                        <span class="card-title">ctfhub之ssrf</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -629,14 +749,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-19
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/vulhub/" class="post-category">
-                                    vulhub
+                            <a href="/categories/ctf/" class="post-category">
+                                    ctf
                                 </a>
                             
                             
@@ -646,8 +766,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/redis/">
-                        <span class="chip bg-color">redis</span>
+                    <a href="/tags/ctf/">
+                        <span class="chip bg-color">ctf</span>
                     </a>
                     
                 </div>
