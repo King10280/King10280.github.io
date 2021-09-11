@@ -519,7 +519,42 @@
   <entry>
     <title>shiro CVE-2016-4437</title>
     <url>/2021/09/09/shiro-CVE-2016-4437/</url>
-    <content><![CDATA[<h2 id="shiro-CVE-2016-4437"><a href="#shiro-CVE-2016-4437" class="headerlink" title="shiro CVE-2016-4437"></a>shiro CVE-2016-4437</h2>]]></content>
+    <content><![CDATA[<h2 id="shiro-CVE-2016-4437"><a href="#shiro-CVE-2016-4437" class="headerlink" title="shiro CVE-2016-4437"></a>shiro CVE-2016-4437</h2><h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>Apache shiro框架提供了记住我（Remember me）功能，用户登录后会生成经过加密的cookie，cookie中的rememberMe字段会被分别进行序列化，AES加密，base64编码操作，</p>
+<p>服务端接收cookie时会进行解密操作，对应加密过程，分别就是</p>
+<ul>
+<li>获取rememberMe cookie</li>
+<li>base64 decode</li>
+<li>解密AES（加密密钥硬编码）</li>
+<li>反序列化（未做过滤处理）</li>
+</ul>
+<p>AES加密的密钥key被硬编码在代码里，也就是通过源码就可以获得key，因此攻击者创建一个恶意对象，并对其进行反序列化、AES加密、base64编码后，作为cookie的rememberMe字段发送，shiro将其解密并反序列化，最终造成反序列化漏洞</p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p><img src="https://i.loli.net/2021/09/10/N4ITAJwUmPD95Ke.png" alt="image-20210910190008301"></p>
+<p>勾选<code>Remember me</code>，抓包</p>
+<p>响应包中存在<code>Set-Cookie: rememberMe=deleteMe</code>，可能存在shiro反序列化漏洞</p>
+<p><img src="https://i.loli.net/2021/09/10/qXU8wco6FWz4hEQ.png" alt="image-20210910203630433"></p>
+<p>利用exp</p>
+<p><code>python3 shiro_exploit.py -t 3 -u http://靶机ip:8080 -p &quot;mkdir 111&quot;</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@kali2020:~&#x2F;桌面&#x2F;Shiro_exploit# python3 shiro_exploit.py -t 3 -u http:&#x2F;&#x2F;靶机ip:8080 -p &quot;mkdir 111&quot;</span><br><span class="line">getdomain error:HTTPConnectionPool(host&#x3D;&#39;www.dnslog.cn&#39;, port&#x3D;80): Max retries exceeded with url: &#x2F;getdomain.php?t&#x3D;321601 (Caused by NewConnectionError(&#39;&lt;urllib3.connection.HTTPConnection object at 0x7f0dcf93b160&gt;: Failed to establish a new connection: [Errno 111] Connection refused&#39;))</span><br><span class="line">getdomain error</span><br><span class="line">get dns host error</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>大概就是连不到<a href="http://www.dnslog.cn这个网站/">www.dnslog.cn这个网站</a></p>
+<blockquote>
+<p>利用exp的流程是，先通过创建文件等操作验证exp可用，然后反弹加密shell，最终getshell</p>
+<p>详见<a href="https://www.cnblogs.com/renhaoblog/p/12971152.html">Apache Shiro 反序列化漏洞复现（CVE-2016-4437）</a></p>
+</blockquote>
+<p>换用shiro利用工具</p>
+<p><img src="https://i.loli.net/2021/09/11/IH12O3LKoZDaTQf.png" alt="image-20210911171444552"></p>
+<p>输入检测目标，进行密钥及利用链爆破，若成功爆破密钥并发现构造链即可进行利用</p>
+<p><img src="https://i.loli.net/2021/09/11/vxdLeq65zn2A9ZI.png" alt="image-20210911203333643"></p>
+<h3 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h3><ul>
+<li><p>不使用硬编码，删除默认密钥</p>
+</li>
+<li><p>升级shiro到1.2.5以上</p>
+</li>
+</ul>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><p><a href="https://github.com/insightglacier/Shiro_exploit">https://github.com/insightglacier/Shiro_exploit</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/loong-hon/p/10619616.html">Apache Shiro Java反序列化漏洞分析</a></p>
+<p><a href="https://www.cnblogs.com/renhaoblog/p/12971152.html">Apache Shiro 反序列化漏洞复现（CVE-2016-4437）</a></p>
+<p><a href="https://bacde.me/post/Apache-Shiro-Deserialize-Vulnerability/">Apache Shiro 反序列化漏洞实战</a></p>
+]]></content>
       <categories>
         <category>shiro</category>
       </categories>
@@ -592,7 +627,13 @@
   <entry>
     <title>tomcat8 弱口令</title>
     <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>docker搭建环境</p>
+    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
+<p>用户权限在<code>conf/tomcat-users.xml</code>文件中配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;tomcat-users xmlns&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml&quot;</span><br><span class="line">              xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">              xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml tomcat-users.xsd&quot;</span><br><span class="line">              version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-jmx&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-status&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;user username&#x3D;&quot;tomcat&quot; password&#x3D;&quot;tomcat&quot; roles&#x3D;&quot;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&quot; &#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">&lt;&#x2F;tomcat-users&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限</p>
+<p>docker搭建环境</p>
 <p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
 <p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
 <p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>

@@ -462,16 +462,9 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                tomcat8 弱口令docker搭建环境
-
-访问xxx:8080/manager/html弱口令tomcat、tomcat登录
-
-找到上传点
-哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war
-
-111.jsp
-
-
+                                tomcat8 弱口令正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击
+用户权限在conf/tomcat-users.xml文件中配置
+1234
                             
                         </div>
                         <div class="publish-info">
@@ -625,7 +618,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.1k</span>&nbsp;字
+                class="white-color">25.9k</span>&nbsp;字
             
             
             
