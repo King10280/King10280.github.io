@@ -397,7 +397,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-09-18
+                    2021-09-20
                 </div>
                 
 
@@ -454,8 +454,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 下载 https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;apache&#x2F;maven&#x2F;maven-3&#x2F;</span><br><span class="line"># 解压</span><br><span class="line">tar -zxvf </span><br><span class="line"># 配置环境变量</span><br><span class="line">vim &#x2F;etc&#x2F;profile</span><br><span class="line">添加</span><br><span class="line">export MAVEN_HOME&#x3D;&#x2F;xxx&#x2F;apache-maven-3.3.9 &#x2F;&#x2F;maven位置</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;&#x2F;bin</span><br><span class="line"># 更新配置</span><br><span class="line">source &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/09/16/gVY59HIiWMf64s1.png" alt="image-20210916184550020"></p>
 <h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p><img src="https://i.loli.net/2021/09/16/zpdBxQsut6OJlPg.png" alt="image-20210916182541274"></p>
-<p>流程</p>
-<ul>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ul>
 <li>编写恶意类，编译为class文件</li>
 <li>在class的目录用python开一个HTTP服务</li>
 <li>marshalsec起一个RMI服务</li>
@@ -472,8 +471,7 @@
 <h4 id="python起一个http服务"><a href="#python起一个http服务" class="headerlink" title="python起一个http服务"></a>python起一个http服务</h4><p>监听在1234端口上</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m SimpleHTTPServer 1234</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/09/18/rg6JR59tK7vekmD.png" alt="image-20210918102037413"></p>
-<p>marshalsec起一个RMI服务</p>
-<blockquote>
+<h4 id="marshalsec起一个RMI服务"><a href="#marshalsec起一个RMI服务" class="headerlink" title="marshalsec起一个RMI服务"></a>marshalsec起一个RMI服务</h4><blockquote>
 <p>HTTPServer服务与RMI可以在同一个服务器</p>
 </blockquote>
 <p>监听9999端口并加载远程类dnslog.class</p>
