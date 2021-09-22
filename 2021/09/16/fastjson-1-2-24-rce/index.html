@@ -397,21 +397,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-09-20
+                    2021-09-22
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    868
+                    1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    4 分
                 </div>
                 
 
@@ -445,15 +445,19 @@
 <p>Fastjson可以将java的对象转换成json的形式，也可以用来将json转换成java对象，效率较高，被广泛的用在web服务以及android上</p>
 <p>它的JSONString（）方法可以将java的对象转换成json格式，同样通过parseObject方法可以将json数据转换成java的对象</p>
 </blockquote>
+<h3 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h3><p>fastjson接受的JSON可以通过<code>@type</code>字段来指定该JSON应当还原成何种类型的对象，也就是未对<code>@type</code>中加载进的类进行过滤，导致的这一版漏洞</p>
+<blockquote>
+<p>主要由于利用templatesImlp这个类，这个类中有一个_bytecodes字段，部分函数能够根据这个字段来生成类的实例，这个类的构造函数是我们可控的，就能rce</p>
+</blockquote>
 <h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>fastjson 1.2.22-1.2.24</p>
-<h3 id="靶机环境"><a href="#靶机环境" class="headerlink" title="靶机环境"></a>靶机环境</h3><p>攻击机：kali/vps（恶意java文件所在）</p>
+<h3 id="靶机环境"><a href="#靶机环境" class="headerlink" title="靶机环境"></a>靶机环境</h3><p>攻击机：kali/vps（恶意java文件所在以及开启RMI服务）</p>
 <p>靶机：另一台vps（vulhub靶场环境）</p>
-<p>当然可以搭建在本地或者一台vps上</p>
-<p>jkd1.8 + maven 3.3.9</p>
+<p><strong>jkd1.8 + maven 3.3.9</strong></p>
 <p>maven安装</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 下载 https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;apache&#x2F;maven&#x2F;maven-3&#x2F;</span><br><span class="line"># 解压</span><br><span class="line">tar -zxvf </span><br><span class="line"># 配置环境变量</span><br><span class="line">vim &#x2F;etc&#x2F;profile</span><br><span class="line">添加</span><br><span class="line">export MAVEN_HOME&#x3D;&#x2F;xxx&#x2F;apache-maven-3.3.9 &#x2F;&#x2F;maven位置</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;&#x2F;bin</span><br><span class="line"># 更新配置</span><br><span class="line">source &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/09/16/gVY59HIiWMf64s1.png" alt="image-20210916184550020"></p>
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p><img src="https://i.loli.net/2021/09/16/zpdBxQsut6OJlPg.png" alt="image-20210916182541274"></p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>访问8090端口</p>
+<p><img src="https://i.loli.net/2021/09/16/zpdBxQsut6OJlPg.png" alt="image-20210916182541274"></p>
 <h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ul>
 <li>编写恶意类，编译为class文件</li>
 <li>在class的目录用python开一个HTTP服务</li>
@@ -475,7 +479,7 @@
 <p>HTTPServer服务与RMI可以在同一个服务器</p>
 </blockquote>
 <p>监听9999端口并加载远程类dnslog.class</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;mbechler&#x2F;marshalsec.git</span><br><span class="line"># mvn编译 marshalsec项目</span><br><span class="line">mvn clean package -DskipTests</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;mbechler&#x2F;marshalsec.git</span><br><span class="line">cd marshalsec&#x2F;</span><br><span class="line"># mvn编译 marshalsec项目</span><br><span class="line">mvn clean package -DskipTests</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/09/18/VWxKP8bMJFlETmo.png" alt="image-20210918101747298"></p>
 <p>编译完成会出现<code>BUILD SUCCESS</code>，target目录下会生成marshalsec-0.0.3-SNAPSHOT-all.jar文件</p>
 <p><img src="https://i.loli.net/2021/09/18/hojsertI9Rkpmg2.png" alt="image-20210918102149353"></p>
@@ -489,16 +493,20 @@
 <p><u>xxx/ceye.io改为dnslog</u></p>
 <p><img src="https://i.loli.net/2021/09/17/FEkLDANtGj4svyX.png" alt="image-20210917212757304"></p>
 <p>过了十分钟又有请求了，但还是不行</p>
-<p>然后就一直访问不上，怀疑是ceye.io存在问题，ceye.io也没有接收到数据</p>
+<p>然后就一直访问不上，<del>怀疑是ceye.io存在问题，ceye.io也没有接收到数据</del></p>
 <p>ps:我只有在挂代理的情况下才能比较温蒂访问到这个网站，有时还不能成功</p>
 <blockquote>
 <p>换了一个dnslog平台还是不行</p>
 </blockquote>
 <p>又耗了半天，暂时没有复现成功，</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这里上想要使用dnslog进行盲打，但目前没有成功，下一篇先来学习dnslog盲打</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这里是想要使用dnslog进行盲打，但目前没有成功</p>
+<h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><ul>
+<li>记得开启防火墙对应端口并在安全组添加策略，或是直接关闭防火墙</li>
+</ul>
 <h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/CoLo/p/14499041.html">Fastjson1.2.24RCE漏洞复现</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/242712.html">Fastjson1.2.24漏洞复现详细过程</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cute-puli/p/13466362.html">复现</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/242712.html">Fastjson1.2.24漏洞复现详细过程（freebuf）</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cute-puli/p/13466362.html">漏洞复现-fastjson1.2.24-RCE</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7104">某json 黑盒盲测与白盒审计（阿里先知）</a></p>
 
                 
             </div>
@@ -877,7 +885,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">28k</span>&nbsp;字
+                class="white-color">28.3k</span>&nbsp;字
             
             
             

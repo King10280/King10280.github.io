@@ -384,14 +384,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-09-20
+                    2021-09-22
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5
+                    99
                 </div>
                 
 
@@ -418,7 +418,21 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2>
+                <h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2><p><img src="https://i.loli.net/2021/09/22/nuHJF8jqwGcCmXz.png" alt="img"></p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
+<p>攻击机：jdk1.8.0_301、Apache Maven 3.3.9、marshalsec</p>
+<p><img src="https://i.loli.net/2021/09/22/mJi7VDOIvstxu4k.png" alt="image-20210922211752091"></p>
+<p>注意jdk版本会影响该漏洞复现</p>
+<ul>
+<li>两种不同协议实现反弹shell有jdk版本要求,<strong>而且最后接收shell的vps的JDK版本要和靶机的版本相近</strong></li>
+</ul>
+<blockquote>
+<p>下图jdk版本不存在该漏洞</p>
+<p><img src="https://i.loli.net/2021/09/22/Nw3SFaVJGCIRXg8.png" alt="img"></p>
+</blockquote>
+<p>访问8090端口</p>
+<p><img src="https://i.loli.net/2021/09/22/Z1IapGmlACtJzw2.png" alt="image-20210922200207047"></p>
+
                 
             </div>
             <hr/>
@@ -525,17 +539,16 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/09/20/fastjson-1-2-47-rce/">
+                <a href="/2021/09/21/java%E5%9F%BA%E7%A1%80/">
                     <div class="card-image">
                         
-                        <img src="/images/fastjson.jpg" class="responsive-img" alt="fastjson 1.2.47-rce">
+                        <img src="/images/java.jpg" class="responsive-img" alt="java基础">
                         
-                        <span class="card-title">fastjson 1.2.47-rce</span>
+                        <span class="card-title">java基础</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -545,9 +558,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-20
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-21
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -556,7 +569,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -793,7 +805,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">28k</span>&nbsp;字
+                class="white-color">28.3k</span>&nbsp;字
             
             
             
