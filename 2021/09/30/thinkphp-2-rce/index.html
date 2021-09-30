@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="常见web漏洞学习之RCE, l0odrd的博客">
+    <meta name="keywords" content="thinkphp 2-rce, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>常见web漏洞学习之RCE | l0odrd的博客</title>
+    <title>thinkphp 2-rce | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -244,12 +244,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/thinkphp.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">常见web漏洞学习之RCE</h1>
+                    <h1 class="description center-align post-title">thinkphp 2-rce</h1>
                 </div>
             </div>
         </div>
@@ -363,25 +363,12 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/rce/">
-                                <span class="chip bg-color">rce</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/rce/" class="post-category">
-                                rce
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -390,21 +377,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-07-20
+                    2021-09-30
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-28
+                    2021-09-30
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    307
+                    113
                 </div>
                 
 
@@ -431,54 +418,23 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="RCE"><a href="#RCE" class="headerlink" title="RCE"></a>RCE</h1><p>remote command/code execute</p>
-<p>远程命令执行和远程代码执行</p>
-<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>两者是有本质区别的，命令执行是针对系统命令，而代码执行是针对脚本代码，如php,java,py等</p>
-<p>形成条件：可控变量，漏洞函数</p>
-<p>echo,eval,print区别</p>
-<h3 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h3><h4 id="产生"><a href="#产生" class="headerlink" title="产生"></a>产生</h4><h5 id="web源码-框架"><a href="#web源码-框架" class="headerlink" title="web源码/框架"></a>web源码/框架</h5><ol>
-<li>thinkPHP php开发框架</li>
-</ol>
-<p>存在的版本就很多了，从3.x，5.0，5.0.10，5.0.23等若干版本</p>
+                <h2 id="thinkphp-2-rce"><a href="#thinkphp-2-rce" class="headerlink" title="thinkphp 2-rce"></a>thinkphp 2-rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">res = preg_replace(<span class="string">&#x27;@(\w+)&#x27;</span>.<span class="variable">$depr</span>.<span class="string">&#x27;([^&#x27;</span>.<span class="variable">$depr</span>.<span class="string">&#x27;\/]+)@e&#x27;</span>, <span class="string">&#x27;$var[\&#x27;</span>\\1\<span class="string">&#x27;]=&quot;\\2&quot;;&#x27;</span>, implode(<span class="variable">$depr</span>,<span class="variable">$paths</span>));</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>thinkPHP 2.x</p>
+<p>thinkphp lite模式下3.0</p>
+<p>访问8080端口</p>
+<p><img src="https://i.loli.net/2021/09/30/yLwKVcpOEkQxjne.png" alt="image-20210930203058925"></p>
+<p>payload</p>
+<p><code>ip:8080/index.php?s=/index/index/xxx/$&#123;@phpinfo()&#125;</code></p>
 <blockquote>
-<p>要专开一篇来记录</p>
-<p><img src="https://i.loli.net/2021/07/21/JzgGi7aL1xqZTkS.png" alt="image-20210721192942401"></p>
 </blockquote>
-<ol start="2">
-<li>WordPress 基于php的博客平台，可以搭建网站也可以当做cms来使用</li>
-</ol>
-<blockquote>
-<p>想到了hexo，也是搭建博客的一个框架，不过hexo搭建静态站点，WordPress搭建动态站点，可以使用数据库（跑偏了）</p>
-</blockquote>
-<p>4.6和5.0.0存在RCE</p>
-<h5 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h5><ul>
-<li>Tomcat</li>
-</ul>
-<blockquote>
-<p>Tomcat的RCE有CVE-2017-12615，CVE-2019-0232</p>
-<p>附CVE-2019-0232复现:</p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liliyuanshangcao/p/10731966.html">Apache Tomcat 远程代码执行漏洞（CVE-2019-0232）漏洞复现</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.sohu.com/a/214814902_354899">Tomcat远程代码执行漏洞分析与利用</a></p>
-</blockquote>
-<ul>
-<li>Redis</li>
-</ul>
-<p>基于主从复制的rce</p>
-<ul>
-<li>Apache Struts2</li>
-</ul>
-<p>有很多RCE，就直接上工具了</p>
-<h4 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h4><p>敏感函数禁用，变量过滤或是固定，waf</p>
-<h3 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h3><h4 id="产生-1"><a href="#产生-1" class="headerlink" title="产生"></a>产生</h4><h5 id="web源码"><a href="#web源码" class="headerlink" title="web源码"></a>web源码</h5><blockquote>
-<p>nexus,webmin,elasticSearch</p>
-</blockquote>
-<h5 id="中间件-1"><a href="#中间件-1" class="headerlink" title="中间件"></a>中间件</h5><blockquote>
-<p>weblogic,apache</p>
-</blockquote>
-<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><blockquote>
-<p>postgresql</p>
-</blockquote>
-<h4 id="防御-1"><a href="#防御-1" class="headerlink" title="防御"></a>防御</h4><h2 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h2>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://www.wangan.com/docs/446">ThinkPHP 2.x 任意代码执行漏洞</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cute-puli/p/13285528.html">漏洞复现-2.x rce-Thinkphp远程命令执行</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ingd/p/7222424.html">ThinkPHP 框架2.1，2.2和3.0版本开启lite模式导致URL命令执行漏洞</a></p>
+
                 
             </div>
             <hr/>
@@ -504,7 +460,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/">https://King10280.github.io/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/</a>
+                    <a href="https://King10280.github.io/2021/09/30/thinkphp-2-rce/">https://King10280.github.io/2021/09/30/thinkphp-2-rce/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -541,11 +497,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/rce/">
-                                    <span class="chip bg-color">rce</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -589,65 +541,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
-            <div class="card">
-                <a href="/2021/07/24/tomcat-rce-cve-2017-12615/">
-                    <div class="card-image">
-                        
-                        <img src="/images/tomcat.png" class="responsive-img" alt="tomcat rce cve-2017-12615">
-                        
-                        <span class="card-title">tomcat rce cve-2017-12615</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-24
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Tomcat-rce/" class="post-category">
-                                    Tomcat rce
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/tomcat-rce/">
-                        <span class="chip bg-color">tomcat rce</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2021/07/19/ctfhub%E4%B9%8Bssrf/">
+                <a href="/2021/09/30/thinkphp-2-rce/">
                     <div class="card-image">
                         
+                        <img src="/images/thinkphp.jpg" class="responsive-img" alt="thinkphp 2-rce">
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="ctfhub之ssrf">
-                        
-                        <span class="card-title">ctfhub之ssrf</span>
+                        <span class="card-title">thinkphp 2-rce</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -658,27 +562,52 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-30
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/ctf/" class="post-category">
-                                    ctf
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            l0odrd
                             
                         </span>
                     </div>
                 </div>
+
                 
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/ctf/">
-                        <span class="chip bg-color">ctf</span>
-                    </a>
-                    
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/09/20/fastjson-1-2-47-rce/">
+                    <div class="card-image">
+                        
+                        <img src="/images/fastjson.jpg" class="responsive-img" alt="fastjson 1.2.47-rce">
+                        
+                        <span class="card-title">fastjson 1.2.47-rce</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            l0odrd
+                            
+                        </span>
+                    </div>
                 </div>
                 
             </div>
