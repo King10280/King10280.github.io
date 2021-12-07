@@ -388,14 +388,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-11-24
+                    2021-12-03
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    533
+                    577
                 </div>
                 
 
@@ -422,8 +422,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2><p><img src="https://i.loli.net/2021/09/22/nuHJF8jqwGcCmXz.png" alt="img"></p>
-<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
+                <h2 id="fastjson-1-2-47-rce"><a href="#fastjson-1-2-47-rce" class="headerlink" title="fastjson 1.2.47-rce"></a>fastjson 1.2.47-rce</h2><h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><p>1.2.47 这个版本没有<code>com.sun.jndi.rmi.object.trustURLCodebase</code>的限制</p>
+<blockquote>
+<p>具体分析见<a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/208339.html">浅谈Fastjson RCE漏洞的绕过史</a></p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/09/22/nuHJF8jqwGcCmXz.png" alt="img"></p>
+<h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>靶机：jdk1.8.0_301、Apache Maven 3.3.9、fastjson1.2.47</p>
 <p>攻击机：jdk1.8.0_301、Apache Maven 3.3.9、marshalsec</p>
 <p><img src="https://i.loli.net/2021/09/22/mJi7VDOIvstxu4k.png" alt="image-20210922211752091"></p>
 <p>注意jdk版本会影响该漏洞复现</p>
@@ -454,6 +458,8 @@
 
 <p><img src="https://i.loli.net/2021/09/23/YgxWpiS7dbhQnoH.png" alt="image-20210923113053182"></p>
 <p>注：所有的工具和编译文件要放在同一目录下，并且python开启http服务也在当前目录</p>
+<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><p>靶机</p>
+<p>环境</p>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/null1433/p/12697682.html">https://www.cnblogs.com/null1433/p/12697682.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40989258/article/details/103049474">https://blog.csdn.net/qq_40989258/article/details/103049474</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hei-zi/p/13274272.html">https://www.cnblogs.com/hei-zi/p/13274272.html</a></p>
@@ -843,7 +849,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">37.5k</span>&nbsp;字
+                class="white-color">37.7k</span>&nbsp;字
             
             
             
